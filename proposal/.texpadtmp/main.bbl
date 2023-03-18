@@ -1,0 +1,200 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{literature_review_2}{inproceedings}{}
+      \name{author}{6}{}{%
+        {{hash=e6b3d27fe26b4e7a773b4769dd567628}{%
+           family={Almeida\bibnamedelima Bordignon},
+           familyi={A\bibinitperiod\bibinitdelim B\bibinitperiod},
+           given={Ana\bibnamedelima Cláudia},
+           giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+        {{hash=e4ee7eeaef08611904f1334727f6d210}{%
+           family={Thom},
+           familyi={T\bibinitperiod},
+           given={Lucinéia\bibnamedelima Heloisa},
+           giveni={L\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=d8a578dc2989e5a4fbcccbdff4f5efa2}{%
+           family={Silva},
+           familyi={S\bibinitperiod},
+           given={Thanner\bibnamedelima Soares},
+           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=d6ba9ab094f9bd6e39182fe2f9135df0}{%
+           family={Dani},
+           familyi={D\bibinitperiod},
+           given={Vinicius\bibnamedelima Stein},
+           giveni={V\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=b4156867f9c86c6f6950d8f6747d8941}{%
+           family={Fantinato},
+           familyi={F\bibinitperiod},
+           given={Marcelo},
+           giveni={M\bibinitperiod}}}%
+        {{hash=17157dbfeac690f774158df4651e774a}{%
+           family={Ferreira},
+           familyi={F\bibinitperiod},
+           given={Renato\bibnamedelimb Cesar\bibnamedelima Borges},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \strng{namehash}{5e616dc4717a7e0a6974b65be87d7b66}
+      \strng{fullhash}{3e237fd6a6050db0b0b5132369960a53}
+      \strng{bibnamehash}{5e616dc4717a7e0a6974b65be87d7b66}
+      \strng{authorbibnamehash}{5e616dc4717a7e0a6974b65be87d7b66}
+      \strng{authornamehash}{5e616dc4717a7e0a6974b65be87d7b66}
+      \strng{authorfullhash}{3e237fd6a6050db0b0b5132369960a53}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the XIV Brazilian Symposium on Information Systems}
+      \field{title}{Natural language processing in business process identification and modeling: a systematic literature review}
+      \field{year}{2018}
+      \field{pages}{1\bibrangedash 8}
+      \range{pages}{8}
+    \endentry
+    \entry{literature_review_guidance}{article}{}
+      \name{author}{1}{}{%
+        {{hash=19919e365e4f12f6028593c952a9bacf}{%
+           family={Kitchenham},
+           familyi={K\bibinitperiod},
+           given={Barbara},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Citeseer}%
+      }
+      \strng{namehash}{19919e365e4f12f6028593c952a9bacf}
+      \strng{fullhash}{19919e365e4f12f6028593c952a9bacf}
+      \strng{bibnamehash}{19919e365e4f12f6028593c952a9bacf}
+      \strng{authorbibnamehash}{19919e365e4f12f6028593c952a9bacf}
+      \strng{authornamehash}{19919e365e4f12f6028593c952a9bacf}
+      \strng{authorfullhash}{19919e365e4f12f6028593c952a9bacf}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Keele, UK, Keele University}
+      \field{number}{2004}
+      \field{title}{Procedures for performing systematic reviews}
+      \field{volume}{33}
+      \field{year}{2004}
+      \field{pages}{1\bibrangedash 26}
+      \range{pages}{26}
+    \endentry
+    \entry{literature_review_1}{inproceedings}{}
+      \name{author}{8}{}{%
+        {{hash=a632ae7209d9801565c37951deefa787}{%
+           family={Maqbool},
+           familyi={M\bibinitperiod},
+           given={Bilal},
+           giveni={B\bibinitperiod}}}%
+        {{hash=6372a05a89ae07648215684d98f8c2a1}{%
+           family={Azam},
+           familyi={A\bibinitperiod},
+           given={Farooque},
+           giveni={F\bibinitperiod}}}%
+        {{hash=3edd2fd01bcd18d0d778b3bbad7c3c0f}{%
+           family={Anwar},
+           familyi={A\bibinitperiod},
+           given={Muhammad\bibnamedelima Waseem},
+           giveni={M\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=1f019fc4263570add80300d40e9e98a2}{%
+           family={Butt},
+           familyi={B\bibinitperiod},
+           given={Wasi\bibnamedelima Haider},
+           giveni={W\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=ebcf47e3ec3369ec3df00a1ba3cfa81e}{%
+           family={Zeb},
+           familyi={Z\bibinitperiod},
+           given={Jahan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f497ff564925728597010e50f52901c0}{%
+           family={Zafar},
+           familyi={Z\bibinitperiod},
+           given={Iqra},
+           giveni={I\bibinitperiod}}}%
+        {{hash=7ed1ef0ad82159757fcbeeee2bdbb0d9}{%
+           family={Nazir},
+           familyi={N\bibinitperiod},
+           given={Aiman\bibnamedelima Khan},
+           giveni={A\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=f12fa9b74b454a67bce145fd7881e93b}{%
+           family={Umair},
+           familyi={U\bibinitperiod},
+           given={Zuneera},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{f69b6159d69f481b9347f444c8972734}
+      \strng{fullhash}{22458cd1a91ea39e971f5b37bfa48f9b}
+      \strng{bibnamehash}{f69b6159d69f481b9347f444c8972734}
+      \strng{authorbibnamehash}{f69b6159d69f481b9347f444c8972734}
+      \strng{authornamehash}{f69b6159d69f481b9347f444c8972734}
+      \strng{authorfullhash}{22458cd1a91ea39e971f5b37bfa48f9b}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Information Science and Applications 2018: ICISA 2018}
+      \field{title}{A comprehensive investigation of BPMN models generation from textual requirements—techniques, tools and trends}
+      \field{year}{2019}
+      \field{pages}{543\bibrangedash 557}
+      \range{pages}{15}
+    \endentry
+    \entry{main_1}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=c000c648e2db0f6bf5927cd879aa7331}{%
+           family={Sintoris},
+           familyi={S\bibinitperiod},
+           given={Konstantinos},
+           giveni={K\bibinitperiod}}}%
+        {{hash=9ade9344e7c2d9df2efe899ffeb87c5b}{%
+           family={Vergidis},
+           familyi={V\bibinitperiod},
+           given={Kostas},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{15213b174890d2aa04d89b6ebaef6958}
+      \strng{fullhash}{15213b174890d2aa04d89b6ebaef6958}
+      \strng{bibnamehash}{15213b174890d2aa04d89b6ebaef6958}
+      \strng{authorbibnamehash}{15213b174890d2aa04d89b6ebaef6958}
+      \strng{authornamehash}{15213b174890d2aa04d89b6ebaef6958}
+      \strng{authorfullhash}{15213b174890d2aa04d89b6ebaef6958}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2017 IEEE 19th conference on business informatics (CBI)}
+      \field{title}{Extracting business process models using natural language processing (NLP) techniques}
+      \field{volume}{1}
+      \field{year}{2017}
+      \field{pages}{135\bibrangedash 139}
+      \range{pages}{5}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
