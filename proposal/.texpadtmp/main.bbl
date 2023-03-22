@@ -19,6 +19,79 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{t2m_2}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=ac7236811e9fb910a9f1a1bb10e3bab1}{%
+           family={Aa},
+           familyi={A\bibinitperiod},
+           given={Han},
+           giveni={H\bibinitperiod},
+           prefix={van\bibnamedelima der},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=28e6dafeba2ab31b768db085e2f731bf}{%
+           family={Di\bibnamedelima Ciccio},
+           familyi={D\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={Claudio},
+           giveni={C\bibinitperiod}}}%
+        {{hash=685de5db04ba434fb83441a38177fe6c}{%
+           family={Leopold},
+           familyi={L\bibinitperiod},
+           given={Henrik},
+           giveni={H\bibinitperiod}}}%
+        {{hash=e9dd3370027e0332318af3685a3ebbba}{%
+           family={Reijers},
+           familyi={R\bibinitperiod},
+           given={Hajo\bibnamedelima A},
+           giveni={H\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{95d02a26a4bc72f50aed566764dc82f2}
+      \strng{fullhash}{feff5fa0a91a76c78cb414167ec7f3d8}
+      \strng{bibnamehash}{95d02a26a4bc72f50aed566764dc82f2}
+      \strng{authorbibnamehash}{95d02a26a4bc72f50aed566764dc82f2}
+      \strng{authornamehash}{95d02a26a4bc72f50aed566764dc82f2}
+      \strng{authorfullhash}{feff5fa0a91a76c78cb414167ec7f3d8}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advanced Information Systems Engineering: 31st International Conference, CAiSE 2019, Rome, Italy, June 3--7, 2019, Proceedings 31}
+      \field{title}{Extracting declarative process models from natural language}
+      \field{year}{2019}
+      \field{pages}{365\bibrangedash 382}
+      \range{pages}{18}
+    \endentry
+    \entry{t2m_4}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=622f3b077fac4e949cd1bd426dbc2065}{%
+           family={Ackermann},
+           familyi={A\bibinitperiod},
+           given={Lars},
+           giveni={L\bibinitperiod}}}%
+        {{hash=e121dc1fdd8c97f4549be40a7a1ee002}{%
+           family={Volz},
+           familyi={V\bibinitperiod},
+           given={Bernhard},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{2d05928b795975987f951af6c1ad635f}
+      \strng{fullhash}{2d05928b795975987f951af6c1ad635f}
+      \strng{bibnamehash}{2d05928b795975987f951af6c1ad635f}
+      \strng{authorbibnamehash}{2d05928b795975987f951af6c1ad635f}
+      \strng{authornamehash}{2d05928b795975987f951af6c1ad635f}
+      \strng{authorfullhash}{2d05928b795975987f951af6c1ad635f}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 2013 ACM workshop on Domain-specific modeling}
+      \field{title}{Model [nl] generation: natural language model extraction}
+      \field{year}{2013}
+      \field{pages}{45\bibrangedash 50}
+      \range{pages}{6}
+    \endentry
     \entry{literature_review_2}{inproceedings}{}
       \name{author}{6}{}{%
         {{hash=e6b3d27fe26b4e7a773b4769dd567628}{%
@@ -69,6 +142,255 @@
       \field{year}{2018}
       \field{pages}{1\bibrangedash 8}
       \range{pages}{8}
+    \endentry
+    \entry{DSM_3}{article}{}
+      \name{author}{3}{}{%
+        {{hash=12c8a93a870d1bc7a6de117db0e7f71d}{%
+           family={Brocke},
+           familyi={B\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod},
+           prefix={vom},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=d9ddca3b1b7af0f96d62a62424bd939a}{%
+           family={Hevner},
+           familyi={H\bibinitperiod},
+           given={Alan},
+           giveni={A\bibinitperiod}}}%
+        {{hash=49b9d2bfb4f6405fb255c47831e440ec}{%
+           family={Maedche},
+           familyi={M\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{9cebafea24306d429d193cc87fd3fb14}
+      \strng{fullhash}{9cebafea24306d429d193cc87fd3fb14}
+      \strng{bibnamehash}{9cebafea24306d429d193cc87fd3fb14}
+      \strng{authorbibnamehash}{9cebafea24306d429d193cc87fd3fb14}
+      \strng{authornamehash}{9cebafea24306d429d193cc87fd3fb14}
+      \strng{authorfullhash}{9cebafea24306d429d193cc87fd3fb14}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Design science research. Cases}
+      \field{title}{Introduction to design science research}
+      \field{year}{2020}
+      \field{pages}{1\bibrangedash 13}
+      \range{pages}{13}
+    \endentry
+    \entry{pre_processing_1}{inproceedings}{}
+      \name{author}{6}{}{%
+        {{hash=e11c791533e5adbcd515d7dbc7b71bd5}{%
+           family={Ferreira},
+           familyi={F\bibinitperiod},
+           given={Renato\bibnamedelimb César\bibnamedelima Borges},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=e4ee7eeaef08611904f1334727f6d210}{%
+           family={Thom},
+           familyi={T\bibinitperiod},
+           given={Lucinéia\bibnamedelima Heloisa},
+           giveni={L\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=3774ef26beeaefa1d4892e3ee8cf931e}{%
+           family={Oliveira},
+           familyi={O\bibinitperiod},
+           given={José\bibnamedelimb Palazzo\bibnamedelima Moreira},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod\bibinitdelim M\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+        {{hash=afdf2e745a36aec21215089a4d40fad7}{%
+           family={Avila},
+           familyi={A\bibinitperiod},
+           given={Diego\bibnamedelima Toralles},
+           giveni={D\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=78d8aebec357eecf4aaacec836570f68}{%
+           family={Santos},
+           familyi={S\bibinitperiod},
+           given={Rubens\bibnamedelima Ideron},
+           giveni={R\bibinitperiod\bibinitdelim I\bibinitperiod},
+           prefix={dos},
+           prefixi={d\bibinitperiod}}}%
+        {{hash=b4156867f9c86c6f6950d8f6747d8941}{%
+           family={Fantinato},
+           familyi={F\bibinitperiod},
+           given={Marcelo},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{7e9612c72baad6aea4ca41c95740c0b8}
+      \strng{fullhash}{c21e74026e284d111fe9adfda090942f}
+      \strng{bibnamehash}{7e9612c72baad6aea4ca41c95740c0b8}
+      \strng{authorbibnamehash}{7e9612c72baad6aea4ca41c95740c0b8}
+      \strng{authornamehash}{7e9612c72baad6aea4ca41c95740c0b8}
+      \strng{authorfullhash}{c21e74026e284d111fe9adfda090942f}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in Conceptual Modeling: ER 2017 Workshops AHA, MoBiD, MREBA, OntoCom, and QMMQ, Valencia, Spain, November 6--9, 2017, Proceedings 36}
+      \field{title}{Assisting process modeling by identifying business process elements in natural language texts}
+      \field{year}{2017}
+      \field{pages}{154\bibrangedash 163}
+      \range{pages}{10}
+    \endentry
+    \entry{complement_1}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=df303cd97008401bbf943fb08f109f8a}{%
+           family={Freytag},
+           familyi={F\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=bc453ef6a9f511eb7f774a9e8f70e6f8}{%
+           family={Leger},
+           familyi={L\bibinitperiod},
+           given={Nils},
+           giveni={N\bibinitperiod}}}%
+        {{hash=5a68441ae473ac1ab17b1805a21b2245}{%
+           family={Kanzler},
+           familyi={K\bibinitperiod},
+           given={Benjamin},
+           giveni={B\bibinitperiod}}}%
+        {{hash=ac576e65e470e266cf20e7efeca179e7}{%
+           family={Semling},
+           familyi={S\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{252ddc5d57f5a8631f8dc15dca613a08}
+      \strng{fullhash}{e64c9d37ca46dfeae1e01073155d0e27}
+      \strng{bibnamehash}{252ddc5d57f5a8631f8dc15dca613a08}
+      \strng{authorbibnamehash}{252ddc5d57f5a8631f8dc15dca613a08}
+      \strng{authornamehash}{252ddc5d57f5a8631f8dc15dca613a08}
+      \strng{authorfullhash}{e64c9d37ca46dfeae1e01073155d0e27}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{BPM (PhD/Demos)}
+      \field{title}{NLP as a Service: An API to Convert between Process Models and Natural Language Text.}
+      \field{year}{2021}
+      \field{pages}{146\bibrangedash 150}
+      \range{pages}{5}
+    \endentry
+    \entry{t2m_1}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=d1f481ac5e7e8ab0519dac8c8bf94250}{%
+           family={Friedrich},
+           familyi={F\bibinitperiod},
+           given={Fabian},
+           giveni={F\bibinitperiod}}}%
+        {{hash=77c03f6db0b7101e4efabda4bd436ce4}{%
+           family={Mendling},
+           familyi={M\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=7d063724d1bb5ef1c238e0f429890f3b}{%
+           family={Puhlmann},
+           familyi={P\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{f64836857e0630439faf7fe7394ad783}
+      \strng{fullhash}{f64836857e0630439faf7fe7394ad783}
+      \strng{bibnamehash}{f64836857e0630439faf7fe7394ad783}
+      \strng{authorbibnamehash}{f64836857e0630439faf7fe7394ad783}
+      \strng{authornamehash}{f64836857e0630439faf7fe7394ad783}
+      \strng{authorfullhash}{f64836857e0630439faf7fe7394ad783}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advanced Information Systems Engineering: 23rd International Conference, CAiSE 2011, London, UK, June 20-24, 2011. Proceedings 23}
+      \field{title}{Process model generation from natural language text}
+      \field{year}{2011}
+      \field{pages}{482\bibrangedash 496}
+      \range{pages}{15}
+    \endentry
+    \entry{DSM_1}{article}{}
+      \name{author}{4}{}{%
+        {{hash=e054261c7f1739e1ba1db0a45e385c1b}{%
+           family={Hevner},
+           familyi={H\bibinitperiod},
+           given={Alan\bibnamedelima R},
+           giveni={A\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=5aec260b5b1381edc4b8ff6755f2d543}{%
+           family={March},
+           familyi={M\bibinitperiod},
+           given={Salvatore\bibnamedelima T},
+           giveni={S\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=c518c214dc9e77148493e9ea47f505ab}{%
+           family={Park},
+           familyi={P\bibinitperiod},
+           given={Jinsoo},
+           giveni={J\bibinitperiod}}}%
+        {{hash=65565df90d4793da7a2f20e5e1b07345}{%
+           family={Ram},
+           familyi={R\bibinitperiod},
+           given={Sudha},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{77b3350005135e016e7a83431f326d8f}
+      \strng{fullhash}{b163bef761d9a2c79a3d232595321775}
+      \strng{bibnamehash}{77b3350005135e016e7a83431f326d8f}
+      \strng{authorbibnamehash}{77b3350005135e016e7a83431f326d8f}
+      \strng{authornamehash}{77b3350005135e016e7a83431f326d8f}
+      \strng{authorfullhash}{b163bef761d9a2c79a3d232595321775}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Management Information Systems Quarterly}
+      \field{number}{1}
+      \field{title}{Design science in information systems research}
+      \field{volume}{28}
+      \field{year}{2008}
+      \field{pages}{6}
+      \range{pages}{1}
+    \endentry
+    \entry{literature_review_3}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=3f09314d4b374c3883e40852b7abec51}{%
+           family={Indahyanti},
+           familyi={I\bibinitperiod},
+           given={Uce},
+           giveni={U\bibinitperiod}}}%
+        {{hash=bf45fcdb4c41f6039a98d818cd5f2c22}{%
+           family={Djunaidy},
+           familyi={D\bibinitperiod},
+           given={Arif},
+           giveni={A\bibinitperiod}}}%
+        {{hash=cccf88e71759b31207d69725d8c8eefa}{%
+           family={Siahaan},
+           familyi={S\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{3f6d78c9edde164e85dfe35e7e4c0f8a}
+      \strng{fullhash}{3f6d78c9edde164e85dfe35e7e4c0f8a}
+      \strng{bibnamehash}{3f6d78c9edde164e85dfe35e7e4c0f8a}
+      \strng{authorbibnamehash}{3f6d78c9edde164e85dfe35e7e4c0f8a}
+      \strng{authornamehash}{3f6d78c9edde164e85dfe35e7e4c0f8a}
+      \strng{authorfullhash}{3f6d78c9edde164e85dfe35e7e4c0f8a}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2022 9th International Conference on Electrical Engineering, Computer Science and Informatics (EECSI)}
+      \field{title}{Auto-Generating Business Process Model From Heterogeneous Documents: A Comprehensive Literature Survey}
+      \field{year}{2022}
+      \field{pages}{239\bibrangedash 243}
+      \range{pages}{5}
     \endentry
     \entry{literature_review_guidance}{article}{}
       \name{author}{1}{}{%
@@ -156,12 +478,90 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Information Science and Applications 2018: ICISA 2018}
-      \field{title}{A comprehensive investigation of BPMN models generation from textual requirements—techniques, tools and trends}
+      \field{title}{A comprehensive investigation of BPMN models generation from textual requirements---techniques, tools and trends}
       \field{year}{2019}
       \field{pages}{543\bibrangedash 557}
       \range{pages}{15}
     \endentry
-    \entry{main_1}{inproceedings}{}
+    \entry{DSM_2}{article}{}
+      \name{author}{4}{}{%
+        {{hash=3127efe8cdd4557b7228a8724f568529}{%
+           family={Peffers},
+           familyi={P\bibinitperiod},
+           given={Ken},
+           giveni={K\bibinitperiod}}}%
+        {{hash=8b17b21a3e4c61d1302f46cba38c6e50}{%
+           family={Tuunanen},
+           familyi={T\bibinitperiod},
+           given={Tuure},
+           giveni={T\bibinitperiod}}}%
+        {{hash=33ad207ea3031c6d744a31f5bc43c547}{%
+           family={Rothenberger},
+           familyi={R\bibinitperiod},
+           given={Marcus\bibnamedelima A},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=edf3e165ce4429b30d49e353a7d1417a}{%
+           family={Chatterjee},
+           familyi={C\bibinitperiod},
+           given={Samir},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Taylor \& Francis}%
+      }
+      \strng{namehash}{4ccaed1d47a4875e5f027cdf2d20bbca}
+      \strng{fullhash}{0d82c455b50c2b184d97697dac2e8660}
+      \strng{bibnamehash}{4ccaed1d47a4875e5f027cdf2d20bbca}
+      \strng{authorbibnamehash}{4ccaed1d47a4875e5f027cdf2d20bbca}
+      \strng{authornamehash}{4ccaed1d47a4875e5f027cdf2d20bbca}
+      \strng{authorfullhash}{0d82c455b50c2b184d97697dac2e8660}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of management information systems}
+      \field{number}{3}
+      \field{title}{A design science research methodology for information systems research}
+      \field{volume}{24}
+      \field{year}{2007}
+      \field{pages}{45\bibrangedash 77}
+      \range{pages}{33}
+    \endentry
+    \entry{literature_review_4}{article}{}
+      \name{author}{3}{}{%
+        {{hash=6206b8a5513915d5840f494d55991173}{%
+           family={Riefer},
+           familyi={R\bibinitperiod},
+           given={Maximilian},
+           giveni={M\bibinitperiod}}}%
+        {{hash=8a90df85d880ec9596711dda8d69bc32}{%
+           family={Ternis},
+           familyi={T\bibinitperiod},
+           given={Simon\bibnamedelima Felix},
+           giveni={S\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=ec385afd980616c990217ed9b67aa4e4}{%
+           family={Thaler},
+           familyi={T\bibinitperiod},
+           given={Tom},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{999d9bd95dfe57860daa29917447193c}
+      \strng{fullhash}{999d9bd95dfe57860daa29917447193c}
+      \strng{bibnamehash}{999d9bd95dfe57860daa29917447193c}
+      \strng{authorbibnamehash}{999d9bd95dfe57860daa29917447193c}
+      \strng{authornamehash}{999d9bd95dfe57860daa29917447193c}
+      \strng{authorfullhash}{999d9bd95dfe57860daa29917447193c}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Multikonferenz Wirtschaftsinformatik (MKWI-16), March}
+      \field{title}{Mining process models from natural language text: A state-of-the-art analysis}
+      \field{year}{2016}
+      \field{pages}{9\bibrangedash 11}
+      \range{pages}{3}
+    \endentry
+    \entry{t2m_3}{inproceedings}{}
       \name{author}{2}{}{%
         {{hash=c000c648e2db0f6bf5927cd879aa7331}{%
            family={Sintoris},
@@ -193,6 +593,80 @@
       \field{year}{2017}
       \field{pages}{135\bibrangedash 139}
       \range{pages}{5}
+    \endentry
+    \entry{complement_2}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=7953873ae6f030a4c7bebcf98f0f9ab9}{%
+           family={Van\bibnamedelimb der\bibnamedelima Aa},
+           familyi={V\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim A\bibinitperiod},
+           given={Han},
+           giveni={H\bibinitperiod}}}%
+        {{hash=685de5db04ba434fb83441a38177fe6c}{%
+           family={Leopold},
+           familyi={L\bibinitperiod},
+           given={Henrik},
+           giveni={H\bibinitperiod}}}%
+        {{hash=e9dd3370027e0332318af3685a3ebbba}{%
+           family={Reijers},
+           familyi={R\bibinitperiod},
+           given={Hajo\bibnamedelima A},
+           giveni={H\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{4b0a43f957d3484815e61e1af13e358a}
+      \strng{fullhash}{4b0a43f957d3484815e61e1af13e358a}
+      \strng{bibnamehash}{4b0a43f957d3484815e61e1af13e358a}
+      \strng{authorbibnamehash}{4b0a43f957d3484815e61e1af13e358a}
+      \strng{authornamehash}{4b0a43f957d3484815e61e1af13e358a}
+      \strng{authorfullhash}{4b0a43f957d3484815e61e1af13e358a}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Business Process Management: 13th International Conference, BPM 2015, Innsbruck, Austria, August 31--September 3, 2015, Proceedings 13}
+      \field{title}{Detecting inconsistencies between process models and textual descriptions}
+      \field{year}{2015}
+      \field{pages}{90\bibrangedash 105}
+      \range{pages}{16}
+    \endentry
+    \entry{complement_3}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=81e99735fb5a9474faeafcc90d49cd40}{%
+           family={Zaheer},
+           familyi={Z\bibinitperiod},
+           given={Sheeza},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0195d0bb5f0bb17591691d9a4de944b7}{%
+           family={Shahzad},
+           familyi={S\bibinitperiod},
+           given={Khurram},
+           giveni={K\bibinitperiod}}}%
+        {{hash=aa55078e94230cfeeb7c1ea28831bfd9}{%
+           family={Nawab},
+           familyi={N\bibinitperiod},
+           given={Rao\bibnamedelimb Muhammad\bibnamedelima Adeel},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{d962d845feacec729017fb4e7c6ba370}
+      \strng{fullhash}{d962d845feacec729017fb4e7c6ba370}
+      \strng{bibnamehash}{d962d845feacec729017fb4e7c6ba370}
+      \strng{authorbibnamehash}{d962d845feacec729017fb4e7c6ba370}
+      \strng{authornamehash}{d962d845feacec729017fb4e7c6ba370}
+      \strng{authorfullhash}{d962d845feacec729017fb4e7c6ba370}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2016 Sixth International Conference on Innovative Computing Technology (INTECH)}
+      \field{title}{Comparing manual-and auto-generated textual descriptions of business process models}
+      \field{year}{2016}
+      \field{pages}{41\bibrangedash 46}
+      \range{pages}{6}
     \endentry
   \enddatalist
 \endrefsection

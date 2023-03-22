@@ -3,10 +3,17 @@
 \contentsline {chapter}{Motivation}{4}{Doc-Start}%
 \contentsline {section}{Research Questions}{5}{section*.1}%
 \contentsline {chapter}{Research Methodology}{5}{section*.1}%
-\contentsline {chapter}{Related Work}{5}{section*.1}%
-\contentsline {chapter}{Method/Approach (theoretical)}{7}{table.caption.2}%
-\contentsline {chapter}{Application (practical)}{7}{table.caption.2}%
-\contentsline {chapter}{Evaluation}{7}{table.caption.2}%
-\contentsline {chapter}{Time Plan}{7}{table.caption.2}%
-\contentsline {chapter}{Bibliography}{8}{table.caption.2}%
-\contentsline {chapter}{Appendix}{9}{table.caption.2}%
+\contentsline {section}{Problem centered approach}{6}{section*.2}%
+\contentsline {section}{Problem Identification And Motivation}{6}{section*.2}%
+\contentsline {section}{Objectives of a solution}{6}{section*.2}%
+\contentsline {section}{Design \& development}{6}{section*.2}%
+\contentsline {section}{Demonstration}{7}{section*.2}%
+\contentsline {section}{Evaluation}{7}{section*.2}%
+\contentsline {section}{Communication}{7}{section*.2}%
+\contentsline {chapter}{Related Work}{7}{section*.2}%
+\contentsline {chapter}{Method/Approach (theoretical)}{10}{table.caption.3}%
+\contentsline {chapter}{Application (practical)}{11}{table.caption.3}%
+\contentsline {chapter}{Evaluation}{12}{table.caption.3}%
+\contentsline {chapter}{Time Plan}{12}{table.caption.3}%
+\contentsline {chapter}{Bibliography}{13}{table.caption.3}%
+\contentsline {chapter}{Appendix}{15}{table.caption.3}%
