@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.13)  22 MAR 2023 11:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.13)  26 MAR 2023 16:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1483,7 +1483,7 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 11.39996pt on input line 19.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 9.49997pt on input line 19.
-<tum-resources/images/TUM_Uhrenturm.png, id=62, 307.3884pt x 408.5664pt>
+<tum-resources/images/TUM_Uhrenturm.png, id=63, 307.3884pt x 408.5664pt>
 File: tum-resources/images/TUM_Uhrenturm.png Graphic file (type png)
 <use tum-resources/images/TUM_Uhrenturm.png>
 Package pdftex.def Info: tum-resources/images/TUM_Uhrenturm.png  used on input line 19.
@@ -1493,7 +1493,7 @@ LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 
 Overfull \vbox (27.90738pt too high) has occurred while \output is active []
 
-<tum-resources/images/Universitaet_Logo_RGB.pdf, id=64, 54.02504pt x 28.452pt>
+<tum-resources/images/Universitaet_Logo_RGB.pdf, id=65, 54.02504pt x 28.452pt>
 File: tum-resources/images/Universitaet_Logo_RGB.pdf Graphic file (type pdf)
 <use tum-resources/images/Universitaet_Logo_RGB.pdf>
 Package pdftex.def Info: tum-resources/images/Universitaet_Logo_RGB.pdf  used on input line 19.
@@ -1555,16 +1555,12 @@ Package biblatex Info: ... file 'main.bbl' found.
  (/Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.bbl)
 Package biblatex Info: Reference section=0 on input line 19.
 Package biblatex Info: Reference segment=0 on input line 19.
- (./chapters/00_Abstract.tex
+ (./chapters/00_Abstract.tex)
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 17.28pt on input line 1.
+(Font)              scaled to size 17.28pt on input line 23.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 17.28pt on input line 1.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 10.0pt on input line 8.
-LaTeX Font Info:    Font shape `T1/ntxtlf/b/it' will be
-(Font)              scaled to size 10.0pt on input line 8.
-) [2] (/Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.toc
+(Font)              scaled to size 17.28pt on input line 23.
+ (/Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.toc
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 10.0pt on input line 3.
 LaTeX Font Info:    Trying to load font information for OT1+minntx on input line 3.
@@ -1598,7 +1594,7 @@ File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 \tf@lot=\write7
 \openout7 = `main.lot'.
 
- (/Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.lof)
+ (/Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.lof [2])
 \tf@lof=\write8
 \openout8 = `main.lof'.
 
@@ -1610,6 +1606,8 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
 (hyperref)                be the same. Added a new anchor on input line 16.
 
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
+(Font)              scaled to size 10.0pt on input line 18.
 ) (./chapters/02_Research_Methodology.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -1618,77 +1616,116 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
 (hyperref)                be the same. Added a new anchor on input line 5.
 
-[6]) (./chapters/03_Related_Work.tex [7]
+[6]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 9.0pt on input line 28.
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 9.0pt on input line 28.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
+(Font)              scaled to size 9.0pt on input line 28.
+<tum-resources/images/DSM.png, id=161, 463.9734pt x 364.9635pt>
+File: tum-resources/images/DSM.png Graphic file (type png)
+<use tum-resources/images/DSM.png>
+Package pdftex.def Info: tum-resources/images/DSM.png  used on input line 29.
+(pdftex.def)             Requested size: 355.6348pt x 279.74191pt.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 8.0pt on input line 30.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7]) (./chapters/03_Related_Work.tex
+Underfull \vbox (badness 5460) has occurred while \output is active []
+
+ [8 <./tum-resources/images/DSM.png>]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 5.
+               Default added (so using `tbp') on input line 11.
 
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 7.
-LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 9.0pt on input line 7.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 9.0pt on input line 7.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [8]) (./chapters/04_Method.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [9]) (./chapters/05_Application.tex
+ [9]) (./chapters/04_Method.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [10]
+<tum-resources/images/theoretical_extraction_pre.png, id=211, 463.2507pt x 101.9007pt>
+File: tum-resources/images/theoretical_extraction_pre.png Graphic file (type png)
+<use tum-resources/images/theoretical_extraction_pre.png>
+Package pdftex.def Info: tum-resources/images/theoretical_extraction_pre.png  used on input line 9.
+(pdftex.def)             Requested size: 316.12317pt x 69.54033pt.
+ [11 <./tum-resources/images/theoretical_extraction_pre.png>]
+<tum-resources/images/theoretical_extraction_pro.png, id=219, 463.2507pt x 232.7094pt>
+File: tum-resources/images/theoretical_extraction_pro.png Graphic file (type png)
+<use tum-resources/images/theoretical_extraction_pro.png>
+Package pdftex.def Info: tum-resources/images/theoretical_extraction_pro.png  used on input line 17.
+(pdftex.def)             Requested size: 316.12317pt x 158.80843pt.
+<tum-resources/images/theoretical_extraction_post.png, id=222, 463.2507pt x 208.8603pt>
+File: tum-resources/images/theoretical_extraction_post.png Graphic file (type png)
+<use tum-resources/images/theoretical_extraction_post.png>
+Package pdftex.def Info: tum-resources/images/theoretical_extraction_post.png  used on input line 25.
+(pdftex.def)             Requested size: 316.12317pt x 142.53304pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./chapters/05_Application.tex
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 7.3pt on input line 2.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 2.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 6.2pt on input line 2.
- [11]) (./chapters/06_Evaluation.tex) (./chapters/07_Time_Plan.tex) [12] [13] [14] (./chapters/99_Appendix.tex [15]
-<tum-resources/images/Universitaet_Flaggen.jpg, id=246, 1590.94376pt x 1131.22626pt>
-File: tum-resources/images/Universitaet_Flaggen.jpg Graphic file (type jpg)
-<use tum-resources/images/Universitaet_Flaggen.jpg>
-Package pdftex.def Info: tum-resources/images/Universitaet_Flaggen.jpg  used on input line 23.
-(pdftex.def)             Requested size: 276.60551pt x 196.67297pt.
-) [16 <./tum-resources/images/Universitaet_Flaggen.jpg>]
-LaTeX Font Info:    Trying to load font information for T1+times on input line 45.
-LaTeX Font Info:    No file T1times.fd. on input line 45.
+ [12 <./tum-resources/images/theoretical_extraction_pro.png>] [13 <./tum-resources/images/theoretical_extraction_post.png>]
+<tum-resources/images/Application_frontbackend.png, id=248, 398.2077pt x 231.9867pt>
+File: tum-resources/images/Application_frontbackend.png Graphic file (type png)
+<use tum-resources/images/Application_frontbackend.png>
+Package pdftex.def Info: tum-resources/images/Application_frontbackend.png  used on input line 11.
+(pdftex.def)             Requested size: 355.6348pt x 207.19316pt.
+) (./chapters/06_Evaluation.tex [14 <./tum-resources/images/Application_frontbackend.png>]) (./chapters/07_Time_Plan.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [15]
+<tum-resources/images/time_plan.png, id=260, 572.3784pt x 102.6234pt>
+File: tum-resources/images/time_plan.png Graphic file (type png)
+<use tum-resources/images/time_plan.png>
+Package pdftex.def Info: tum-resources/images/time_plan.png  used on input line 10.
+(pdftex.def)             Requested size: 395.15247pt x 70.8478pt.
+) [16 <./tum-resources/images/time_plan.png>] [17] [18]
+LaTeX Font Info:    Trying to load font information for T1+times on input line 42.
+LaTeX Font Info:    No file T1times.fd. on input line 42.
 
 
 LaTeX Font Warning: Font shape `T1/times/m/n' undefined
-(Font)              using `T1/cmr/m/n' instead on input line 45.
+(Font)              using `T1/cmr/m/n' instead on input line 42.
 
 
 LaTeX Font Warning: Font shape `T1/times/b/n' undefined
-(Font)              using `T1/times/m/n' instead on input line 45.
+(Font)              using `T1/times/m/n' instead on input line 42.
 
-[17] (/Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.aux)
+[19] (/Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C2C54ADD186949B1CD354F334DFBF972;2392.
+(rerunfilecheck)             Checksum: 7AF1ED0E37C004AA5B6B73BFB85E19C4;2312.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 51298 strings out of 476024
- 1095773 string characters out of 5790018
- 1991706 words of memory out of 5000000
- 70840 multiletter control sequences out of 15000+600000
- 591100 words of font info for 113 fonts, out of 8000000 for 9000
+ 51338 strings out of 476024
+ 1097480 string characters out of 5790018
+ 1991786 words of memory out of 5000000
+ 70875 multiletter control sequences out of 15000+600000
+ 587519 words of font info for 110 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
- 129i,17n,145p,1707b,2913s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 129i,17n,145p,1616b,2913s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist, replaced by a fixed one
 
-{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/newtx/NewTXMI.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newtx/ztmb.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newtx/ztmbi.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newtx/ztmr.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newtx/ztmri.pfb>
-Output written on /Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.pdf (17 pages, 793918 bytes).
+{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newtx/ztmb.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newtx/ztmr.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newtx/ztmri.pfb>
+Output written on /Users/shuaiwei_yu/Desktop/bachelor-thesis/proposal/.texpadtmp/main.pdf (19 pages, 1328144 bytes).
 PDF statistics:
- 312 PDF objects out of 1000 (max. 8388607)
- 254 compressed objects within 3 object streams
- 40 named destinations out of 1000 (max. 500000)
- 164 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 329 PDF objects out of 1000 (max. 8388607)
+ 262 compressed objects within 3 object streams
+ 47 named destinations out of 1000 (max. 500000)
+ 181 words of extra memory for PDF output out of 10000 (max. 10000000)
 

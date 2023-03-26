@@ -314,6 +314,58 @@
       \field{pages}{482\bibrangedash 496}
       \range{pages}{15}
     \endentry
+    \entry{complement_4}{inproceedings}{}
+      \name{author}{6}{}{%
+        {{hash=e47c16f090fd2b1fdcc386235bff8c77}{%
+           family={Han},
+           familyi={H\bibinitperiod},
+           given={Xue},
+           giveni={X\bibinitperiod}}}%
+        {{hash=716851c6a7a1d4e1ee9493ec7d8a8f48}{%
+           family={Dang},
+           familyi={D\bibinitperiod},
+           given={Yabin},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=cd79c4fdce4748655178459924dde5dd}{%
+           family={Mei},
+           familyi={M\bibinitperiod},
+           given={Lijun},
+           giveni={L\bibinitperiod}}}%
+        {{hash=22a4c83e1a6b81fd07339728328800ec}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yanfei},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=cda636b822923fefb4125859c6c395a1}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Shaochun},
+           giveni={S\bibinitperiod}}}%
+        {{hash=35b53a5f450cc6a8ce8bce633606e1de}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Xin},
+           giveni={X\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{9b9d5d91b05e9662a86a24726de3e07d}
+      \strng{fullhash}{d4c4b34028c48b0a4d3fa7f29968dc2a}
+      \strng{bibnamehash}{9b9d5d91b05e9662a86a24726de3e07d}
+      \strng{authorbibnamehash}{9b9d5d91b05e9662a86a24726de3e07d}
+      \strng{authornamehash}{9b9d5d91b05e9662a86a24726de3e07d}
+      \strng{authorfullhash}{d4c4b34028c48b0a4d3fa7f29968dc2a}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2019 IEEE International Conference on Web Services (ICWS)}
+      \field{title}{A novel part of speech tagging framework for NLP based business process management}
+      \field{year}{2019}
+      \field{pages}{383\bibrangedash 387}
+      \range{pages}{5}
+    \endentry
     \entry{DSM_1}{article}{}
       \name{author}{4}{}{%
         {{hash=e054261c7f1739e1ba1db0a45e385c1b}{%

@@ -10,10 +10,9 @@
 \contentsline {section}{Demonstration}{7}{section*.2}%
 \contentsline {section}{Evaluation}{7}{section*.2}%
 \contentsline {section}{Communication}{7}{section*.2}%
-\contentsline {chapter}{Related Work}{7}{section*.2}%
-\contentsline {chapter}{Method/Approach (theoretical)}{10}{table.caption.3}%
-\contentsline {chapter}{Application (practical)}{11}{table.caption.3}%
-\contentsline {chapter}{Evaluation}{12}{table.caption.3}%
-\contentsline {chapter}{Time Plan}{12}{table.caption.3}%
-\contentsline {chapter}{Bibliography}{13}{table.caption.3}%
-\contentsline {chapter}{Appendix}{15}{table.caption.3}%
+\contentsline {chapter}{Related Work}{8}{figure.caption.3}%
+\contentsline {chapter}{Method/Approach (theoretical)}{11}{table.caption.4}%
+\contentsline {chapter}{Application (practical)}{12}{figure.caption.7}%
+\contentsline {chapter}{Evaluation}{14}{figure.caption.8}%
+\contentsline {chapter}{Time Plan}{16}{figure.caption.8}%
+\contentsline {chapter}{Bibliography}{17}{figure.caption.9}%
