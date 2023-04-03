@@ -2,17 +2,17 @@
 \babel@toc {english}{}\relax 
 \contentsline {chapter}{Motivation}{4}{Doc-Start}%
 \contentsline {section}{Research Questions}{5}{section*.1}%
-\contentsline {chapter}{Research Methodology}{5}{section*.1}%
-\contentsline {section}{Problem centered approach}{6}{section*.2}%
-\contentsline {section}{Problem Identification And Motivation}{6}{section*.2}%
-\contentsline {section}{Objectives of a solution}{6}{section*.2}%
-\contentsline {section}{Design \& development}{6}{section*.2}%
-\contentsline {section}{Demonstration}{7}{section*.2}%
-\contentsline {section}{Evaluation}{7}{section*.2}%
-\contentsline {section}{Communication}{7}{section*.2}%
-\contentsline {chapter}{Related Work}{8}{figure.caption.3}%
-\contentsline {chapter}{Method/Approach (theoretical)}{11}{table.caption.4}%
-\contentsline {chapter}{Application (practical)}{12}{figure.caption.7}%
-\contentsline {chapter}{Evaluation}{14}{figure.caption.8}%
-\contentsline {chapter}{Time Plan}{16}{figure.caption.8}%
-\contentsline {chapter}{Bibliography}{17}{figure.caption.9}%
+\contentsline {chapter}{Research Methodology}{6}{figure.caption.2}%
+\contentsline {section}{Problem centered approach}{6}{section*.3}%
+\contentsline {section}{Problem Identification And Motivation}{7}{section*.3}%
+\contentsline {section}{Objectives of a solution}{7}{section*.3}%
+\contentsline {section}{Design \& development}{7}{section*.3}%
+\contentsline {section}{Demonstration}{7}{section*.3}%
+\contentsline {section}{Evaluation}{7}{figure.caption.4}%
+\contentsline {section}{Communication}{9}{figure.caption.4}%
+\contentsline {chapter}{Related Work}{9}{figure.caption.4}%
+\contentsline {chapter}{Method/Approach (theoretical)}{11}{table.caption.5}%
+\contentsline {chapter}{Application (practical)}{13}{figure.caption.8}%
+\contentsline {chapter}{Evaluation}{16}{figure.caption.9}%
+\contentsline {chapter}{Time Plan}{18}{figure.caption.9}%
+\contentsline {chapter}{Bibliography}{19}{figure.caption.10}%

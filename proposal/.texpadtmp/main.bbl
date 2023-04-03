@@ -182,6 +182,40 @@
       \field{pages}{1\bibrangedash 13}
       \range{pages}{13}
     \endentry
+    \entry{t2m_5}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=e11c791533e5adbcd515d7dbc7b71bd5}{%
+           family={Ferreira},
+           familyi={F\bibinitperiod},
+           given={Renato\bibnamedelimb César\bibnamedelima Borges},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=e4ee7eeaef08611904f1334727f6d210}{%
+           family={Thom},
+           familyi={T\bibinitperiod},
+           given={Lucinéia\bibnamedelima Heloisa},
+           giveni={L\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=b4156867f9c86c6f6950d8f6747d8941}{%
+           family={Fantinato},
+           familyi={F\bibinitperiod},
+           given={Marcelo},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{803c8790377ba951a715482daa896378}
+      \strng{fullhash}{803c8790377ba951a715482daa896378}
+      \strng{bibnamehash}{803c8790377ba951a715482daa896378}
+      \strng{authorbibnamehash}{803c8790377ba951a715482daa896378}
+      \strng{authornamehash}{803c8790377ba951a715482daa896378}
+      \strng{authorfullhash}{803c8790377ba951a715482daa896378}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{ICEIS (3)}
+      \field{title}{A Semi-automatic Approach to Identify Business Process Elements in Natural Language Texts.}
+      \field{year}{2017}
+      \field{pages}{250\bibrangedash 261}
+      \range{pages}{12}
+    \endentry
     \entry{pre_processing_1}{inproceedings}{}
       \name{author}{6}{}{%
         {{hash=e11c791533e5adbcd515d7dbc7b71bd5}{%
@@ -406,6 +440,43 @@
       \field{year}{2008}
       \field{pages}{6}
       \range{pages}{1}
+    \endentry
+    \entry{t2m_6}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=712695647cf0a8db342b899f056d05f1}{%
+           family={Honkisz},
+           familyi={H\bibinitperiod},
+           given={Krzysztof},
+           giveni={K\bibinitperiod}}}%
+        {{hash=77f64f7f39b87432b73e8126c9c21481}{%
+           family={Kluza},
+           familyi={K\bibinitperiod},
+           given={Krzysztof},
+           giveni={K\bibinitperiod}}}%
+        {{hash=9dbe824b52cc63f9542e938b57577d71}{%
+           family={Wiśniewski},
+           familyi={W\bibinitperiod},
+           given={Piotr},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{ac97ef1f426e1a7c3c12e854969d538d}
+      \strng{fullhash}{ac97ef1f426e1a7c3c12e854969d538d}
+      \strng{bibnamehash}{ac97ef1f426e1a7c3c12e854969d538d}
+      \strng{authorbibnamehash}{ac97ef1f426e1a7c3c12e854969d538d}
+      \strng{authornamehash}{ac97ef1f426e1a7c3c12e854969d538d}
+      \strng{authorfullhash}{ac97ef1f426e1a7c3c12e854969d538d}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Knowledge Science, Engineering and Management: 11th International Conference, KSEM 2018, Changchun, China, August 17--19, 2018, Proceedings, Part I 11}
+      \field{title}{A concept for generating business process models from natural language description}
+      \field{year}{2018}
+      \field{pages}{91\bibrangedash 103}
+      \range{pages}{13}
     \endentry
     \entry{literature_review_3}{inproceedings}{}
       \name{author}{3}{}{%
