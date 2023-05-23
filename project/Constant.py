@@ -13,7 +13,10 @@ OBJECT_PRONOUNS = ["me", "you", "him", "her", "it", "us", "you", "them"]
 POSSESSIVE_ADJECTIVES = ["my", "your", "his", "her", "its", "our", "your", "their"]
 POSSESSIVE_PRONOUNS = ["mine", "yours", "his", "hers", "ours", "yours", "theirs"]
 
-SINGLE_CONDITIONAL_INDICATORS = ["if", "whether", "whereas", "otherwise", "optionally"]
+#  "whereas", "optionally"
+SINGLE_IF_CONDITIONAL_INDICATORS = ["if", "whether"]
+
+SINGLE_ELSE_CONDITIONAL_INDICATORS = ["else", "otherwise"]
 
 # COMPOUND_CONDITIONAL_INDICATORS = ["in case of", "in the case of", "in case", "for the case"]
 COMPOUND_CONDITIONAL_INDICATORS = [

@@ -2,9 +2,10 @@ import WordNetWrapper
 from Model.Action import Action
 from Model.Actor import Actor
 from Model.Resource import Resource
+from Model.SentenceContainer import SentenceContainer
 from Model.Specifier import Specifier
 from Model.SpecifierType import SpecifierType
-from Utilities import find_dependency
+from Utilities import find_dependency, anaphora_resolver, find_actor, belongs_to_other_process, find_process
 
 from spacy.tokens import Token
 
@@ -14,6 +15,7 @@ def create_actor(main_actor):
         return None
 
     actor = Actor(main_actor)
+    anaphora_resolver(actor)
     determine_noun_specifiers(actor)
     complete_name = get_complete_actor_name(main_actor)
 
@@ -30,6 +32,7 @@ def create_object(obj):
         return None
 
     resource = Resource(obj)
+    anaphora_resolver(resource)
     determine_noun_specifiers(resource)
     return resource
 
@@ -48,7 +51,6 @@ def create_action(verb, noun):
         action.aux = aux[0]
 
     modifiers = find_dependency(["advmod", "acomp"], token=verb)
-    #todo: The java code checks a list of constant, see Constants.f_sequenceIndicators
     if len(modifiers) > 0:
         action.mod = modifiers[0]
 
@@ -73,6 +75,7 @@ def determine_noun_specifiers(actor):
     find_compound(actor)
     find_amod_specifiers(actor)
     find_nn_specifier(actor)
+
 
 def find_verb_specifiers(action):
     find_prep_specifier(action)
@@ -107,17 +110,20 @@ def find_nn_specifier(actor):
         specifier = Specifier(s, SpecifierType.NN, s.text)
         actor.add_modifier(specifier)
 
+
 def find_prep_specifier(action):
     prep_specifiers = find_dependency(["prep"], token=action.token)
     for p in prep_specifiers:
         specifier = Specifier(p, SpecifierType.PREP, p.text)
         action.add_modifier(specifier)
 
+
 def find_acomp_specifier(action):
     acomp_specifiers = find_dependency(["acomp"], token=action.token)
     for a in acomp_specifiers:
         specifier = Specifier(a, SpecifierType.ACOMP, a.text)
         action.add_modifier(specifier)
+
 
 def get_complete_actor_name(main_actor):
     l = find_dependency(["compound", "amod", "nmod"], token=main_actor)
@@ -138,3 +144,14 @@ def is_negated(verb: Token, noun: Token) -> bool:
                 return True
 
     return False
+
+
+def correct_model(container: SentenceContainer):
+    for process in container.processes:
+        if process.is_invalid():
+            insertion_index = belongs_to_other_process(process.sub_sentence.root, container)
+            deletion_index = container.processes.index(find_process(container, sub_sent=process.sub_sentence))
+            # swap the insertion_index and deletion_index
+            container.processes[insertion_index], container.processes[deletion_index] = container.processes[
+                deletion_index], container.processes[insertion_index]
+            container.remove_process(sub_sentence=process.sub_sentence)

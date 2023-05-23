@@ -1,25 +1,18 @@
-import Constant
-import spacy
-
 from typing import Optional
 
 from spacy.matcher import Matcher
 from spacy.tokens import Doc, Span, Token
 from spacy import Language
 
-from Model.Action import Action
 from Model.Process import Process
 from Model.SentenceContainer import SentenceContainer
-from Utilities import find_dependency, find_action, contains_indicator
+from AnalyzeText import determine_marker, correct_order
+from Utilities import find_dependency
 
-from ModelBuilder import create_actor, create_action
+from ModelBuilder import create_actor, create_action, correct_model
 
 
-# todo: for sentence like The woman who lives next door is a doctor.
-#  it will be separated into three sub-sentences. Yet the first and the third is actually one
-#  try to identify the "ACTOR" in the first sub-sentence and then check whether it has a nsubj relation with the Verb
-#  in the third sub-sentence, if so, combine them into one sub-sentence!
-def sub_sentence_finder(sentence: Span, doc: Doc) -> [Span]:
+def sub_sentence_finder(sentence: Span) -> [Span]:
     """find the potential sub-sentences of a sentence, when the sentence has no sub-sentence, return the sentence itself
        in a List.
 
@@ -39,12 +32,9 @@ def sub_sentence_finder(sentence: Span, doc: Doc) -> [Span]:
     for i in range(len(sentence_list) - 1):
         left = sentence_list[i]
         right = sentence_list[i + 1]
-        sentence = doc[left:right]
+        sentence = sentence.doc[left:right]
         if sentence.text in symbols:
             continue
-        # if right - left == 1:
-        #     if sentence._.labels == ".":
-        #         continue
         result.append(sentence)
 
     return result
@@ -97,7 +87,7 @@ def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
         container = SentenceContainer(sentence)
         result.append(container)
 
-        sub_sentence_list = sub_sentence_finder(sentence, doc)
+        sub_sentence_list = sub_sentence_finder(sentence)
         for sub_sentence in sub_sentence_list:
             process = Process(sub_sentence)
             extract_elements(sub_sentence, process, nlp)
@@ -105,6 +95,9 @@ def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
 
         if len(container.processes) > 1:
             find_xcomp(container.processes)
+
+    for sentence in result:
+        correct_model(sentence)
 
     return result
 
@@ -136,6 +129,14 @@ def extract_elements(sentence, process, nlp: Language):
     obj = determine_object(verb, sentence_is_active)
     process.action = create_action(verb, obj)
 
+    if process.action is not None:
+        for conjunct in process.action.token.conjuncts:
+            if conjunct == process.action.token:
+                continue
+            if sentence.start < conjunct.i < sentence.end:
+                conjunct_obj = determine_object(conjunct, sentence_is_active)
+                conjunct_action = create_action(conjunct, conjunct_obj)
+                process.action.conjunction.append(conjunct_action)
 
 def is_active(nlp: Language, sentence: Span) -> bool:
     """ determine whether the sentence is in active or in passive voice
@@ -223,7 +224,7 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
     if active:
         if predicate is None:
             return None
-        obj = find_dependency(["dobj"], token=predicate)
+        obj = find_dependency(["dobj", "acomp"], token=predicate)
         if len(obj) == 0:
             obj = find_dependency(["pobj"], token=predicate)
 
@@ -235,150 +236,3 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
 
     return None
 
-
-def determine_marker(container: SentenceContainer, nlp: Language):
-    has_found_marker = determine_single_marker(container)
-    if not has_found_marker:
-        determine_compound_marker(container, nlp)
-
-
-def determine_single_marker(container: SentenceContainer) -> bool:
-    found_marker = False
-
-    mark_list = find_dependency(["mark"], sentence=container.sentence)
-    for mark in mark_list:
-        verb = next(mark.ancestors)
-        action = find_action(verb, container)
-        if action is not None:
-            if mark.text.lower() in Constant.SINGLE_CONDITIONAL_INDICATORS:
-                action.marker = "if"
-                found_marker = True
-
-    advmod_list = find_dependency(["advmod"], sentence=container.sentence)
-    for advmod in advmod_list:
-        verb = next(advmod.ancestors)
-        action = find_action(verb, container)
-        if action is not None:
-            if advmod.text.lower() in Constant.SINGLE_PARALLEL_INDICATORS:
-                action.marker = "while"
-                found_marker = True
-            elif advmod.text.lower() in Constant.SINGLE_CONDITIONAL_INDICATORS:
-                action.marker = "if"
-                found_marker = True
-            elif advmod.text.lower() in Constant.SINGLE_SEQUENCE_INDICATORS:
-                action.marker = "then"
-                found_marker = True
-            # elif not advmod.text.lower() == "also":
-            #     action.pre_adv_mod = advmod
-
-    prep_list = find_dependency(["prep"], sentence=container.sentence)
-    for prep in prep_list:
-        verb = next(prep.ancestors)
-        action = find_action(verb, container)
-        if action is not None:
-            action.prep = prep
-
-    return found_marker
-
-
-def determine_compound_marker(container: SentenceContainer, nlp: Language):
-    for process in container.processes:
-        if process.action is None:
-            continue
-
-        if contains_indicator(Constant.COMPOUND_CONDITIONAL_INDICATORS, process.sub_sentence, nlp):
-            process.action.marker = "if"
-        elif contains_indicator(Constant.COMPOUND_PARALLEL_INDICATORS, process.sub_sentence, nlp):
-            process.action.marker = "while"
-        elif contains_indicator(Constant.COMPOUND_SEQUENCE_INDICATORS, process.sub_sentence, nlp):
-            process.action.marker = "then"
-
-    #
-    #         # todo: is this necessary?
-    #         for indic in Constant.SEQUENCE_INDICATORS:
-    #             if specifier.name.startswith(indic):
-    #                 if process.action.pre_adv_mod is None:
-    #                     process.action.pre_adv_mod = specifier
-
-    return None
-
-
-def determine_implicit_marker():
-    # todo: algorithm 15 -> TextAnalyzer.java line 1217, not sure whether this is necessary
-    return None
-
-
-def correct_order(container: [SentenceContainer]) -> [Process]:
-    result = []
-
-    for sentence in container:
-        for process in sentence.processes:
-            if process.action is None:
-                continue
-
-            if process.action.marker == "if":
-                if not sentence.process_is_first(process):
-                    # stop the maneuver if the pressure is too high -> if the pressure is too high, stop the maneuver
-                    result.insert(len(result) - 1, process)
-                else:
-                    result.append(process)
-            else:
-                result.append(process)
-
-    return result
-
-
-if __name__ == '__main__':
-    import spacy
-    import warnings
-    import benepar
-    import os
-    from spacy_wordnet.wordnet_annotator import WordnetAnnotator
-
-    os.environ['TRANSFORMERS_NO_ADVISORY_WARNINGS'] = 'true'
-    warnings.filterwarnings('ignore')
-    A_nlp = spacy.load('en_core_web_sm')
-    # nlp = spacy.load('en_core_web_trf')
-    A_nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
-    # nlp.add_pipe('benepar', config={'model': 'benepar_en3_large'})
-    A_nlp.add_pipe("spacy_wordnet", after='tagger')
-
-    # text_input = "Father and mother wrote me, Daisy and Anne a letter." \
-    #              "The baby was carried by the kangaroo in her pouch. " \
-    #              "The director will give you the instructions. " \
-    #              "The video was posted on Facebook by Alex and Nancy. " \
-    #              "Send the report to the customer. " \
-    #              "The wedding planner and the action photographer are making all the reservations. " \
-    #              "The surgeon positions the balloon in an area of blockage and inflates it. " \
-
-    text_input = "In case customer accepts the offer, the salesperson will base on this close the deal. " \
-                 "Otherwise, the salesperson will offer a lower price. " \
-                 "In the meantime, the customer prepares the payment. " \
-                 "subsequently the salesperson delivers the product." \
-                 "The process is finished, if the customer is satisfied."
-
-    # text_input = open('Text/text02.txt', 'r').read().replace('\n', ' ')
-
-    document = A_nlp(text_input)
-    container = analyze_document(A_nlp, document)
-    for cont in container:
-        determine_marker(cont, A_nlp)
-    acts = correct_order(container)
-    for act in acts:
-        print("-" * 10)
-        marker = act.action.marker
-        if marker is not None:
-            print(marker + "->")
-
-        actor = act.actor
-        action = act.action
-        obj = action.object
-
-        if actor is not None:
-            print("Actor: "+actor.token.text)
-        if action is not None:
-            print("Action: "+action.token.text)
-        if obj is not None:
-            print("Object: "+obj.token.text)
-
-        print("-" * 10)

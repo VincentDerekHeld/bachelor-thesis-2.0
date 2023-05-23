@@ -12,3 +12,9 @@ class Process:
 
     def __str__(self) -> str:
         return "Sub-sentence: \"" + self.sub_sentence.text + "\""
+
+    def is_invalid(self):
+        if self.actor is None and self.action is None:
+            return True
+        else:
+            return False

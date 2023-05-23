@@ -1,4 +1,4 @@
-from Constant import PERSON_CORRECTOR_LIST, PERSON_PRONOUNS, REAL_ACTOR_DETERMINERS
+from Constant import PERSON_CORRECTOR_LIST, REAL_ACTOR_DETERMINERS, SUBJECT_PRONOUNS
 
 
 # Define a function to get hypernyms
@@ -14,7 +14,7 @@ def get_hypernyms(token):
 def can_be_person_or_system(full_noun: str, main_noun) -> bool:
     if full_noun.lower() in PERSON_CORRECTOR_LIST:
         return True
-    elif main_noun.text.lower() in PERSON_PRONOUNS:
+    elif main_noun.text.lower() in SUBJECT_PRONOUNS:
         return True
 
     synsets = main_noun._.wordnet.synsets()
