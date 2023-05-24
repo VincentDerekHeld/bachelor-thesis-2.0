@@ -82,6 +82,16 @@ def add_index(index_list, index):
 
 
 def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
+    """Analyze the document and return a list of SentenceContainer which contains the extracted information stored in
+        the models.
+
+       Args:
+           nlp: The spacy language model
+           doc: The document that contains the sentence
+
+       Returns:
+           A list SentenceContainer
+    """
     result = []
     for sentence in doc.sents:
         container = SentenceContainer(sentence)
@@ -103,6 +113,12 @@ def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
 
 
 def find_xcomp(processes):
+    """
+    find the xcomp within the processes
+
+    Args:
+        processes: the processes where possible xcomp can be found
+    """
     xcomp = None
     for process in processes:
         if process.action is None:
@@ -120,6 +136,14 @@ def find_xcomp(processes):
 
 
 def extract_elements(sentence, process, nlp: Language):
+    """
+    extract the elements from the sentence, creating the corresponding models, and adding them to the processes
+
+    Args:
+        sentence: the complete sentence
+        process: the process where the elements should be determined and then be added to
+        nlp: the spacy language model
+    """
     sentence_is_active = is_active(nlp, sentence)
 
     actor = determine_actor(sentence, sentence_is_active)
@@ -137,6 +161,7 @@ def extract_elements(sentence, process, nlp: Language):
                 conjunct_obj = determine_object(conjunct, sentence_is_active)
                 conjunct_action = create_action(conjunct, conjunct_obj)
                 process.action.conjunction.append(conjunct_action)
+
 
 def is_active(nlp: Language, sentence: Span) -> bool:
     """ determine whether the sentence is in active or in passive voice
@@ -235,4 +260,3 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
         return obj[0]
 
     return None
-

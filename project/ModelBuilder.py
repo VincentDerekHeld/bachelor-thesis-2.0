@@ -1,3 +1,4 @@
+from typing import Optional
 import WordNetWrapper
 from Model.Action import Action
 from Model.Actor import Actor
@@ -10,7 +11,16 @@ from Utilities import find_dependency, anaphora_resolver, find_actor, belongs_to
 from spacy.tokens import Token
 
 
-def create_actor(main_actor):
+def create_actor(main_actor: Token) -> Optional[Actor]:
+    """
+    Creates an actor from a token, resolves the reference and then determines the noun specifiers for the actor.
+
+    Args:
+        main_actor: the token for the actor
+
+    Returns:
+        the created actor object
+    """
     if main_actor is None:
         return None
 
@@ -27,7 +37,15 @@ def create_actor(main_actor):
     return actor
 
 
-def create_object(obj):
+def create_object(obj: Token) -> Optional[Resource]:
+    """
+    Creates a resource from a token, resolves the reference and then determines the noun specifiers for the resource.
+    Args:
+        obj: the token for the resource
+
+    Returns: the created resource object
+
+    """
     if obj is None:
         return None
 
@@ -37,7 +55,17 @@ def create_object(obj):
     return resource
 
 
-def create_action(verb, noun):
+def create_action(verb: Token, noun: Token) -> Optional[Action]:
+    """
+    Creates an action from a verb and a noun token. It also determines the verb specifiers for the action.
+
+    Args:
+        verb: the verb token for the action
+        noun: the noun token for the object
+
+    Returns: the created action object
+
+    """
     if verb is None:
         return None
 
@@ -147,6 +175,13 @@ def is_negated(verb: Token, noun: Token) -> bool:
 
 
 def correct_model(container: SentenceContainer):
+    """
+    Corrects the model. The women who lives next door is a doctor -> (The women) (who lives next door) (is a doctor)
+    -> (The women is a doctor) (who lives next door)
+    Args:
+        container: the container with the sentence
+
+    """
     for process in container.processes:
         if process.is_invalid():
             insertion_index = belongs_to_other_process(process.sub_sentence.root, container)

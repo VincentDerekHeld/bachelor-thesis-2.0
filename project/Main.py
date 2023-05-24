@@ -45,8 +45,8 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    # text_input = open('Text/text01.txt', 'r').read().replace('\n', ' ')
-    text_input = "The first activity is to check and repair the hardware. The first step solved the problem. "
+    text_input = open('Text/text01.txt', 'r').read().replace('\n', ' ')
+    # text_input = "The first activity is to check and repair the hardware. The first step solved the problem. "
 
     document = nlp(text_input)
     document._.coref_chains.print()

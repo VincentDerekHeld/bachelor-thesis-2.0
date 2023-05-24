@@ -11,11 +11,26 @@ from Model.SentenceContainer import SentenceContainer
 from Utilities import find_dependency, find_action, contains_indicator
 
 def determine_marker(container: SentenceContainer, nlp: Language):
+    """
+    Determines the marker of the action in the given container.
+
+    Args:
+        container: The container that contains the action.
+        nlp: The nlp language object.
+
+    """
     determine_single_marker(container)
     determine_compound_marker(container, nlp)
 
 
 def determine_single_marker(container: SentenceContainer):
+    """
+    Determines the marker of the action that is composed of one word in the given container.
+
+    Args:
+        container: The container that contains the action.
+
+    """
     mark_list = find_dependency(["mark"], sentence=container.sentence)
     for mark in mark_list:
         verb = next(mark.ancestors)
@@ -51,6 +66,14 @@ def determine_single_marker(container: SentenceContainer):
 
 
 def determine_compound_marker(container: SentenceContainer, nlp: Language):
+    """
+    Determines the marker of the action that is composed of multiple words in the given container.
+
+    Args:
+        container: The container that contains the action.
+        nlp: The nlp language object.
+
+    """
     for process in container.processes:
         if process.action is None:
             continue
@@ -81,6 +104,13 @@ def determine_implicit_marker():
 
 
 def correct_order(container: [SentenceContainer]):
+    """
+    # stop the maneuver if the pressure is too high -> if the pressure is too high, stop the maneuver
+
+    Args:
+        container: The container that contains the action.
+
+    """
 
     for sentence in container:
         for process in sentence.processes:
@@ -94,3 +124,4 @@ def correct_order(container: [SentenceContainer]):
                     index = sentence.processes.index(process)
                     sentence.processes.remove(process)
                     sentence.processes.insert(index - 1, process)
+
