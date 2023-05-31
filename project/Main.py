@@ -9,7 +9,8 @@ from spacy import displacy
 from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 
 from AnalyzeSentence import analyze_document
-from AnalyzeText import determine_marker, correct_order
+from AnalyzeText import determine_marker, correct_order, construct
+from Structure.Block import ConditionBlock
 from Utilities import find_dependency
 
 
@@ -46,40 +47,25 @@ if __name__ == '__main__':
     nlp.add_pipe('coreferee')
 
     text_input = open('Text/text01.txt', 'r').read().replace('\n', ' ')
-    # text_input = "The first activity is to check and repair the hardware. The first step solved the problem. "
+    # text_input = "A customer brings in a defective computer and the CRS checks the defect and hands out a repair cost calculation back. " \
+    #              "If the customer accepts the offer, the computer is repaired, otherwise she takes her computer home unrepaired. " \
+    #              "CRS will then check the functionality of the computer. " \
+    #              "If an error is detected another arbitrary repair activity is executed. Otherwise, the repair is finished."
+
+    # text_input = "The first activity is to check and repair the hardware, whereas the second activity checks and configures the software."
 
     document = nlp(text_input)
     document._.coref_chains.print()
+    print()
 
-    contain = analyze_document(nlp, document)
-    for cont in contain:
-        determine_marker(cont, nlp)
-    correct_order(contain)
-    for sent in contain:
-        for proc in sent.processes:
+    # for sent in document.sents:
+    #     print(sent._.parse_string)
+    # displacy.serve(document, style="dep", port=5001)
 
-            print("-" * 10)
-            marker = proc.action.marker
-            if marker is not None:
-                print(marker + "->")
+    containerList = analyze_document(nlp, document)
+    for container in containerList:
+        determine_marker(container, nlp)
+    correct_order(containerList)
 
-            actor = proc.actor
-            action = proc.action
-            obj = action.object
-
-            if actor is not None:
-                if len(actor.resolved_token) > 0:
-                    print("Actor: ", end="")
-                    print(actor.resolved_token)
-                else:
-                    print("Actor: " + actor.token.text)
-            if action is not None:
-                print("Action: " + action.token.text)
-            if obj is not None:
-                if len(obj.resolved_token) > 0:
-                    print("Object: ", end="")
-                    print(obj.resolved_token)
-                else:
-                    print("Object: " + obj.token.text)
-
-            print("-" * 10)
+    linked_list = construct(containerList)
+    print(linked_list)

@@ -38,4 +38,13 @@ class Action(ExtractedObject):
         # self.transient: bool = False
 
     def __str__(self) -> str:
-        return "Action: \"" + self.token.text + "\" " + self.object.__str__()
+        verb = self.verb_base_form
+        # if self.prt is not None:
+        #     verb += " " + self.prt.text
+        if self.prep is not None:
+            verb += " " + self.prep.text
+
+        if self.object is not None:
+            verb += " " + str(self.object)
+
+        return verb

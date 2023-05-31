@@ -17,10 +17,20 @@ class SentenceContainer:
         return process == self.processes[0]
 
     def has_if(self):
-        return any(process.action.marker == "if" for process in self.processes)
+        for process in self.processes:
+            if process.action is None:
+                continue
+            if process.action.marker == "if":
+                return True
+        return False
 
     def has_else(self):
-        return any(process.action.marker == "else" for process in self.processes)
+        for process in self.processes:
+            if process.action is None:
+                continue
+            if process.action.marker == "else":
+                return True
+        return False
 
     def remove_process(self, actor=None, action=None, sub_sentence=None):
         if actor is not None:

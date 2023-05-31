@@ -13,4 +13,19 @@ class Actor(ExtractedObject):
         # self.__num_specifiers = []
 
     def __str__(self) -> str:
-        return "Actor: \"" + self.token.text + "\""
+        actor = ""
+        if self.token is None:
+            return actor
+        else:
+            if len(self.resolved_token) > 0:
+                for a in self.resolved_token:
+                    actor += a.text
+                    if self.resolved_token.index(a) != len(self.resolved_token) - 1:
+                        actor += ", "
+            else:
+                actor = self.token.text
+
+            if self.determiner is not None:
+                actor = self.determiner.text + " " + actor
+
+            return actor

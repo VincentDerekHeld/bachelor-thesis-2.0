@@ -8,7 +8,11 @@ from spacy import Language
 from Model.Action import Action
 from Model.Process import Process
 from Model.SentenceContainer import SentenceContainer
+from Structure.Activity import Activity
+from Structure.Block import ConditionBlock
+from Structure.Structure import LinkedStructure
 from Utilities import find_dependency, find_action, contains_indicator
+
 
 def determine_marker(container: SentenceContainer, nlp: Language):
     """
@@ -125,3 +129,37 @@ def correct_order(container: [SentenceContainer]):
                     sentence.processes.remove(process)
                     sentence.processes.insert(index - 1, process)
 
+
+def construct(container_list: [SentenceContainer]):
+    link = LinkedStructure()
+    for container in container_list:
+        if container.has_if() or container.has_else():
+            if last_container_has_conditional_marker(container, container_list):
+                if isinstance(link.tail, ConditionBlock):
+                    link.tail.add_branch(container)
+            else:
+                if_block = ConditionBlock()
+                if_block.add_branch(container)
+                link.add_structure(if_block)
+
+        # elif container.has_while():
+        # #todo: implemnt has while etc....
+        #     pass
+
+        else:
+            for process in container.processes:
+                activity = Activity(process)
+                link.add_structure(activity)
+
+    return link
+
+
+def last_container_has_conditional_marker(container: SentenceContainer, container_list: [SentenceContainer]):
+    index = container_list.index(container)
+    if index == 0:
+        return False
+    else:
+        if container_list[index - 1].has_if() or container_list[index - 1].has_else():
+            return True
+        else:
+            return False

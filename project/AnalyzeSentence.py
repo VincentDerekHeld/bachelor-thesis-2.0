@@ -92,10 +92,10 @@ def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
        Returns:
            A list SentenceContainer
     """
-    result = []
+    container_list = []
     for sentence in doc.sents:
         container = SentenceContainer(sentence)
-        result.append(container)
+        container_list.append(container)
 
         sub_sentence_list = sub_sentence_finder(sentence)
         for sub_sentence in sub_sentence_list:
@@ -106,10 +106,11 @@ def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
         if len(container.processes) > 1:
             find_xcomp(container.processes)
 
-    for sentence in result:
+    for sentence in container_list:
         correct_model(sentence)
+        complement_model(sentence)
 
-    return result
+    return container_list
 
 
 def find_xcomp(processes):
@@ -260,3 +261,34 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
         return obj[0]
 
     return None
+
+
+def complement_model(container: SentenceContainer):
+    new_processes = container.processes.copy()
+    for process in container.processes:
+        if process.action is None:
+            continue
+
+        # add the conjunctions to the list
+        if len(process.action.conjunction) > 0:
+            index_in_list = new_processes.index(process)
+            for conjunction in process.action.conjunction:
+                # if the process doesn't have an object, the real object might belong to the conjunction
+                if process.action.object is None and conjunction.object is not None:
+                    process.action.object = conjunction.object
+
+                # to determine whether to add the conjunctions before or after this process
+                if conjunction.token.i < process.action.token.i:
+                    index_in_list -= 1
+                # create a new process for the conjunction
+                conjunction_process = Process(process.sub_sentence)
+                conjunction_process.action = conjunction
+                if conjunction.object is None:
+                    conjunction_process.action.object = process.action.object
+                conjunction_process.actor = process.actor
+
+                new_processes.insert(index_in_list + 1, conjunction_process)
+                index_in_list += 1
+
+    # substitute the old processes with the new ones (because we performed the adding element in the loop)
+    container.processes = new_processes

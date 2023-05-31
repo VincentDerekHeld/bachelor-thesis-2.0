@@ -199,7 +199,10 @@ def belongs_to_other_process(root: Token, container: SentenceContainer):
         the process contains the given root token, None otherwise
 
     """
-    ancestor = next(root.ancestors)
+    if len(list(root.ancestors)) > 0:
+        ancestor = next(root.ancestors)
+    else:
+        ancestor = None
     if ancestor is not None:
         if ancestor.pos_ == "AUX" or ancestor.pos_ == "VERB":
             action = find_action(ancestor, container)

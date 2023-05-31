@@ -185,6 +185,8 @@ def correct_model(container: SentenceContainer):
     for process in container.processes:
         if process.is_invalid():
             insertion_index = belongs_to_other_process(process.sub_sentence.root, container)
+            if insertion_index is None:
+                continue
             deletion_index = container.processes.index(find_process(container, sub_sent=process.sub_sentence))
             # swap the insertion_index and deletion_index
             container.processes[insertion_index], container.processes[deletion_index] = container.processes[

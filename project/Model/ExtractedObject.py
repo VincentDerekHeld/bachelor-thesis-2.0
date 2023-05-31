@@ -15,18 +15,18 @@ class ExtractedObject:
 
         self.modifiers: [Specifier] = []
 
-    def add_compound(self, l):
-        self.compound.extend(l)
+    def add_compound(self, compound):
+        self.compound.extend(compound)
 
     def add_modifier(self, modifier):
         self.modifiers.append(modifier)
 
-    def get_specifiers(self, type: [SpecifierType] = None) -> [Specifier]:
-        if type is None:
+    def get_specifiers(self, specifier_type: [SpecifierType] = None) -> [Specifier]:
+        if specifier_type is None:
             return self.modifiers
         else:
             result = []
             for m in self.modifiers:
-                if m.SpecifierType.value in type:
+                if m.SpecifierType.value in specifier_type:
                     result.append(m)
             return result
