@@ -250,7 +250,7 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
     if active:
         if predicate is None:
             return None
-        obj = find_dependency(["dobj", "acomp"], token=predicate)
+        obj = find_dependency(["dobj"], token=predicate)
         if len(obj) == 0:
             obj = find_dependency(["pobj"], token=predicate)
 

@@ -4,14 +4,14 @@ from spacy.matcher.matcher import Matcher
 from spacy.tokens import Doc, Span, Token
 
 from Constant import SUBJECT_PRONOUNS, OBJECT_PRONOUNS
-from Model.Actor import Actor
-from Model.ExtractedObject import ExtractedObject
-from Model.Process import Process
-from Model.SentenceContainer import SentenceContainer
-from Model.Action import Action
+# from Model.Actor import Actor
+# from Model.ExtractedObject import ExtractedObject
+# from Model.Process import Process
+# from Model.SentenceContainer import SentenceContainer
+# from Model.Action import Action
 
 
-def find_dependency(dependencies: [str], sentence: Span = None, token: Token = None) -> [Token]:
+def find_dependency(dependencies: [str], sentence: Span = None, token: Token = None, deep = False) -> [Token]:
     """
     find tokens that has the corresponding dependency in the specified dependencies list
 
@@ -19,16 +19,24 @@ def find_dependency(dependencies: [str], sentence: Span = None, token: Token = N
         dependencies: list of dependencies that we want to find
         sentence: do we want to find dependency in a sentence?
         token: or do we just to find dependency in the children of a token?
+        deep: if true, the function will search the children's children for dependency, useful for compound dependency
 
     Returns:
         list of tokens
 
     """
     result = []
+
     if token is not None:
-        for child in token.children:
-            if child.dep_ in dependencies:
-                result.append(child)
+        if not deep:
+            for child in token.children:
+                if child.dep_ in dependencies:
+                    result.append(child)
+        else:
+            for child in token.children:
+                if child.dep_ in dependencies:
+                    result.append(child)
+                result.extend(find_dependency(dependencies, token=child, deep=True))
 
     elif sentence is not None:
         for token in sentence:
@@ -42,7 +50,7 @@ def find_dependency(dependencies: [str], sentence: Span = None, token: Token = N
     return result
 
 
-def find_action(verb: Token, container: SentenceContainer) -> Optional[Action]:
+def find_action(verb: Token, container):
     """
     given a verb in form of Token, find the corresponding action in the container
 
@@ -60,7 +68,7 @@ def find_action(verb: Token, container: SentenceContainer) -> Optional[Action]:
     return None
 
 
-def find_actor(noun: Token, container: SentenceContainer) -> Optional[Actor]:
+def find_actor(noun: Token, container):
     """
     given a noun in form of Token, find the corresponding actor in the container
 
@@ -78,7 +86,7 @@ def find_actor(noun: Token, container: SentenceContainer) -> Optional[Actor]:
     return None
 
 
-def find_process(container: SentenceContainer, action=None, actor=None, sub_sent=None) -> Optional[Process]:
+def find_process(container, action=None, actor=None, sub_sent=None):
     """
     find the process that has the given action, actor, or sub_sentence
 
@@ -135,7 +143,7 @@ def contains_indicator(rules, sentence: Span, nlp) -> bool:
     return False
 
 
-def anaphora_resolver(obj: ExtractedObject):
+def anaphora_resolver(obj):
     """
     resolve the anaphora in the given object
 
@@ -187,7 +195,7 @@ def resolve_reference(to_be_resolved_word: Token) -> [Token]:
         return []
 
 
-def belongs_to_other_process(root: Token, container: SentenceContainer):
+def belongs_to_other_process(root: Token, container):
     """
     check if the given root token belongs to other action
 
@@ -210,3 +218,44 @@ def belongs_to_other_process(root: Token, container: SentenceContainer):
                 process = find_process(container, action=action)
                 return container.processes.index(process)
     return None
+
+
+def str_utility(string, string_list: [], i=None) -> []:
+    if i is not None:
+        insertion(string, string_list, i)
+    elif len(string_list) == 0:
+        string_list.append(string)
+    else:
+        insertion(string, string_list)
+
+    return string_list
+
+
+def insertion(string, string_list: [], i=None):
+    for s in string_list:
+        if isinstance(s, str):
+            continue
+        if i is not None:
+            index = i
+        else:
+            index = string.i
+
+        if index < s.i:
+            string_list.insert(string_list.index(s), string)
+            return string_list
+    string_list.append(string)
+
+
+def string_list_to_string(string_list: []) -> str:
+    result = ""
+
+    for i in range(len(string_list)):
+        if isinstance(string_list[i], str):
+            result += string_list[i]
+        else:
+            result += string_list[i].text
+
+        if i != len(string_list) - 1:
+            result += " "
+
+    return result

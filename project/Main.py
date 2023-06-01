@@ -46,13 +46,8 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text01.txt', 'r').read().replace('\n', ' ')
-    # text_input = "A customer brings in a defective computer and the CRS checks the defect and hands out a repair cost calculation back. " \
-    #              "If the customer accepts the offer, the computer is repaired, otherwise she takes her computer home unrepaired. " \
-    #              "CRS will then check the functionality of the computer. " \
-    #              "If an error is detected another arbitrary repair activity is executed. Otherwise, the repair is finished."
-
-    # text_input = "The first activity is to check and repair the hardware, whereas the second activity checks and configures the software."
+    # text_input = open('Text/text01.txt', 'r').read().replace('\n', ' ')
+    text_input = "If the customer decides that the costs are acceptable, the process continues, otherwise she takes her computer home unrepaired."
 
     document = nlp(text_input)
     document._.coref_chains.print()

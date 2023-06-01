@@ -41,7 +41,10 @@ class ConditionBlock(Structure):
             elif branch["type"] == ConditionType.ELSE:
                 string += "else:\n"
             for action in branch["actions"]:
-                string += "\t" + str(action) + "\n"
+                if self.branches.index(branch) == len(self.branches) - 1 and branch["actions"].index(action) == len(branch["actions"]) - 1:
+                    string += "\t" + str(action)
+                else:
+                    string += "\t" + str(action) + "\n"
         return string
 
 

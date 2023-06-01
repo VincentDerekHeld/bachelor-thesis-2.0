@@ -1,5 +1,6 @@
 from Model.ExtractedObject import ExtractedObject
 from spacy.tokens import Token
+from Utilities import str_utility, string_list_to_string
 
 
 class Actor(ExtractedObject):
@@ -13,19 +14,19 @@ class Actor(ExtractedObject):
         # self.__num_specifiers = []
 
     def __str__(self) -> str:
-        actor = ""
+        actor = []
         if self.token is None:
-            return actor
+            return ""
         else:
             if len(self.resolved_token) > 0:
                 for a in self.resolved_token:
-                    actor += a.text
-                    if self.resolved_token.index(a) != len(self.resolved_token) - 1:
-                        actor += ", "
+                    actor = str_utility(a, actor)
             else:
-                actor = self.token.text
+                actor = str_utility(self.token, actor)
 
             if self.determiner is not None:
-                actor = self.determiner.text + " " + actor
+                actor = str_utility(self.determiner, actor)
+            for comp in self.compound:
+                actor = str_utility(comp, actor)
 
-            return actor
+            return string_list_to_string(actor)

@@ -78,9 +78,8 @@ def create_action(verb: Token, noun: Token) -> Optional[Action]:
     if len(aux) > 0:
         action.aux = aux[0]
 
-    modifiers = find_dependency(["advmod", "acomp"], token=verb)
-    if len(modifiers) > 0:
-        action.mod = modifiers[0]
+    modifiers = find_dependency(["advmod"], token=verb)
+    action.advmod.extend(modifiers)
 
     negate = is_negated(verb, noun)
     action.negated = negate
@@ -117,7 +116,7 @@ def find_determiner(actor):
 
 
 def find_compound(actor):
-    compound_list = find_dependency(["compound"], token=actor.token)
+    compound_list = find_dependency(["compound"], token=actor.token, deep=True)
     actor.add_compound(compound_list)
 
 

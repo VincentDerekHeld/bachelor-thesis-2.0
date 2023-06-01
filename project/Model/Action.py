@@ -3,6 +3,8 @@ from Model.Resource import Resource
 from spacy.tokens import Token
 from typing import Optional
 
+from Utilities import str_utility, string_list_to_string
+
 
 class Action(ExtractedObject):
     def __init__(self, verb):
@@ -21,30 +23,42 @@ class Action(ExtractedObject):
         # They >were< playing football.
         # She >had< already left when he arrived.
         self.aux: Optional[Token] = None
-        self.mod: Optional[Token] = None
+        self.advmod = []
         self.dative: Optional[Token] = None
 
         self.marker: Optional[str] = None
-        self.marker_from_PP: bool = False
         self.pre_adv_mod: Optional[Token] = None
         self.prep: Optional[Token] = None
 
         self.negated: bool = False
 
-        self.link: Optional[Action] = None
+        # self.link: Optional[Action] = None
         # todo: change to ENUM
         # self.link_type: Optional[str] = None
         # todo: what is this?
         # self.transient: bool = False
 
     def __str__(self) -> str:
-        verb = self.verb_base_form
-        # if self.prt is not None:
-        #     verb += " " + self.prt.text
+        result = []
+        if self.token is None:
+            return ""
+
+        str_utility(self.token, result)
+
+        if self.prt is not None:
+            str_utility(self.prt, result)
         if self.prep is not None:
-            verb += " " + self.prep.text
+            str_utility(self.prep, result)
+
+        for mod in self.advmod:
+            str_utility(mod, result)
+
+        if self.negated:
+            index = result.index(self.token)
+            if index > -1:
+                result.insert(index, "do not")
 
         if self.object is not None:
-            verb += " " + str(self.object)
+            str_utility(str(self.object), result, i=self.object.token.i)
 
-        return verb
+        return string_list_to_string(result)
