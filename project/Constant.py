@@ -54,3 +54,5 @@ COMPOUND_SEQUENCE_INDICATORS = [
 ]
 
 EXCEPTION_INDICATORS = ["except"]
+
+STRING_EXCLUSION_LIST = ["otherwise", "after", "via", "when"]

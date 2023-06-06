@@ -15,16 +15,16 @@ class Resource(ExtractedObject):
         else:
             if len(self.resolved_token) > 0:
                 for r in self.resolved_token:
-                    resource = str_utility(r, resource)
+                    str_utility(r, resource)
             else:
-                resource = str_utility(self.token, resource)
+                str_utility(self.token, resource)
 
             if self.determiner is not None:
-                resource = str_utility(self.determiner, resource)
+                str_utility(self.determiner, resource)
             for comp in self.compound:
-                resource = str_utility(comp, resource)
-            for mod in self.modifiers:
-                if mod.SpecifierType.value == "amod":
-                    resource = str_utility(mod.token, resource)
+                str_utility(comp, resource)
+            for spec in self.specifiers:
+                if spec.SpecifierType.value == "amod":
+                    str_utility(spec.token, resource)
 
             return string_list_to_string(resource)

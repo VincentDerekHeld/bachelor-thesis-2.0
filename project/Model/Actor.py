@@ -20,13 +20,16 @@ class Actor(ExtractedObject):
         else:
             if len(self.resolved_token) > 0:
                 for a in self.resolved_token:
-                    actor = str_utility(a, actor)
+                    str_utility(a, actor)
             else:
-                actor = str_utility(self.token, actor)
+                str_utility(self.token, actor)
 
             if self.determiner is not None:
-                actor = str_utility(self.determiner, actor)
+                str_utility(self.determiner, actor)
             for comp in self.compound:
-                actor = str_utility(comp, actor)
+                str_utility(comp, actor)
+            for spec in self.specifiers:
+                if spec.SpecifierType.value == "amod":
+                    str_utility(spec.token, actor)
 
             return string_list_to_string(actor)

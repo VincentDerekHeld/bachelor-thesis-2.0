@@ -46,8 +46,8 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    # text_input = open('Text/text01.txt', 'r').read().replace('\n', ' ')
-    text_input = "If the customer decides that the costs are acceptable, the process continues, otherwise she takes her computer home unrepaired."
+    text_input = open('Text/text05.txt', 'r').read().replace('\n', ' ')
+    # text_input = "The first activity is to check and repair the hardware, whereas the second activity checks and configures the software."
 
     document = nlp(text_input)
     document._.coref_chains.print()

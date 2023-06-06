@@ -70,13 +70,13 @@ def create_action(verb: Token, noun: Token) -> Optional[Action]:
         return None
 
     action = Action(verb)
+
     if noun is not None:
         resource = create_object(noun)
         action.object = resource
 
     aux = find_dependency(["aux"], token=verb)
-    if len(aux) > 0:
-        action.aux = aux[0]
+    action.aux = aux[0] if len(aux) > 0 else None
 
     modifiers = find_dependency(["advmod"], token=verb)
     action.advmod.extend(modifiers)
@@ -85,15 +85,12 @@ def create_action(verb: Token, noun: Token) -> Optional[Action]:
     action.negated = negate
 
     prt = find_dependency(["prt"], token=verb)
-    if len(prt) > 0:
-        action.prt = prt[0]
+    action.prt = prt[0] if len(prt) > 0 else None
 
     dative = find_dependency(["dative"], token=verb)
-    if len(dative) > 0:
-        action.dative = dative[0]
+    action.dative = dative[0] if len(dative) > 0 else None
 
     find_verb_specifiers(action)
-
     return action
 
 

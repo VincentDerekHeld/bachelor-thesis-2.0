@@ -6,8 +6,7 @@ from spacy import Language
 
 from Model.Process import Process
 from Model.SentenceContainer import SentenceContainer
-from AnalyzeText import determine_marker, correct_order
-from Utilities import find_dependency
+from Utilities import find_dependency, find_process
 
 from ModelBuilder import create_actor, create_action, correct_model
 
@@ -103,8 +102,10 @@ def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
             extract_elements(sub_sentence, process, nlp)
             container.add_process(process)
 
-        if len(container.processes) > 1:
-            find_xcomp(container.processes)
+        # if len(container.processes) > 1:
+        #     find_xcomp(container.processes)
+    for sentence in container_list:
+        complement_actor(sentence)
 
     for sentence in container_list:
         correct_model(sentence)
@@ -155,6 +156,8 @@ def extract_elements(sentence, process, nlp: Language):
     process.action = create_action(verb, obj)
 
     if process.action is not None:
+        process.action.active = sentence_is_active
+
         for conjunct in process.action.token.conjuncts:
             if conjunct == process.action.token:
                 continue
@@ -292,3 +295,35 @@ def complement_model(container: SentenceContainer):
 
     # substitute the old processes with the new ones (because we performed the adding element in the loop)
     container.processes = new_processes
+
+
+def complement_actor(container: SentenceContainer):
+    for process in container.processes:
+        if process.action is not None and process.actor is None:
+            token = process.action.token
+            token = find_xcomp_ancestor(token)
+            if token is None:
+                return
+
+            father = belongs_to_action(container, token)
+            if father is not None:
+                if father.actor is not None:
+                    process.actor = father.actor
+                    return
+
+def find_xcomp_ancestor(token):
+    if token.dep_ == "xcomp":
+        return next(token.ancestors)
+
+    if token.dep_ == "conj":
+        return find_xcomp_ancestor(next(token.ancestors))
+    else:
+        return None
+
+def belongs_to_action(container: SentenceContainer, token: Token):
+    for process in container.processes:
+        if process.action is not None:
+            if process.action.token == token:
+                return process
+    return None
+

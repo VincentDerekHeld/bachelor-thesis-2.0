@@ -3,7 +3,9 @@ from typing import Optional
 from spacy.matcher.matcher import Matcher
 from spacy.tokens import Doc, Span, Token
 
-from Constant import SUBJECT_PRONOUNS, OBJECT_PRONOUNS
+from Constant import SUBJECT_PRONOUNS, OBJECT_PRONOUNS, STRING_EXCLUSION_LIST
+
+
 # from Model.Actor import Actor
 # from Model.ExtractedObject import ExtractedObject
 # from Model.Process import Process
@@ -221,6 +223,13 @@ def belongs_to_other_process(root: Token, container):
 
 
 def str_utility(string, string_list: [], i=None) -> []:
+    if isinstance(string, Token):
+        s = string.text.lower()
+    else:
+        s = string.lower()
+    if s in STRING_EXCLUSION_LIST:
+        return
+
     if i is not None:
         insertion(string, string_list, i)
     elif len(string_list) == 0:
@@ -228,20 +237,18 @@ def str_utility(string, string_list: [], i=None) -> []:
     else:
         insertion(string, string_list)
 
-    return string_list
-
 
 def insertion(string, string_list: [], i=None):
-    for s in string_list:
-        if isinstance(s, str):
+    for s in range(len(string_list)):
+        if isinstance(string_list[s], str):
             continue
         if i is not None:
             index = i
         else:
             index = string.i
 
-        if index < s.i:
-            string_list.insert(string_list.index(s), string)
+        if index < string_list[s].i:
+            string_list.insert(s, string)
             return string_list
     string_list.append(string)
 
@@ -253,9 +260,16 @@ def string_list_to_string(string_list: []) -> str:
         if isinstance(string_list[i], str):
             result += string_list[i]
         else:
-            result += string_list[i].text
+            result += string_list[i].text.lower()
 
         if i != len(string_list) - 1:
             result += " "
 
     return result
+
+
+def find_index(item, l):
+    for i in range(len(l)):
+        if item == l[i]:
+            return i
+    return -1
