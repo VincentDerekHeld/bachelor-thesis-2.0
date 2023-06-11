@@ -11,7 +11,7 @@ from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 from AnalyzeSentence import analyze_document
 from AnalyzeText import determine_marker, correct_order, construct
 from Structure.Block import ConditionBlock
-from Utilities import find_dependency
+from Utilities import find_dependency, text_pre_processing
 
 
 def download_all_dependencies():
@@ -46,9 +46,10 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text05.txt', 'r').read().replace('\n', ' ')
-    # text_input = "The first activity is to check and repair the hardware, whereas the second activity checks and configures the software."
+    text_input = open('Text/text06.txt', 'r').read().replace('\n', ' ')
+    # text_input = "The ongoing repair consists of two activities, which are executed in an arbitrary order."
 
+    text_input = text_pre_processing(text_input)
     document = nlp(text_input)
     document._.coref_chains.print()
     print()
@@ -57,10 +58,11 @@ if __name__ == '__main__':
     #     print(sent._.parse_string)
     # displacy.serve(document, style="dep", port=5001)
 
-    containerList = analyze_document(nlp, document)
+    containerList = analyze_document(document)
     for container in containerList:
         determine_marker(container, nlp)
     correct_order(containerList)
 
     linked_list = construct(containerList)
     print(linked_list)
+

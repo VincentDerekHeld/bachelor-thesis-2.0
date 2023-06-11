@@ -10,13 +10,16 @@ class Action(ExtractedObject):
     def __init__(self, verb):
         super().__init__(verb)
         self.object: Optional[Resource] = None
+        self.prepositional_object: Optional[Resource] = None
         self.conjunction: [Action] = []
         self.xcomp: Optional[Action] = None
+
         # "prt" stands for particle. -> It is a term used in dependency grammar to describe a relationship
         # between a verb and a particle in a phrasal verb.
         # She picked >up< the book.
         # They are looking >into< the problem.
         self.prt: Optional[Token] = None
+
         # Auxiliary verbs are verbs that are used together with a main verb to provide additional information
         # about the verb's tense, voice, or modality.
         # They >were< playing football.
@@ -31,6 +34,9 @@ class Action(ExtractedObject):
 
         self.negated: bool = False
         self.active: bool = False
+
+        # a specific attribute used for the if condition
+        self.subclause: Optional[Action] = None
 
         # self.link: Optional[Action] = None
         # todo: change to ENUM
@@ -50,11 +56,15 @@ class Action(ExtractedObject):
 
         if self.prt is not None:
             str_utility(self.prt, result)
-        if self.prep is not None:
-            str_utility(self.prep, result)
 
-        for mod in self.advmod:
-            str_utility(mod, result)
+        if self.prep is not None and self.prepositional_object is not None:
+            pobj = str(self.prepositional_object)
+            if pobj != "":
+                str_utility(self.prep, result)
+                str_utility(pobj, result, i=self.prepositional_object.token.i)
+
+        # for mod in self.advmod:
+        #     str_utility(mod, result)
 
         for spec in self.specifiers:
             if spec.SpecifierType.value == "acomp":
@@ -69,6 +79,10 @@ class Action(ExtractedObject):
                     result.insert(index, "do not")
 
         if self.object is not None:
-            str_utility(str(self.object), result, i=self.object.token.i)
+            if self.prepositional_object is not None:
+                if self.object.token != self.prepositional_object.token:
+                    str_utility(str(self.object), result, i=self.object.token.i)
+            else:
+                str_utility(str(self.object), result, i=self.object.token.i)
 
         return string_list_to_string(result)

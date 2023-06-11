@@ -10,26 +10,23 @@ class Actor(ExtractedObject):
         # A “real”-Actor, as a person, an organization or a software system. -> [“person”, “social group”, “software system”]
         self.is_real_actor = True
         self.is_meta_actor = False
-        # todo: I'm not sure the numbers should also be concluded in the class
-        # self.__num_specifiers = []
 
     def __str__(self) -> str:
-        actor = []
         if self.token is None:
             return ""
         else:
-            if len(self.resolved_token) > 0:
-                for a in self.resolved_token:
-                    str_utility(a, actor)
-            else:
-                str_utility(self.token, actor)
+            actor = self.get_all_children()
 
-            if self.determiner is not None:
-                str_utility(self.determiner, actor)
-            for comp in self.compound:
-                str_utility(comp, actor)
-            for spec in self.specifiers:
-                if spec.SpecifierType.value == "amod":
-                    str_utility(spec.token, actor)
+        if len(self.resolved_token) > 0:
+            s = ""
+            for a in self.resolved_token:
+                if self.resolved_token.index(a) != len(self.resolved_token) - 1:
+                    s += a.text + ", "
+                else:
+                    s += a.text
 
-            return string_list_to_string(actor)
+            str_utility(s, actor, self.token.i)
+        else:
+            str_utility(self.token, actor)
+
+        return string_list_to_string(actor)

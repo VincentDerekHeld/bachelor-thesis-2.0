@@ -14,7 +14,7 @@ POSSESSIVE_ADJECTIVES = ["my", "your", "his", "her", "its", "our", "your", "thei
 POSSESSIVE_PRONOUNS = ["mine", "yours", "his", "hers", "ours", "yours", "theirs"]
 
 #  "whereas", "optionally"
-SINGLE_IF_CONDITIONAL_INDICATORS = ["if", "whether"]
+SINGLE_IF_CONDITIONAL_INDICATORS = ["if", "whether", "once"]
 
 SINGLE_ELSE_CONDITIONAL_INDICATORS = ["else", "otherwise"]
 
@@ -55,4 +55,4 @@ COMPOUND_SEQUENCE_INDICATORS = [
 
 EXCEPTION_INDICATORS = ["except"]
 
-STRING_EXCLUSION_LIST = ["otherwise", "after", "via", "when"]
+STRING_EXCLUSION_LIST = []

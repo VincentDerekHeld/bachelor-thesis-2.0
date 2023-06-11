@@ -2,6 +2,7 @@ from typing import Optional
 from spacy.tokens import Token
 from Model.Specifier import Specifier
 from Model.SpecifierType import SpecifierType
+from Utilities import str_utility
 
 
 class ExtractedObject:
@@ -30,3 +31,16 @@ class ExtractedObject:
                 if m.SpecifierType.value in specifier_type:
                     result.append(m)
             return result
+
+    def get_all_children(self):
+        result = []
+        self._help_get_all_children(self.token, result)
+        return result
+
+    def _help_get_all_children(self, token, result):
+        for child in token.children:
+            if child.dep_ in ["relcl", "punct", "acl"]:
+                continue
+            self._help_get_all_children(child, result)
+            str_utility(child, result)
+        return result

@@ -9,22 +9,21 @@ class Resource(ExtractedObject):
         self.resolved_token: [Token] = []
 
     def __str__(self) -> str:
-        resource = []
         if self.token is None:
             return ""
         else:
+            resource = self.get_all_children()
+
             if len(self.resolved_token) > 0:
+                s = ""
                 for r in self.resolved_token:
-                    str_utility(r, resource)
+                    if self.resolved_token.index(r) != len(self.resolved_token) - 1:
+                        s += r.text + ", "
+                    else:
+                        s += r.text
+
+                str_utility(s, resource, self.token.i)
             else:
                 str_utility(self.token, resource)
-
-            if self.determiner is not None:
-                str_utility(self.determiner, resource)
-            for comp in self.compound:
-                str_utility(comp, resource)
-            for spec in self.specifiers:
-                if spec.SpecifierType.value == "amod":
-                    str_utility(spec.token, resource)
 
             return string_list_to_string(resource)

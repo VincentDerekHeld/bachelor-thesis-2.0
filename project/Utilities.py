@@ -1,3 +1,4 @@
+import re
 from typing import Optional
 
 from spacy.matcher.matcher import Matcher
@@ -13,7 +14,7 @@ from Constant import SUBJECT_PRONOUNS, OBJECT_PRONOUNS, STRING_EXCLUSION_LIST
 # from Model.Action import Action
 
 
-def find_dependency(dependencies: [str], sentence: Span = None, token: Token = None, deep = False) -> [Token]:
+def find_dependency(dependencies: [str], sentence: Span = None, token: Token = None, deep=False) -> [Token]:
     """
     find tokens that has the corresponding dependency in the specified dependencies list
 
@@ -47,7 +48,7 @@ def find_dependency(dependencies: [str], sentence: Span = None, token: Token = N
                     result.append(child)
 
     else:
-        return None
+        return []
 
     return result
 
@@ -170,7 +171,7 @@ def needs_resolve_reference(word: Token) -> bool:
         True if the word needs to be resolved, False otherwise
 
     """
-    if word.text in SUBJECT_PRONOUNS or word.text in OBJECT_PRONOUNS:
+    if word.text.lower() in SUBJECT_PRONOUNS or word.text in OBJECT_PRONOUNS:
         return True
     return False
 
@@ -268,8 +269,5 @@ def string_list_to_string(string_list: []) -> str:
     return result
 
 
-def find_index(item, l):
-    for i in range(len(l)):
-        if item == l[i]:
-            return i
-    return -1
+def text_pre_processing(text: str) -> str:
+    return re.sub("[\(\[].*?[\)\]]", "", text)

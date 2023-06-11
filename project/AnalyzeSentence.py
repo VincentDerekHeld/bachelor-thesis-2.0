@@ -5,8 +5,9 @@ from spacy.tokens import Doc, Span, Token
 from spacy import Language
 
 from Model.Process import Process
+from Model.Resource import Resource
 from Model.SentenceContainer import SentenceContainer
-from Utilities import find_dependency, find_process
+from Utilities import find_dependency
 
 from ModelBuilder import create_actor, create_action, correct_model
 
@@ -80,7 +81,7 @@ def add_index(index_list, index):
         return index_list
 
 
-def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
+def analyze_document(doc: Doc) -> [SentenceContainer]:
     """Analyze the document and return a list of SentenceContainer which contains the extracted information stored in
         the models.
 
@@ -99,15 +100,15 @@ def analyze_document(nlp: Language, doc: Doc) -> [SentenceContainer]:
         sub_sentence_list = sub_sentence_finder(sentence)
         for sub_sentence in sub_sentence_list:
             process = Process(sub_sentence)
-            extract_elements(sub_sentence, process, nlp)
+            extract_elements(sub_sentence, process)
             container.add_process(process)
 
         # if len(container.processes) > 1:
         #     find_xcomp(container.processes)
-    for sentence in container_list:
-        complement_actor(sentence)
 
     for sentence in container_list:
+        complement_actor(sentence)
+        complement_object(sentence)
         correct_model(sentence)
         complement_model(sentence)
 
@@ -137,7 +138,7 @@ def find_xcomp(processes):
                     process.action.xcomp = p.action
 
 
-def extract_elements(sentence, process, nlp: Language):
+def extract_elements(sentence, process):
     """
     extract the elements from the sentence, creating the corresponding models, and adding them to the processes
 
@@ -146,7 +147,7 @@ def extract_elements(sentence, process, nlp: Language):
         process: the process where the elements should be determined and then be added to
         nlp: the spacy language model
     """
-    sentence_is_active = is_active(nlp, sentence)
+    sentence_is_active = is_active(sentence)
 
     actor = determine_actor(sentence, sentence_is_active)
     process.actor = create_actor(actor)
@@ -167,7 +168,7 @@ def extract_elements(sentence, process, nlp: Language):
                 process.action.conjunction.append(conjunct_action)
 
 
-def is_active(nlp: Language, sentence: Span) -> bool:
+def is_active(sentence: Span) -> bool:
     """ determine whether the sentence is in active or in passive voice
 
         Args:
@@ -175,18 +176,9 @@ def is_active(nlp: Language, sentence: Span) -> bool:
 
         Returns:
             return True if the sentence is in active voice, False otherwise
-
-        References:
-            https://gist.github.com/armsp/30c2c1e19a0f1660944303cf079f831a
     """
-    matcher = Matcher(nlp.vocab)
-    passive_rule = [{'DEP': 'nsubjpass'}, {'DEP': 'aux', 'OP': '*'}, {'DEP': 'auxpass'}, {'TAG': 'VBN'}]
-    matcher.add('passive', [passive_rule])
-    matches = matcher(sentence)
-    if len(matches) > 0:
-        return False
-    else:
-        return True
+    passive_tense = [tok for tok in sentence if (tok.dep_ == 'auxpass')]
+    return not len(passive_tense) > 0
 
 
 def determine_actor(sentence: Span, active: bool) -> Optional[Token]:
@@ -255,7 +247,9 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
             return None
         obj = find_dependency(["dobj"], token=predicate)
         if len(obj) == 0:
-            obj = find_dependency(["pobj"], token=predicate)
+            prep = find_dependency(["prep"], token=predicate)
+            if len(prep) > 0:
+                obj = find_dependency(["pobj"], token=prep[0])
 
     else:
         obj = find_dependency(["nsubjpass"], token=predicate)
@@ -311,6 +305,22 @@ def complement_actor(container: SentenceContainer):
                     process.actor = father.actor
                     return
 
+
+def complement_object(container: SentenceContainer):
+    for process in container.processes:
+        if process.action is not None:
+            if process.action.object is None:
+                # todo: develop algorithm
+                return
+
+            elif process.action.object.token.pos_ == "PRON":
+                if process.action.token.dep_ == "relcl":
+                    new_obj = next(process.action.token.ancestors)
+                    if new_obj is not None:
+                        process.action.object = Resource(new_obj)
+                        return
+
+
 def find_xcomp_ancestor(token):
     if token.dep_ == "xcomp":
         return next(token.ancestors)
@@ -320,10 +330,10 @@ def find_xcomp_ancestor(token):
     else:
         return None
 
+
 def belongs_to_action(container: SentenceContainer, token: Token):
     for process in container.processes:
         if process.action is not None:
             if process.action.token == token:
                 return process
     return None
-

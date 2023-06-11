@@ -87,11 +87,27 @@ def create_action(verb: Token, noun: Token) -> Optional[Action]:
     prt = find_dependency(["prt"], token=verb)
     action.prt = prt[0] if len(prt) > 0 else None
 
+    pobj = find_pobj(verb)
+    action.prepositional_object = Resource(pobj) if pobj is not None else None
+
     dative = find_dependency(["dative"], token=verb)
     action.dative = dative[0] if len(dative) > 0 else None
 
     find_verb_specifiers(action)
     return action
+
+
+def find_pobj(verb: Token):
+    pobj = find_dependency(["pobj"], token=verb)
+    if len(pobj) == 0:
+        prep = find_dependency(["prep"], token=verb)
+        if len(prep) > 0:
+            pobj = find_dependency(["pobj"], token=prep[0])
+
+    if len(pobj) > 0:
+        return pobj[0]
+    else:
+        return None
 
 
 def determine_noun_specifiers(actor):
@@ -182,6 +198,7 @@ def correct_model(container: SentenceContainer):
         if process.is_invalid():
             insertion_index = belongs_to_other_process(process.sub_sentence.root, container)
             if insertion_index is None:
+                container.remove_process(sub_sentence=process.sub_sentence)
                 continue
             deletion_index = container.processes.index(find_process(container, sub_sent=process.sub_sentence))
             # swap the insertion_index and deletion_index

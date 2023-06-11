@@ -102,11 +102,6 @@ def determine_compound_marker(container: SentenceContainer, nlp: Language):
     return None
 
 
-def determine_implicit_marker():
-    # todo: algorithm 15 -> TextAnalyzer.java line 1217, not sure whether this is necessary
-    return None
-
-
 def correct_order(container: [SentenceContainer]):
     """
     # stop the maneuver if the pressure is too high -> if the pressure is too high, stop the maneuver

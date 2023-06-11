@@ -35,6 +35,7 @@ class ConditionBlock(Structure):
 
     def __str__(self) -> str:
         string = ""
+        string += "-----BEGIN_IF-----\n"
         for branch in self.branches:
             if branch["type"] == ConditionType.IF:
                 string += "if: " + str(branch["condition"]) + ":\n"
@@ -45,6 +46,7 @@ class ConditionBlock(Structure):
                     string += "\t" + str(action)
                 else:
                     string += "\t" + str(action) + "\n"
+        string += "\n-----END_IF-----"
         return string
 
 
