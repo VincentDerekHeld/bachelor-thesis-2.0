@@ -33,6 +33,20 @@ class ConditionBlock(Structure):
             if len(self.branches) > 0:
                 self.branches[-1]["actions"].append(Activity(process))
 
+    def merge_branches(self, incoming: "ConditionBlock"):
+        for branch in incoming.branches:
+            self.branches.append(branch)
+
+    def create_dummy_branch(self):
+        branch = {"type": ConditionType.ELSE, "condition": None, "actions": []}
+        self.branches.append(branch)
+
+    def is_complete(self):
+        if len(self.branches) == 1:
+            return False
+        else:
+            return True
+
     def __str__(self) -> str:
         string = ""
         string += "-----BEGIN_IF-----\n"
@@ -42,7 +56,8 @@ class ConditionBlock(Structure):
             elif branch["type"] == ConditionType.ELSE:
                 string += "else:\n"
             for action in branch["actions"]:
-                if self.branches.index(branch) == len(self.branches) - 1 and branch["actions"].index(action) == len(branch["actions"]) - 1:
+                if self.branches.index(branch) == len(self.branches) - 1 and branch["actions"].index(action) == len(
+                        branch["actions"]) - 1:
                     string += "\t" + str(action)
                 else:
                     string += "\t" + str(action) + "\n"
@@ -50,7 +65,32 @@ class ConditionBlock(Structure):
         return string
 
 
-class AndBlock:
+class AndBlock(Structure):
     def __init__(self):
+        super().__init__()
         self.branches = []
-        self.next = None
+
+    def add_branch(self, container: SentenceContainer):
+        branch = []
+
+        for process in container.processes:
+            if process.action is None:
+                continue
+            else:
+                branch.append(Activity(process))
+
+        self.branches.append(branch)
+
+    def __str__(self) -> str:
+        string = ""
+        string += "-----BEGIN_AND-----\n"
+        for branch in self.branches:
+            string += str(self.branches.index(branch) + 1) + ":\n"
+            for action in branch:
+                if self.branches.index(branch) == len(self.branches) - 1 and branch.index(action) == len(
+                        branch) - 1:
+                    string += "\t" + str(action)
+                else:
+                    string += "\t" + str(action) + "\n"
+        string += "\n-----END_AND-----"
+        return string

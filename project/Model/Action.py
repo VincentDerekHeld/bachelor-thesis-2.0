@@ -1,3 +1,6 @@
+from enum import Enum
+
+from Model.Actor import Actor
 from Model.ExtractedObject import ExtractedObject
 from Model.Resource import Resource
 from spacy.tokens import Token
@@ -5,6 +8,8 @@ from typing import Optional
 
 from Utilities import str_utility, string_list_to_string
 
+class LinkType(Enum):
+    FORWARD = "forward"
 
 class Action(ExtractedObject):
     def __init__(self, verb):
@@ -38,9 +43,8 @@ class Action(ExtractedObject):
         # a specific attribute used for the if condition
         self.subclause: Optional[Action] = None
 
-        # self.link: Optional[Action] = None
-        # todo: change to ENUM
-        # self.link_type: Optional[str] = None
+        self.link: Optional[Action] = None
+        self.link_type: Optional[LinkType] = None
         # todo: what is this?
         # self.transient: bool = False
 

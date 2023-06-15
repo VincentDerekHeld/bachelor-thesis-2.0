@@ -9,7 +9,7 @@ from Model.Action import Action
 from Model.Process import Process
 from Model.SentenceContainer import SentenceContainer
 from Structure.Activity import Activity
-from Structure.Block import ConditionBlock
+from Structure.Block import ConditionBlock, AndBlock
 from Structure.Structure import LinkedStructure
 from Utilities import find_dependency, find_action, contains_indicator
 
@@ -126,27 +126,85 @@ def correct_order(container: [SentenceContainer]):
 
 
 def construct(container_list: [SentenceContainer]):
+    # result = []
     link = LinkedStructure()
-    for container in container_list:
+    for i in range(len(container_list)):
+        container = container_list[i]
+        if i + 1 <= len(container_list) - 1:
+            next_container = container_list[i + 1]
+        else:
+            next_container = None
+
         if container.has_if() or container.has_else():
             if last_container_has_conditional_marker(container, container_list):
                 if isinstance(link.tail, ConditionBlock):
+                # if isinstance(result[-1], ConditionBlock):
+                #     result[-1].add_branch(container)
                     link.tail.add_branch(container)
             else:
                 if_block = ConditionBlock()
                 if_block.add_branch(container)
+                # result.append(if_block)
                 link.add_structure(if_block)
 
+        # todo: what if the single sentence contains two parrallel action that has nothing to do with other sentences?
         # elif container.has_while():
-        # #todo: implemnt has while etc....
-        #     pass
+        #     if isinstance(result[-1], AndBlock):
+        #         result[-1].add_branch(container)
+        #     elif not isinstance(result[-1], ConditionBlock):
+        #         and_block = AndBlock()
+        #         and_block.add_branch(result[-1])
+        #         and_block.add_branch(container)
+        #         result.remove(result[-1])
+        #         result.append(and_block)
+
+
+        elif next_container is not None and next_container.has_while():
+            and_block = AndBlock()
+            and_block.add_branch(container)
+            and_block.add_branch(container_list[i + 1])
+            # result.append(and_block)
+            link.add_structure(and_block)
+            i += 1
 
         else:
+            # result.append(container)
+
             for process in container.processes:
                 activity = Activity(process)
                 link.add_structure(activity)
 
+    # return result
     return link
+
+
+def build_flows(container_list: [SentenceContainer]):
+    flow_list = construct(container_list)
+    link = LinkedStructure()
+
+    for i in range(len(flow_list)):
+        if isinstance(flow_list[i], ConditionBlock):
+            if flow_list[i].is_complete():
+                link.add_structure(flow_list[i])
+            else:
+                pass
+        elif isinstance(flow_list[i], AndBlock):
+            link.add_structure(flow_list[i])
+        else:
+            for process in flow_list[i].processes:
+                activity = Activity(process)
+                link.add_structure(activity)
+
+    return link
+
+def get_valid_actors(container: SentenceContainer):
+    result = []
+    for process in container.processes:
+        if process.actor is not None:
+            if process.actor.is_real_actor():
+                result.append(process.actor)
+
+    return result
 
 
 def last_container_has_conditional_marker(container: SentenceContainer, container_list: [SentenceContainer]):

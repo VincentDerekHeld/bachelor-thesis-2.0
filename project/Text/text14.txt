@@ -8,7 +8,7 @@ Should everything be in order, he notes his code one on the docket ("accurate po
  From it, the copy of the invoice is passed on to the next cost center manager, based on the docket, or if all items are marked correct, sent back to accounting. 
  Therefore, the copy of invoice and the docket gradually move through the hands of all cost center managers until all positions are marked as completely accurate. 
  However, if inconsistencies exist, e.g. because the ordered product is not of the expected quantity or quality, the cost center manager rejects the AP with a note and explanatory statement on the docket, and the copy of the invoice is sent back to accounting directly. 
- Based on the statements of the cost center managers, she will proceede with the clarification with the vendor, but, if necessary, she consults the cost center managers by telephone or e-mail again. 
+ Based on the statements of the cost center managers, she will proceed with the clarification with the vendor, but, if necessary, she consults the cost center managers by telephone or e-mail again.
  When all inconsistencies are resolved, the copy of the invoice is sent to the cost center managers again, and the process continues. 
  After all invoice items are AP, the accounting employee forwards the copy of the invoice to the commercial manager. 
  He makes the commercial audit and issues the approval for payment. 

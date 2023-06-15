@@ -46,17 +46,15 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text06.txt', 'r').read().replace('\n', ' ')
-    # text_input = "The ongoing repair consists of two activities, which are executed in an arbitrary order."
+    text_input = open('Text/text08.txt', 'r').read().replace('\n', ' ')
+    # text_input = "If an error is detected another arbitrary repair activity is executed. Otherwise, the repair is finished."
+
+
 
     text_input = text_pre_processing(text_input)
     document = nlp(text_input)
     document._.coref_chains.print()
     print()
-
-    # for sent in document.sents:
-    #     print(sent._.parse_string)
-    # displacy.serve(document, style="dep", port=5001)
 
     containerList = analyze_document(document)
     for container in containerList:
@@ -65,4 +63,29 @@ if __name__ == '__main__':
 
     linked_list = construct(containerList)
     print(linked_list)
+
+
+
+
+    # for file in os.listdir("Text"):
+    #     if file == "__pycache__":
+    #         continue
+    #     print("*" * 50)
+    #     print(file)
+    #     text_input = open('Text/' + file, 'r').read().replace('\n', ' ')
+    #
+    #     text_input = text_pre_processing(text_input)
+    #     document = nlp(text_input)
+    #     document._.coref_chains.print()
+    #     print()
+    #
+    #
+    #     containerList = analyze_document(document)
+    #     for container in containerList:
+    #         determine_marker(container, nlp)
+    #     correct_order(containerList)
+    #
+    #     linked_list = construct(containerList)
+    #     print(linked_list)
+    #     print("*" * 50)
 

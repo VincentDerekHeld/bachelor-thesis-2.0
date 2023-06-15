@@ -32,6 +32,14 @@ class SentenceContainer:
                 return True
         return False
 
+    def has_while(self):
+        for process in self.processes:
+            if process.action is None:
+                continue
+            if process.action.marker == "while":
+                return True
+        return False
+
     def remove_process(self, actor=None, action=None, sub_sentence=None):
         if actor is not None:
             for process in self.processes:
