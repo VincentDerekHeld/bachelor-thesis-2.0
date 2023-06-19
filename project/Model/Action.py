@@ -6,7 +6,8 @@ from Model.Resource import Resource
 from spacy.tokens import Token
 from typing import Optional
 
-from Utilities import str_utility, string_list_to_string
+from Utilities import str_utility, string_list_to_string, index_of
+
 
 class LinkType(Enum):
     FORWARD = "forward"
@@ -61,12 +62,6 @@ class Action(ExtractedObject):
         if self.prt is not None:
             str_utility(self.prt, result)
 
-        if self.prep is not None and self.prepositional_object is not None:
-            pobj = str(self.prepositional_object)
-            if pobj != "":
-                str_utility(self.prep, result)
-                str_utility(pobj, result, i=self.prepositional_object.token.i)
-
         # for mod in self.advmod:
         #     str_utility(mod, result)
 
@@ -75,12 +70,12 @@ class Action(ExtractedObject):
                 str_utility(spec.token, result)
 
         if self.negated:
-            index = result.index(self.token)
+            index = index_of(self.token, result)
             if index > -1:
                 if self.token.lemma_ in ["be", "have"]:
                     result.insert(index + 1, "not")
                 else:
-                    result.insert(index, "do not")
+                    result.insert(index, "not")
 
         if self.object is not None:
             if self.prepositional_object is not None:
@@ -88,5 +83,11 @@ class Action(ExtractedObject):
                     str_utility(str(self.object), result, i=self.object.token.i)
             else:
                 str_utility(str(self.object), result, i=self.object.token.i)
+
+        if self.prep is not None and self.prepositional_object is not None:
+            pobj = str(self.prepositional_object)
+            if pobj != "":
+                str_utility(self.prep, result)
+                str_utility(pobj, result, i=self.prepositional_object.token.i)
 
         return string_list_to_string(result)

@@ -1,4 +1,11 @@
+from enum import Enum
 from typing import Optional
+
+
+class StructureType(Enum):
+    ACTIVITY = "activity"
+    CONDITION = "condition"
+    PARALLEL = "parallel"
 
 
 class Structure:
@@ -7,6 +14,7 @@ class Structure:
     def __init__(self):
         Structure.ID_COUNTER += 1
         self.id = Structure.ID_COUNTER
+        self.type: StructureType = None
 
         self.previous: Optional[Structure] = None
         self.next: Optional[Structure] = None

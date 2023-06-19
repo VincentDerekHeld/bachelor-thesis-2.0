@@ -228,6 +228,7 @@ def str_utility(string, string_list: [], i=None) -> []:
         s = string.text.lower()
     else:
         s = string.lower()
+
     if s in STRING_EXCLUSION_LIST:
         return
 
@@ -267,6 +268,18 @@ def string_list_to_string(string_list: []) -> str:
             result += " "
 
     return result
+
+
+def index_of(item: Token, l: []) -> int:
+    for i in range(len(l)):
+        if isinstance(l[i], str):
+            if item.lemma_ == l[i]:
+                return i
+        elif isinstance(l[i], Token):
+            if item == l[i]:
+                return i
+        else:
+            continue
 
 
 def text_pre_processing(text: str) -> str:

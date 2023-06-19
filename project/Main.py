@@ -9,7 +9,8 @@ from spacy import displacy
 from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 
 from AnalyzeSentence import analyze_document
-from AnalyzeText import determine_marker, correct_order, construct
+from AnalyzeText import determine_marker, correct_order, construct, build_flows, get_valid_actors
+from BPMNCreator import create_bpmn_model
 from Structure.Block import ConditionBlock
 from Utilities import find_dependency, text_pre_processing
 
@@ -46,13 +47,12 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text08.txt', 'r').read().replace('\n', ' ')
-    # text_input = "If an error is detected another arbitrary repair activity is executed. Otherwise, the repair is finished."
-
-
+    text_input = open('Text/text04.txt', 'r').read().replace('\n', ' ')
+    # text_input = "Unfortunately it is not coupled correctly to our Enterprise Resource Planning system."
 
     text_input = text_pre_processing(text_input)
     document = nlp(text_input)
+
     document._.coref_chains.print()
     print()
 
@@ -60,9 +60,16 @@ if __name__ == '__main__':
     for container in containerList:
         determine_marker(container, nlp)
     correct_order(containerList)
+    valid_actors = get_valid_actors(containerList)
+    print(valid_actors)
+    for container in containerList:
+        for process in container.processes:
+            if process.actor is not None:
+                print(process.actor.full_name)
 
-    linked_list = construct(containerList)
-    print(linked_list)
+    # linked_list = build_flows(containerList)
+    # print(linked_list)
+    # create_bpmn_model("test")
 
 
 
@@ -85,7 +92,6 @@ if __name__ == '__main__':
     #         determine_marker(container, nlp)
     #     correct_order(containerList)
     #
-    #     linked_list = construct(containerList)
+    #     linked_list = build_flows(containerList)
     #     print(linked_list)
     #     print("*" * 50)
-

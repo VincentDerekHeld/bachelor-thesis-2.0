@@ -1,0 +1,22 @@
+-----BEGIN_IF-----
+if: the organization insure the claimant:
+	check it
+-----END_IF-----
+inform the claimant
+reject the claim
+-----BEGIN_IF-----
+else:
+	evaluate the severity of the claim
+-----END_IF-----
+send relevant forms
+-----BEGIN_IF-----
+if: return the forms:
+	check forms for completeness
+if: the forms provide all relevant details:
+	register the claim in the claims management system
+	which ends the claims notiﬁcation process
+else:
+	inform the claimant
+	update the forms
+-----END_IF-----
+check claimant upon reception of the updated forms

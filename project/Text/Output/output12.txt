@@ -1,0 +1,22 @@
+one of my masters determines the necessary parts and quantities as well as the delivery date
+we get a new order from the sales department
+-----BEGIN_IF-----
+if: that information is present:
+	information has
+-----END_IF-----
+information optimizes our production processes
+information create possibly uniform work packages
+minimize the setup times
+information creates a list of parts
+not couple information to our enterprise resource planning system
+transfer the data
+that by the way is
+-----BEGIN_IF-----
+if: all the data is present:
+	we need
+if: this is not necessary:
+if: schedule production:
+	we receive a notice from the system
+	an employee takes care of the implementation
+-----END_IF-----
+check the order for its quality

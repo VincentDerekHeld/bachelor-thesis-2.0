@@ -34,13 +34,13 @@ class ExtractedObject:
 
     def get_all_children(self):
         result = []
-        self._help_get_all_children(self.token, result)
+        self.help_get_all_children(self.token, result)
         return result
 
-    def _help_get_all_children(self, token, result):
+    def help_get_all_children(self, token, result):
         for child in token.children:
             if child.dep_ in ["relcl", "punct", "acl"]:
                 continue
-            self._help_get_all_children(child, result)
+            self.help_get_all_children(child, result)
             str_utility(child, result)
         return result

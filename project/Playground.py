@@ -14,8 +14,8 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text02.txt', 'r').read().replace('\n', ' ')
-    # text_input = "The first activity is to check and repair the hardware, whereas the second activity checks and configures the software."
+    text_input = open('Text/text04.txt', 'r').read().replace('\n', ' ')
+    # text_input = "If the storehouse has successfully reserved or back-ordered every item of the part list and the preparation activity has finished, the engineering department assembles the bicycle."
 
     document = nlp(text_input)
 

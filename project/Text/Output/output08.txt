@@ -1,0 +1,15 @@
+the loan approval process starts
+receiving a customer request for a loan amount
+invoke the risk assessment web service
+assess the request
+-----BEGIN_IF-----
+if: the loan is small:
+	the customer is
+	approve the loan
+if: the customer is:
+	deny the loan
+if: the customer needs further review:
+	the loan amount is for $ 10,000 or more
+	send the request
+-----END_IF-----
+the customer receives feedback from the assessor or approver

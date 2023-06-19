@@ -1,0 +1,22 @@
+the evanstonian is
+a guest calls room service at the evanstonian
+the room service manager takes down the order
+manager submits an order ticket to the kitchen
+preparing the food
+manager gives an order to the sommelier
+fetch wine from the cellar
+prepare any other alcoholic beverages
+eighty percent of room service orders include wine or some other alcoholic beverage
+manager assigns the order to the waiter
+the kitchen and the sommelier doing their tasks
+the waiter readies a cart
+the waiter is responsible
+-----BEGIN_IF-----
+if: the food wine and cart are ready:
+	the waiter delivers food to the guests room
+-----END_IF-----
+the waiter debits the guests account
+-----BEGIN_IF-----
+if: sommelier has another order:
+	the waiter do the billing
+-----END_IF-----

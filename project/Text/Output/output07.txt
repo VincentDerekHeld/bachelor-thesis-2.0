@@ -1,0 +1,18 @@
+the process starts
+a customer submits a claim
+sending relevant documentation
+the notification department at the car insurer checks the documents upon completeness
+the notification department at the car insurer register the claim
+the handling department picks up the claim
+the handling department check the insurance
+perform an assessment
+-----BEGIN_IF-----
+if: the assessment is positive:
+	authorise the repairs
+	phone a garage
+	schedule the payment
+else:
+	reject the claim
+-----END_IF-----
+send a letter in any case
+consider the process

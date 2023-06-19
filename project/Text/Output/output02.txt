@@ -1,0 +1,24 @@
+a customer brings a defective computer
+the crs checks the defect
+the crs hand out a repair cost calculation
+-----BEGIN_IF-----
+if: the customer decides:
+	the costs are acceptable
+	the process continues
+else:
+	customer takes her computer
+-----END_IF-----
+the ongoing repair consists of two activities
+execute two activities in an arbitrary order
+the first activity is
+the first activity check the hardware
+the first activity repair the hardware
+the second activity checks the software
+the second activity configure the software
+test the proper system functionality after each of these activities
+-----BEGIN_IF-----
+if: detect an error:
+	execute another arbitrary repair activity
+else:
+	finish the repair
+-----END_IF-----

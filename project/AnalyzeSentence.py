@@ -115,27 +115,27 @@ def analyze_document(doc: Doc) -> [SentenceContainer]:
     return container_list
 
 
-def find_xcomp(processes):
-    """
-    find the xcomp within the processes
-
-    Args:
-        processes: the processes where possible xcomp can be found
-    """
-    xcomp = None
-    for process in processes:
-        if process.action is None:
-            continue
-
-        for child in process.action.token.children:
-            if child.dep_ == "xcomp":
-                xcomp = child
-                break
-
-        if xcomp is not None:
-            for p in processes:
-                if p.action.token == xcomp and p != process:
-                    process.action.xcomp = p.action
+# def find_xcomp(processes):
+#     """
+#     find the xcomp within the processes
+#
+#     Args:
+#         processes: the processes where possible xcomp can be found
+#     """
+#     xcomp = None
+#     for process in processes:
+#         if process.action is None:
+#             continue
+#
+#         for child in process.action.token.children:
+#             if child.dep_ == "xcomp":
+#                 xcomp = child
+#                 break
+#
+#         if xcomp is not None:
+#             for p in processes:
+#                 if p.action.token == xcomp and p != process:
+#                     process.action.xcomp = p.action
 
 
 def extract_elements(sentence, process):

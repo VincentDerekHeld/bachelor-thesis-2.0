@@ -6,7 +6,8 @@ from Model.Resource import Resource
 from Model.SentenceContainer import SentenceContainer
 from Model.Specifier import Specifier
 from Model.SpecifierType import SpecifierType
-from Utilities import find_dependency, anaphora_resolver, find_actor, belongs_to_other_process, find_process
+from Utilities import find_dependency, anaphora_resolver, find_actor, belongs_to_other_process, find_process, \
+    str_utility, string_list_to_string
 
 from spacy.tokens import Token
 
@@ -28,12 +29,13 @@ def create_actor(main_actor: Token) -> Optional[Actor]:
     anaphora_resolver(actor)
     determine_noun_specifiers(actor)
     complete_name = get_complete_actor_name(main_actor)
+    actor.full_name = complete_name.strip()
 
-    # todo: is "customer" a real actor?, because this algorithm will not find it
     if not WordNetWrapper.can_be_person_or_system(complete_name, main_actor):
         actor.is_real_actor = False
-    if WordNetWrapper.is_meta_actor(main_actor, threshold=1):
-        actor.is_meta_actor = True
+    # todo: examie the necessity of the meta-actor tag
+    # if WordNetWrapper.is_meta_actor(main_actor, threshold=1):
+    #     actor.is_meta_actor = True
     return actor
 
 
@@ -166,11 +168,19 @@ def find_acomp_specifier(action):
 
 
 def get_complete_actor_name(main_actor):
-    l = find_dependency(["compound", "amod", "nmod"], token=main_actor)
-    result = " ".join([x.text for x in l])
-    result += " " + main_actor.text
-    return result
+    # l = find_dependency(["compound", "amod", "nmod"], token=main_actor)
+    # result = " ".join([x.text for x in l])
+    # result += " " + main_actor.textr
+    result = []
+    help_get_complete_actor_name(main_actor, result)
+    return string_list_to_string(result)
 
+def help_get_complete_actor_name(main_actor, result):
+    for child in main_actor.children:
+        if child.dep_ in ["compound", "amod", "nmod"]:
+            help_get_complete_actor_name(child, result)
+            str_utility(child, result)
+    return result
 
 def is_negated(verb: Token, noun: Token) -> bool:
     negation_list = ["no", "not", "n't"]

@@ -1,0 +1,16 @@
+i am
+report a vacancy to me
+i create a job description from the information
+i ask the department
+i submitting the job description for consideration
+i wait for the approval
+description happen
+the department not approve description
+the department reject description
+the department request a correction
+i correct the description
+i submit description for consideration
+-----BEGIN_IF-----
+if: approve the description:
+	i post the job
+-----END_IF-----

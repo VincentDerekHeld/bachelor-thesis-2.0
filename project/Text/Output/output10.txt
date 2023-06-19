@@ -1,0 +1,38 @@
+the process of an oﬃce supply request starts
+any employee of the organization submits an oﬃce supply request
+-----BEGIN_IF-----
+if: register the requirement:
+	the immediate supervisor of the employee receive the request
+-----END_IF-----
+the supervisor approve a change
+the supervisor ask for a change
+the supervisor reject the request
+-----BEGIN_IF-----
+if: reject the request:
+	the process end
+if: ask the request:
+	make a change
+	return it to the petitioner employee
+	who review the comments for the change request
+if: approve the request:
+	request go to the purchase department
+	that be in charge of making quotations
+	making quotations
+	select a vendor
+if: the vendor is not valid:
+	the purchase department have
+	the purchase department choose a different vendor
+-----END_IF-----
+select a vendor
+confirm a vendor
+the system generate a purchase order
+the system send a purchase order
+the system wait a purchase order
+deliver the product
+the invoice received
+-----BEGIN_IF-----
+if: the system in any case send a notification:
+	the user know
+	the result was
+-----END_IF-----
+approval rejection or change in any of the cases required

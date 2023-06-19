@@ -1,0 +1,12 @@
+the party sends a warrant possession request
+the client service back oﬃce as part of the small claims registry operations receives the request
+the client service back oﬃce as part of the small claims registry operations retrieve the sct file
+forward the sct warrant possession to queensland police
+the back oﬃce store the sct physical file
+awaiting a report
+the police
+receive the report
+retrieve the respective sct file
+back oﬃce attaches the new sct document
+back oﬃce store the expanded sct physical file
+some other mc internal staff after that receives the physical sct file

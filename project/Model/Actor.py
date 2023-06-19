@@ -6,6 +6,7 @@ from Utilities import str_utility, string_list_to_string
 class Actor(ExtractedObject):
     def __init__(self, token):
         super().__init__(token)
+        self.full_name: str = ""
         self.resolved_token: [Token] = []
         # A “real”-Actor, as a person, an organization or a software system. -> [“person”, “social group”, “software system”]
         self.is_real_actor = True

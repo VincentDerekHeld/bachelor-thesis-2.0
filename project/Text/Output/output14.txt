@@ -1,0 +1,36 @@
+acme ag a basic principle receives invoices on
+the secretariat receive these in the central inbox
+the secretariat forward these a short visual inspection to
+employee in acme financial accounting a software identifies the charging suppliers
+employee create a new instance
+employee checks the invoice items
+employee note the corresponding cost center at the acme ag and the related cost center managers for each position on a separate form
+manager reviews the content accuracy after
+receiving the copy of the invoice
+-----BEGIN_IF-----
+if: mark all items:
+	pass the copy of the invoice it on based
+	the copy of invoice and the docket move through the hands of all cost center managers
+if: inconsistencies exist:
+	mark all positions
+	the cost center manager rejects the ap with a note and explanatory statement on the docket
+	send the copy of the invoice
+	manager proceed
+	manager consults the cost center managers by telephone or e
+-----END_IF-----
+resolve all inconsistencies
+send the copy of the invoice
+the process continues
+the accounting employee forwards the copy of the invoice
+all invoice items are
+-----BEGIN_IF-----
+if: the bill amount exceeds eur 20,000:
+	employee issue the approval for payment
+	the board wants
+	the board check 20,000
+-----END_IF-----
+the copy of the invoice including the docket moves in the appropriate signature file
+the accounting employee resolve it with the supplier
+the accounting employee gives payment instructions
+the accounting employee close the instance in acme financial accounting
+complete the commercial audit

@@ -126,56 +126,34 @@ def correct_order(container: [SentenceContainer]):
 
 
 def construct(container_list: [SentenceContainer]):
-    # result = []
-    link = LinkedStructure()
+    result = []
     for i in range(len(container_list)):
         container = container_list[i]
-        if i + 1 <= len(container_list) - 1:
-            next_container = container_list[i + 1]
-        else:
-            next_container = None
 
         if container.has_if() or container.has_else():
             if last_container_has_conditional_marker(container, container_list):
-                if isinstance(link.tail, ConditionBlock):
-                # if isinstance(result[-1], ConditionBlock):
-                #     result[-1].add_branch(container)
-                    link.tail.add_branch(container)
+                if isinstance(result[-1], ConditionBlock):
+                    result[-1].add_branch(container)
             else:
                 if_block = ConditionBlock()
                 if_block.add_branch(container)
-                # result.append(if_block)
-                link.add_structure(if_block)
+                result.append(if_block)
 
         # todo: what if the single sentence contains two parrallel action that has nothing to do with other sentences?
-        # elif container.has_while():
-        #     if isinstance(result[-1], AndBlock):
-        #         result[-1].add_branch(container)
-        #     elif not isinstance(result[-1], ConditionBlock):
-        #         and_block = AndBlock()
-        #         and_block.add_branch(result[-1])
-        #         and_block.add_branch(container)
-        #         result.remove(result[-1])
-        #         result.append(and_block)
-
-
-        elif next_container is not None and next_container.has_while():
-            and_block = AndBlock()
-            and_block.add_branch(container)
-            and_block.add_branch(container_list[i + 1])
-            # result.append(and_block)
-            link.add_structure(and_block)
-            i += 1
+        elif container.has_while():
+            if isinstance(result[-1], AndBlock):
+                result[-1].add_branch(container)
+            elif not isinstance(result[-1], ConditionBlock):
+                and_block = AndBlock()
+                and_block.add_branch(result[-1])
+                and_block.add_branch(container)
+                result.remove(result[-1])
+                result.append(and_block)
 
         else:
-            # result.append(container)
+            result.append(container)
 
-            for process in container.processes:
-                activity = Activity(process)
-                link.add_structure(activity)
-
-    # return result
-    return link
+    return result
 
 
 def build_flows(container_list: [SentenceContainer]):
@@ -184,10 +162,12 @@ def build_flows(container_list: [SentenceContainer]):
 
     for i in range(len(flow_list)):
         if isinstance(flow_list[i], ConditionBlock):
-            if flow_list[i].is_complete():
-                link.add_structure(flow_list[i])
-            else:
-                pass
+            link.add_structure(flow_list[i])
+            # todo: if the condition gateway has only one branch, we might have to search another to merge.
+            # if flow_list[i].is_complete():
+            #     link.add_structure(flow_list[i])
+            # else:
+            #     pass
         elif isinstance(flow_list[i], AndBlock):
             link.add_structure(flow_list[i])
         else:
@@ -197,12 +177,14 @@ def build_flows(container_list: [SentenceContainer]):
 
     return link
 
-def get_valid_actors(container: SentenceContainer):
+
+def get_valid_actors(container_list: [SentenceContainer]):
     result = []
-    for process in container.processes:
-        if process.actor is not None:
-            if process.actor.is_real_actor():
-                result.append(process.actor)
+    for container_list in container_list:
+        for process in container_list.processes:
+            if process.actor is not None:
+                if process.actor.is_real_actor and process.actor.full_name not in result:
+                    result.append(process.actor.full_name)
 
     return result
 

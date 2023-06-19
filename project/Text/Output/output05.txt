@@ -1,0 +1,22 @@
+the mail processing unit collect mail from the party on a daily basis
+the mail clerk this unit sorts the unopened mail into
+distribute the mail
+the registry receive the mail
+open it
+sort it into groups for distribution
+register it in a manual incoming mail register
+the assistant registry manager within the registry performs a quality check
+-----BEGIN_IF-----
+if: the mail is not compliant:
+	compile a list of requisition
+	send a list of requisition
+-----END_IF-----
+who takes the applicable fees
+-----BEGIN_AND-----
+1:
+	the assistant registry manager this point puts the receipt and copied documents into
+	the assistant registry manager post receipt to the party
+2:
+	the cashier captures the party details
+	the cashier print the physical court file
+-----END_AND-----

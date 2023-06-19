@@ -1,0 +1,71 @@
+a switch over request initiate the process
+the customer transmits his data
+customer service is
+customer service receive the customer data
+enter a customer data object
+enter customer data
+compare it with the internal customer data base
+check it for completeness and plausibility
+-----BEGIN_IF-----
+if: correct these case of any errors on:
+
+-----END_IF-----
+do the comparison of data
+store individual customer data
+-----BEGIN_IF-----
+if: the customer not exist in the customer database:
+	create a new customer object in case
+	which remain during the rest of the process
+-----END_IF-----
+this object consists of data elements such as the customers name and address and the assigned power gauge
+use the generated customer object in combination with other customer data
+prepare the contract documents for the power supplier switch
+carry an automated check of the contract documents the following out in
+confirm their successful generation
+not the contract documents
+analyze the causing issues
+resolve the causing issues
+generate the contract documents
+-----BEGIN_IF-----
+if: send a confirmation document case of a positive response out to:
+	execute the switch over to the new supplier
+-----END_IF-----
+the cis send a request to the grid operator
+-----BEGIN_IF-----
+if: the selected supplier supply the customer in the future:
+	request puts the question
+-----END_IF-----
+the grid operator check the switch over request for supplier concurrence
+the grid operator transmits a response comment
+-----BEGIN_IF-----
+if: the grid operator demand the resolution of the conflict:
+if: the grid operator in the case of supplier concurrence inform all involved suppliers:
+
+-----END_IF-----
+the grid operator communicates with the old supplier
+the grid operator carry out the termination of the sales agreement between the customer and the old supplier
+
+customer service creates a cis contract
+check the contract details
+the customer has the chance
+withdraw from the switch contract
+confirm contract
+the process at customer service ends
+an additional constraint is
+regard the contract
+the customer withdraw the offered contract within
+the process continues
+the confirmation message by the customer is not necessary
+message speed up the switch process
+the grid operator the switch date transmits the power meter data via
+power supply begun
+the grid operator at the same time computes the final billing
+the grid operator send billing
+the old supplier creates the final billing
+the old supplier send the final billing
+the process for the customer as well as the grid operator ends
+customer service imports the meter data
+receiving the meter data
+that require the information
+the process of winning a new customer ends
+winning a new customer

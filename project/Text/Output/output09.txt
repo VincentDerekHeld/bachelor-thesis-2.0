@@ -1,0 +1,16 @@
+the process of vacations request starts
+any employee of the organization submits a vacation request
+-----BEGIN_IF-----
+if: register the requirement:
+	the immediate supervisor of the employee receive the request
+-----END_IF-----
+the supervisor approve the request
+the supervisor reject the request
+-----BEGIN_IF-----
+if: reject the request:
+	return the application to the applicant employee
+	who review the rejection reasons
+if: approve the request:
+	generate a notification to the human resources representative
+	who complete the respective management procedures
+-----END_IF-----

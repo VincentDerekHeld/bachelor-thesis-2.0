@@ -1,0 +1,36 @@
+the first step is
+the first step determine contact details of potential customers
+achieve this in several ways
+we buy details for cold calls
+our marketing staff participates in exhibitions
+
+you happen
+you know somebody
+who is interested
+we start
+we calling the customer
+the call center staff do that
+customer determining the contact person and the budget
+which be available
+-----BEGIN_IF-----
+if: person is interested:
+	asking the customer
+if: this is not:
+if: the potential project budget is huge:
+	we leave person
+-----END_IF-----
+the head of development tries
+the head of development acquire the customer
+-----BEGIN_IF-----
+if: the customer is interested in the end:
+	the next step is
+if: give step a sales representative in:
+
+-----END_IF-----
+we waiting
+the customer come
+-----BEGIN_IF-----
+if: not contact we within 2 weeks:
+	a sales representative calling the customer
+-----END_IF-----
+the last phase is
