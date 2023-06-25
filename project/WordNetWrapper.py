@@ -14,8 +14,11 @@ def can_be_person_or_system(full_noun: str, main_noun) -> bool:
     full_noun = full_noun.strip()
     if full_noun.lower() in PERSON_CORRECTOR_LIST:
         return True
-    # elif main_noun.text.lower() in SUBJECT_PRONOUNS:
-    #     return True
+    elif main_noun.text.lower() in SUBJECT_PRONOUNS:
+        return False
+    elif main_noun.pos_ == "PRON":
+        return False
+
     synsets = main_noun._.wordnet.synsets()
     if len(synsets) == 0:
         return False

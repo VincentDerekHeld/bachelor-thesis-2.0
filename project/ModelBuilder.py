@@ -168,19 +168,22 @@ def find_acomp_specifier(action):
 
 
 def get_complete_actor_name(main_actor):
-    # l = find_dependency(["compound", "amod", "nmod"], token=main_actor)
-    # result = " ".join([x.text for x in l])
-    # result += " " + main_actor.textr
     result = []
+    str_utility(main_actor, result)
     help_get_complete_actor_name(main_actor, result)
+    if result[0].dep_ == "det" and result[0].text.lower() in ["the", "a", "an"]:
+        result.remove(result[0])
     return string_list_to_string(result)
+
 
 def help_get_complete_actor_name(main_actor, result):
     for child in main_actor.children:
-        if child.dep_ in ["compound", "amod", "nmod"]:
+        if child.dep_ in ["compound", "det", "prep", "pobj", "appos", "amod", "nmod"] \
+                and child.text.lower().strip() not in ["as", "within", "at", "of"]:
             help_get_complete_actor_name(child, result)
             str_utility(child, result)
     return result
+
 
 def is_negated(verb: Token, noun: Token) -> bool:
     negation_list = ["no", "not", "n't"]

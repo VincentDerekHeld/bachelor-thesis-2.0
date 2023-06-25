@@ -6,6 +6,6 @@ Eighty percent of room-service orders include wine or some other alcoholic bever
 Finally, she assigns the order to the waiter.
 While the kitchen and the sommelier are doing their tasks, the waiter readies a cart (i.e., puts a tablecloth on the cart and gathers silverware).
 The waiter is also responsible for nonalcoholic drinks.
-Once the food, wine, and cart are ready, the waiter delivers it to the guests room.
-After returning to the room-service station, the waiter debits the guests account.
+Once the food, wine, and cart are ready, the waiter delivers it to the guest’s room.
+After returning to the room-service station, the waiter debits the guest’s account.
 The waiter may wait to do the billing if he has another order to prepare or deliver.

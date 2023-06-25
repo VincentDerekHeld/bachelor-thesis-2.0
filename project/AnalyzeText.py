@@ -10,7 +10,7 @@ from Model.Process import Process
 from Model.SentenceContainer import SentenceContainer
 from Structure.Activity import Activity
 from Structure.Block import ConditionBlock, AndBlock
-from Structure.Structure import LinkedStructure
+from Structure.Structure import LinkedStructure, Structure
 from Utilities import find_dependency, find_action, contains_indicator
 
 
@@ -92,13 +92,6 @@ def determine_compound_marker(container: SentenceContainer, nlp: Language):
         elif contains_indicator(Constant.COMPOUND_SEQUENCE_INDICATORS, process.sub_sentence, nlp):
             process.action.marker = "then"
 
-    #
-    #         # todo: is this necessary?
-    #         for indic in Constant.SEQUENCE_INDICATORS:
-    #             if specifier.name.startswith(indic):
-    #                 if process.action.pre_adv_mod is None:
-    #                     process.action.pre_adv_mod = specifier
-
     return None
 
 
@@ -123,6 +116,22 @@ def correct_order(container: [SentenceContainer]):
                     index = sentence.processes.index(process)
                     sentence.processes.remove(process)
                     sentence.processes.insert(index - 1, process)
+
+
+def remove_redundant_processes(container: [SentenceContainer]):
+    for sentence in container:
+        for i in range(len(sentence.processes) - 1, 0, -1):
+            if sentence.processes[i].action is None:
+                sentence.processes.remove(sentence.processes[i])
+            elif sentence.processes[i].action.object is None:
+                # todo: 考虑什么时候要移除一个process， 下面的条件过于简单
+                sentence.processes.remove(sentence.processes[i])
+
+
+def determine_end_activities(structure_list: [Structure]):
+    for structure in structure_list:
+        if structure_list.index(structure) == len(structure_list) - 1:
+            structure.is_end_activity = True
 
 
 def construct(container_list: [SentenceContainer]):
@@ -157,6 +166,25 @@ def construct(container_list: [SentenceContainer]):
 
 
 def build_flows(container_list: [SentenceContainer]):
+    flow_list = construct(container_list)
+    result = []
+
+    for i in range(len(flow_list)):
+        if isinstance(flow_list[i], ConditionBlock):
+            if not flow_list[i].is_complete():
+                flow_list[i].create_dummy_branch()
+            result.append(flow_list[i])
+        elif isinstance(flow_list[i], AndBlock):
+            result.append(flow_list[i])
+        else:
+            for process in flow_list[i].processes:
+                activity = Activity(process)
+                result.append(activity)
+
+    return result
+
+
+def build_linked_list(container_list: [SentenceContainer]):
     flow_list = construct(container_list)
     link = LinkedStructure()
 

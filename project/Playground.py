@@ -8,13 +8,14 @@ from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 if __name__ == '__main__':
     # nlp = spacy.load('en_core_web_sm')
     nlp = spacy.load('en_core_web_trf')
+    # nlp = spacy_stanza.load_pipeline("en", download_method=None)
 
     nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
     # nlp.add_pipe('benepar', config={'model': 'benepar_en3_large'})
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text04.txt', 'r').read().replace('\n', ' ')
+    text_input = open('Text/text12.txt', 'r').read().replace('\n', ' ')
     # text_input = "If the storehouse has successfully reserved or back-ordered every item of the part list and the preparation activity has finished, the engineering department assembles the bicycle."
 
     document = nlp(text_input)

@@ -1,13 +1,11 @@
-from Structure.Structure import Structure, StructureType
+from Structure.Structure import Structure
 
 
 class Activity(Structure):
 
     def __init__(self, process):
         super().__init__()
-        self.type = StructureType.ACTIVITY
         self.process = process
-        self.is_end_activity = False
 
     def __str__(self) -> str:
         activity = ""

@@ -2,7 +2,7 @@ PERSON_CORRECTOR_LIST = ["resource provisioning", "customer service", "support",
                          "client service back office", "master", "masters", "assembler ag", "acme ag",
                          "acme financial accounting", "secretarial office", "office", "registry", "head", "storehouse",
                          "atm", "crs", "company", "garage", "kitchen", "department", "ec", "sp", "mpo", "mpoo", "mpon",
-                         "msp", "mspo", "mspn", "go", "pu", "ip", "inq", "fault detector"]
+                         "msp", "mspo", "mspn", "go", "pu", "ip", "inq", "fault detector", "mail processing unit"]
 
 REAL_ACTOR_DETERMINERS = ["person", "social_group", "software system"]
 

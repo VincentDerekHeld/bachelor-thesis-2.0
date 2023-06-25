@@ -2,7 +2,7 @@ from enum import Enum
 
 from Model.SentenceContainer import SentenceContainer
 from Structure.Activity import Activity
-from Structure.Structure import Structure, StructureType
+from Structure.Structure import Structure
 
 
 class ConditionType(Enum):
@@ -13,7 +13,6 @@ class ConditionType(Enum):
 class ConditionBlock(Structure):
     def __init__(self):
         super().__init__()
-        self.type = StructureType.CONDITION
         self.branches = []
 
     def add_branch(self, container: SentenceContainer):
@@ -48,6 +47,13 @@ class ConditionBlock(Structure):
         else:
             return True
 
+    def is_simple(self):
+        if len(self.branches) == 2:
+            if self.branches[0]["type"] == ConditionType.IF and self.branches[1]["type"] == ConditionType.ELSE:
+                return True
+
+        return False
+
     def __str__(self) -> str:
         string = ""
         string += "-----BEGIN_IF-----\n"
@@ -69,7 +75,6 @@ class ConditionBlock(Structure):
 class AndBlock(Structure):
     def __init__(self):
         super().__init__()
-        self.type = StructureType.PARALLEL
         self.branches = []
 
     def add_branch(self, container: SentenceContainer):
