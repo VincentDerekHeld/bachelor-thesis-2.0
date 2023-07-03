@@ -1,8 +1,9 @@
 PERSON_CORRECTOR_LIST = ["resource provisioning", "customer service", "support", "support office", "support officer",
                          "client service back office", "master", "masters", "assembler ag", "acme ag",
                          "acme financial accounting", "secretarial office", "office", "registry", "head", "storehouse",
-                         "atm", "crs", "company", "garage", "kitchen", "department", "ec", "sp", "mpo", "mpoo", "mpon",
-                         "msp", "mspo", "mspn", "go", "pu", "ip", "inq", "fault detector", "mail processing unit"]
+                         "atm", "crs", "company", "garage", "kitchen", "sommelier", "department", "ec", "sp", "mpo",
+                         "mpoo", "mpon", "msp", "mspo", "mspn", "go", "pu", "ip", "inq", "fault detector",
+                         "mail processing unit"]
 
 REAL_ACTOR_DETERMINERS = ["person", "social_group", "software system"]
 
@@ -14,7 +15,7 @@ POSSESSIVE_ADJECTIVES = ["my", "your", "his", "her", "its", "our", "your", "thei
 POSSESSIVE_PRONOUNS = ["mine", "yours", "his", "hers", "ours", "yours", "theirs"]
 
 #  "whereas", "optionally"
-SINGLE_IF_CONDITIONAL_INDICATORS = ["if", "whether", "once"]
+SINGLE_IF_CONDITIONAL_INDICATORS = ["if", "whether"]
 
 SINGLE_ELSE_CONDITIONAL_INDICATORS = ["else", "otherwise"]
 
@@ -22,7 +23,7 @@ SINGLE_ELSE_CONDITIONAL_INDICATORS = ["else", "otherwise"]
 COMPOUND_CONDITIONAL_INDICATORS = [
     {"in/for (the) case (of)": [
         {"LEMMA": {"IN": ["in", "for"]}},
-        {"POS": "DET", "OP": "?"},
+        {"LEMMA": "the", "OP": "?"},
         {"LEMMA": "case"},
         {"POS": "ADP", "OP": "?"},
     ]}

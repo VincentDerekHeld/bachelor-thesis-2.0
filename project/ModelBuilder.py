@@ -6,8 +6,7 @@ from Model.Resource import Resource
 from Model.SentenceContainer import SentenceContainer
 from Model.Specifier import Specifier
 from Model.SpecifierType import SpecifierType
-from Utilities import find_dependency, anaphora_resolver, find_actor, belongs_to_other_process, find_process, \
-    str_utility, string_list_to_string
+from Utilities import find_dependency, anaphora_resolver, belongs_to_other_process, find_process, get_complete_actor_name
 
 from spacy.tokens import Token
 
@@ -28,7 +27,10 @@ def create_actor(main_actor: Token) -> Optional[Actor]:
     actor = Actor(main_actor)
     anaphora_resolver(actor)
     determine_noun_specifiers(actor)
-    complete_name = get_complete_actor_name(main_actor)
+    if len(actor.resolved_token) > 0:
+        complete_name = get_complete_actor_name(actor.resolved_token[0])
+    else:
+        complete_name = get_complete_actor_name(main_actor)
     actor.full_name = complete_name.strip()
 
     if not WordNetWrapper.can_be_person_or_system(complete_name, main_actor):
@@ -167,22 +169,7 @@ def find_acomp_specifier(action):
         action.add_modifier(specifier)
 
 
-def get_complete_actor_name(main_actor):
-    result = []
-    str_utility(main_actor, result)
-    help_get_complete_actor_name(main_actor, result)
-    if result[0].dep_ == "det" and result[0].text.lower() in ["the", "a", "an"]:
-        result.remove(result[0])
-    return string_list_to_string(result)
 
-
-def help_get_complete_actor_name(main_actor, result):
-    for child in main_actor.children:
-        if child.dep_ in ["compound", "det", "prep", "pobj", "appos", "amod", "nmod"] \
-                and child.text.lower().strip() not in ["as", "within", "at", "of"]:
-            help_get_complete_actor_name(child, result)
-            str_utility(child, result)
-    return result
 
 
 def is_negated(verb: Token, noun: Token) -> bool:

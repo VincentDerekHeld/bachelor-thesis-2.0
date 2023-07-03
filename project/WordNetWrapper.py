@@ -1,14 +1,6 @@
 from Constant import PERSON_CORRECTOR_LIST, REAL_ACTOR_DETERMINERS, SUBJECT_PRONOUNS
-
-
-# Define a function to get hypernyms
-def get_hypernyms(token):
-    hypernyms = []
-    for synset in token._.wordnet.synsets():
-        for hypernym in synset.hypernyms():
-            hypernyms.extend([lemma.name() for lemma in hypernym.lemmas()])
-    return set(hypernyms)
-
+import spacy
+from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 
 def can_be_person_or_system(full_noun: str, main_noun) -> bool:
     full_noun = full_noun.strip()
@@ -27,6 +19,7 @@ def can_be_person_or_system(full_noun: str, main_noun) -> bool:
     else:
         return False
 
+
 def can_be(synset, checked_words: list):
     if not synset.name() in checked_words:
         checked_words.append(synset.name())
@@ -44,15 +37,40 @@ def can_be(synset, checked_words: list):
         return False
 
 
-# todo: this function gives wrong result.
-def is_meta_actor(main_noun, threshold=3):
-    meta_terms = {'step', 'phase', 'stage', 'process', 'task', 'locomotion'}
-    hyponym_count = 0
+def hypernyms_checker(token, stop_list: list) -> bool:
+    if token.text.lower() in stop_list:
+        return True
 
-    for synset in main_noun._.wordnet.synsets():
-        for hyponym in synset.hyponyms():
-            if any(lemma.name() in meta_terms for lemma in hyponym.lemmas()):
-                hyponym_count += 1
-                if hyponym_count >= threshold:
-                    return True
-    return False
+    synsets = token._.wordnet.synsets()
+    if len(synsets) == 0:
+        return False
+    elif can_be_checked_token(synsets[0], [], stop_list):
+        return True
+    else:
+        return False
+
+
+def can_be_checked_token(synset, checked_words: list, stop_list: list):
+    if not synset.name() in checked_words:
+        checked_words.append(synset.name())
+        hypernyms = synset.hypernyms()
+        if len(hypernyms) == 0:
+            return False
+        hypernym_name = hypernyms[0].lemma_names()[0]
+        # print(hypernym_name)
+        if hypernym_name in stop_list:
+            return True
+        else:
+            hypernyms = synset.hypernyms()
+            if can_be_checked_token(hypernyms[0], checked_words, stop_list):
+                return True
+    else:
+        return False
+
+
+if __name__ == '__main__':
+    nlp = spacy.load('en_core_web_sm')
+    nlp.add_pipe("spacy_wordnet", after='tagger')
+    text_input = "the process will end"
+    document = nlp(text_input)
+    hypernyms_checker(document[3], [])

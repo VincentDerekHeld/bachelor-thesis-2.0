@@ -4,20 +4,21 @@ import benepar
 from spacy import displacy
 from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 
+from Utilities import text_pre_processing
 
 if __name__ == '__main__':
     # nlp = spacy.load('en_core_web_sm')
     nlp = spacy.load('en_core_web_trf')
-    # nlp = spacy_stanza.load_pipeline("en", download_method=None)
 
     nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
     # nlp.add_pipe('benepar', config={'model': 'benepar_en3_large'})
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text12.txt', 'r').read().replace('\n', ' ')
-    # text_input = "If the storehouse has successfully reserved or back-ordered every item of the part list and the preparation activity has finished, the engineering department assembles the bicycle."
+    # text_input = open('Text/text03.txt', 'r').read().replace('\n', ' ')
+    text_input = "A member of the sales department can then reject or accept the order for a customized bike."
 
+    text_input = text_pre_processing(text_input)
     document = nlp(text_input)
 
     for sent in document.sents:

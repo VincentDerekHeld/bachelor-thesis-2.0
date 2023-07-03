@@ -42,12 +42,10 @@ class Action(ExtractedObject):
         self.active: bool = False
 
         # a specific attribute used for the if condition
-        self.subclause: Optional[Action] = None
+        self.subclause = None
 
         self.link: Optional[Action] = None
         self.link_type: Optional[LinkType] = None
-        # todo: what is this?
-        # self.transient: bool = False
 
     def __str__(self) -> str:
         result = []

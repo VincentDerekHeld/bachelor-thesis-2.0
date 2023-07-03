@@ -4,6 +4,7 @@ from spacy.matcher import Matcher
 from spacy.tokens import Doc, Span, Token
 from spacy import Language
 
+from Model.Actor import Actor
 from Model.Process import Process
 from Model.Resource import Resource
 from Model.SentenceContainer import SentenceContainer
@@ -103,9 +104,6 @@ def analyze_document(doc: Doc) -> [SentenceContainer]:
             extract_elements(sub_sentence, process)
             container.add_process(process)
 
-        # if len(container.processes) > 1:
-        #     find_xcomp(container.processes)
-
     for sentence in container_list:
         complement_actor(sentence)
         complement_object(sentence)
@@ -113,29 +111,6 @@ def analyze_document(doc: Doc) -> [SentenceContainer]:
         complement_model(sentence)
 
     return container_list
-
-
-# def find_xcomp(processes):
-#     """
-#     find the xcomp within the processes
-#
-#     Args:
-#         processes: the processes where possible xcomp can be found
-#     """
-#     xcomp = None
-#     for process in processes:
-#         if process.action is None:
-#             continue
-#
-#         for child in process.action.token.children:
-#             if child.dep_ == "xcomp":
-#                 xcomp = child
-#                 break
-#
-#         if xcomp is not None:
-#             for p in processes:
-#                 if p.action.token == xcomp and p != process:
-#                     process.action.xcomp = p.action
 
 
 def extract_elements(sentence, process):
@@ -215,7 +190,6 @@ def determine_predicate(sentence: Span, active: bool) -> Optional[Token]:
            if the verb is identified, return it as a token, otherwise return None
     """
 
-    # predicates = []
     if active:
         actor = find_dependency(["nsubj"], sentence=sentence)
         if len(actor) == 0:
@@ -293,17 +267,32 @@ def complement_model(container: SentenceContainer):
 
 def complement_actor(container: SentenceContainer):
     for process in container.processes:
-        if process.action is not None and process.actor is None:
-            token = process.action.token
-            token = find_xcomp_ancestor(token)
-            if token is None:
-                return
-
-            father = belongs_to_action(container, token)
-            if father is not None:
-                if father.actor is not None:
-                    process.actor = father.actor
-                    return
+        if process.action is not None:
+            if process.actor is None:
+                token = process.action.token
+                xcomp_token = find_xcomp_ancestor(token)
+                if xcomp_token is not None:
+                    father = belongs_to_action(container, xcomp_token)
+                    if father is not None:
+                        if father.actor is not None:
+                            process.actor = father.actor
+                            return
+                elif process.action.token.dep_ in ["ccomp", "acl"]:
+                    verb = next(process.action.token.ancestors)
+                    if verb.pos_ == "NOUN":
+                        verb = next(verb.ancestors)
+                    dative = find_dependency(["dative", "prep"], token=verb)
+                    if len(dative) > 0:
+                        if dative[0].pos_ == "NOUN":
+                            process.actor = create_actor(dative[0])
+                        elif dative[0].pos_ == "ADP":
+                            pobj = find_dependency(["pobj"], token=dative[0])
+                            if len(pobj) > 0:
+                                process.actor = create_actor(pobj[0])
+            elif process.actor.token.pos_ == "PRON" and process.action.token.dep_ == "relcl":
+                new_actor = next(process.action.token.ancestors)
+                if new_actor is not None:
+                    process.actor = create_actor(new_actor)
 
 
 def complement_object(container: SentenceContainer):

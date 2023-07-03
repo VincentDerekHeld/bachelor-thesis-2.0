@@ -10,7 +10,7 @@ from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 
 from AnalyzeSentence import analyze_document
 from AnalyzeText import determine_marker, correct_order, build_flows, get_valid_actors, build_linked_list, \
-    remove_redundant_processes, determine_end_activities
+    remove_redundant_processes, determine_end_activities, adjust_actors
 from BPMNCreator import create_bpmn_model
 from Utilities import text_pre_processing
 
@@ -46,8 +46,8 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text02.txt', 'r').read().replace('\n', ' ')
-    # text_input = "Every time we get a new order from the sales department, first, one of my masters determines the necessary parts and quantities as well as the delivery date."
+    # text_input = open('Text/text10.txt', 'r').read().replace('\n', ' ')
+    text_input = "Whenever the sales department receives an order, a new process instance is created.This procedure is repeated for each item on the part list. In the meantime, the engineering department prepares everything for the assembling of the ordered bicycle. A member of the sales department can then reject or accept the order for a customized bike."
 
     text_input = text_pre_processing(text_input)
     document = nlp(text_input)
@@ -59,12 +59,13 @@ if __name__ == '__main__':
     for container in containerList:
         determine_marker(container, nlp)
     correct_order(containerList)
-    # remove_redundant_processes(containerList)
+    remove_redundant_processes(containerList)
+
+    valid_actors = get_valid_actors(containerList)
+    # adjust_actors(containerList, valid_actors)
     flows = build_flows(containerList)
     determine_end_activities(flows)
 
+    create_bpmn_model(flows, valid_actors, "debug", "/Users/shuaiwei_yu/Desktop/output/text10_test.png")
 
-    valid_actors = get_valid_actors(containerList)
-    create_bpmn_model(flows, valid_actors, "debug02", "/Users/shuaiwei_yu/Downloads/text02_test.png")
-
-    print(build_linked_list(containerList))
+    # print(build_linked_list(containerList))

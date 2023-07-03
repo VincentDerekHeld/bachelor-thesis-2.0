@@ -12,42 +12,11 @@ def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str,
                       theme: str = "BLUEMOUNTAIN"):
     input_syntax = create_bpmn_description(structure_list, actor_list, title, theme=theme)
     print(input_syntax)
-    render_bpmn_model(input_syntax, save_path)
+    # render_bpmn_model(input_syntax, save_path)
+    print("debug model --> omit the rendering")
 
 
 def render_bpmn_model(input_syntax: str, path: str):
-    #     input_syntax = """
-    #     title: debug01
-    # colourtheme: BLUEMOUNTAIN
-    # lane: customer
-    # 	(start) as start
-    # 	[brings a defective computer] as activity_9
-    # lane: crs
-    # 	[checks the defect] as activity_10
-    # 	[hand out a repair cost calculation] as activity_11
-    # 	<the customer decides> as gateway_1
-    # 	[are acceptable] as activity_3
-    # 	[continues] as activity_4
-    # 	[takes her computer] as activity_5
-    # 	[consists of two activities] as activity_12
-    # 	[execute two activities in an arbitrary order] as activity_13
-    # 	[is] as activity_14
-    # 	[check the hardware] as activity_15
-    # 	[repair the hardware] as activity_16
-    # 	[checks the software] as activity_17
-    # 	[configure the software] as activity_18
-    # 	[test the proper system functionality after each of these activities] as activity_19
-    # 	<detect an error> as gateway_6
-    # 	[execute another arbitrary repair activity] as activity_8
-    # 	(end) as end
-    #
-    # start->activity_9->activity_10->activity_11->gateway_1
-    # gateway_1->activity_3->activity_4->activity_12
-    # gateway_1->activity_5->activity_12
-    # activity_12->activity_13->activity_14->activity_15->activity_16->activity_17->activity_18->activity_19->gateway_6
-    # gateway_6-"yes"->activity_8->end
-    # gateway_6-"no"->end
-    #     """
     render(input_syntax, path)
 
 
@@ -82,8 +51,8 @@ def create_bpmn_description(structure_list: [Structure], actor_list: list, title
         elif isinstance(structure, ConditionBlock):
             end_gateway = "gateway_" + str(structure.id) + "_end"
 
-            if structure.branches[0]["condition"] is not None:
-                key = belongs_to_lane(structure_list, lanes, structure.branches[0]["condition"], key)
+            if len(structure.branches[0]["condition"]) > 0:
+                key = belongs_to_lane(structure_list, lanes, structure.branches[0]["condition"][0], key)
             append_to_lane(key, lanes, connection_id, connections, structure, last_gateway)
 
             for branch in structure.branches:
@@ -93,12 +62,29 @@ def create_bpmn_description(structure_list: [Structure], actor_list: list, title
                 elif structure.is_simple() and branch["type"] == ConditionType.ELSE:
                     connections.append("gateway_" + str(structure.id) + '-"no"')
                 else:
-                    connections.append("gateway_" + str(structure.id) + '-"' + str(branch["condition"]) + '"')
+                    condition = ""
+                    for c in branch["condition"]:
+                        condition += str(c)
+                        if branch["condition"].index(c) != len(branch["condition"]) - 1:
+                            condition += ", "
+                    # if condition == "None":
+                    #     condition = ""
+                    connections.append("gateway_" + str(structure.id) + '-"' + condition + '"')
 
+                need_end_gateway = True
                 for activity in branch["actions"]:
                     key = belongs_to_lane(structure_list, lanes, activity, key)
                     append_to_lane(key, lanes, connection_id, connections, activity, last_gateway)
-                connections[connection_id] += "->" + end_gateway
+                    if activity.is_end_activity:
+                        need_end_gateway = False
+                        end_id = "end_" + str(activity.id)
+                        early_end_gateway = "(end) as end_" + str(activity.id)
+                        lanes[key].append(early_end_gateway)
+                        connections[connection_id] += "->" + end_id
+                        continue
+
+                if need_end_gateway:
+                    connections[connection_id] += "->" + end_gateway
 
             lanes[key].append("<> as " + end_gateway)
             connection_id += 1
@@ -119,14 +105,6 @@ def create_bpmn_description(structure_list: [Structure], actor_list: list, title
             lanes[key].append("<@parallel> as " + end_gateway)
             connection_id += 1
             last_gateway = end_gateway
-
-        # if structure_list.index(structure) == len(structure_list) - 1:
-        #     lanes[key].append("(end) as end")
-        #     if connection_id < len(connections):
-        #         connections[connection_id] += "->end"
-        #     else:
-        #         connections.append(last_gateway)
-        #         connections[connection_id] += "->end"
 
         if structure.is_end_activity:
             lanes[key].append("(end) as end")
@@ -173,7 +151,7 @@ def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, s
             if structure.process.actor.full_name in lanes.keys():
                 lanes[key].append("[" + str(structure.process.action) + "] as activity_" + str(structure.id))
             else:
-                # todo: develop a better tostring method for visualization
+                # todo: develop a better toString method for visualization
                 lanes[key].append(
                     "[" + str(structure.process.actor) + " " + str(structure.process.action) + "] as activity_" +
                     str(structure.id))
@@ -182,7 +160,7 @@ def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, s
                 "[" + str(structure.process.action) + "] as activity_" + str(structure.id))
     elif isinstance(structure, ConditionBlock):
         if structure.is_simple():
-            condition = structure.branches[0]["condition"]
+            condition = structure.branches[0]["condition"][0]
             if condition is not None:
                 lanes[key].append("<" + str(condition) + "?> as gateway_" + str(structure.id))
             else:

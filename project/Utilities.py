@@ -160,6 +160,7 @@ def anaphora_resolver(obj):
     obj.resolved_token.extend(resolved_words)
 
 
+
 def needs_resolve_reference(word: Token) -> bool:
     """
     check if the given word needs to be resolved
@@ -223,6 +224,24 @@ def belongs_to_other_process(root: Token, container):
     return None
 
 
+def get_complete_actor_name(main_actor):
+    result = []
+    str_utility(main_actor, result)
+    help_get_complete_actor_name(main_actor, result)
+    if result[0].dep_ == "det" and result[0].text.lower() in ["the", "a", "an"]:
+        result.remove(result[0])
+    return string_list_to_string(result)
+
+
+def help_get_complete_actor_name(main_actor, result):
+    for child in main_actor.children:
+        if child.dep_ in ["compound", "det", "prep", "pobj", "appos", "amod", "nmod"] \
+                and child.text.lower().strip() not in ["as", "within", "at", "of"]:
+            help_get_complete_actor_name(child, result)
+            str_utility(child, result)
+    return result
+
+
 def str_utility(string, string_list: [], i=None) -> []:
     if isinstance(string, Token):
         s = string.text.lower()
@@ -283,4 +302,8 @@ def index_of(item: Token, l: []) -> int:
 
 
 def text_pre_processing(text: str) -> str:
-    return re.sub("[\(\[].*?[\)\]]", "", text)
+    # remove the text between brackets
+    text = re.sub("[\(\[].*?[\)\]]", "", text)
+    # replace two or more spaces with one
+    text = re.sub(r"\s{2,}", " ", text)
+    return text
