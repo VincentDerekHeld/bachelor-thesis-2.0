@@ -1,15 +1,21 @@
-the loan approval process starts
-receiving a customer request for a loan amount
-invoke the risk assessment web service
-assess the request
------BEGIN_IF-----
-if: the loan is small:
-	the customer is
-	approve the loan
-if: the customer is:
-	deny the loan
-if: the customer needs further review:
-	the loan amount is for $ 10,000 or more
-	send the request
------END_IF-----
-the customer receives feedback from the assessor or approver
+title: result08
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane:
+	(start) as start
+	[receiving a customer request for a loan amount] as activity_9
+	[invoke the risk assessment web service] as activity_10
+	[assess the request] as activity_11
+	<> as gateway_1
+	[approve the loan] as activity_4
+	[deny the loan] as activity_6
+	[send the request] as activity_8
+	<> as gateway_1_end
+	[the customer receives feedback from the assessor or approver] as activity_12
+	(end) as end
+
+start->activity_9->activity_10->activity_11->gateway_1
+gateway_1-"the loan is small, the customer is"->activity_4->gateway_1_end
+gateway_1-"the customer is"->activity_6->gateway_1_end
+gateway_1-"the customer needs further review"->activity_8->gateway_1_end
+gateway_1_end->activity_12->end

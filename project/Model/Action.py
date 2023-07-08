@@ -10,7 +10,8 @@ from Utilities import str_utility, string_list_to_string, index_of
 
 
 class LinkType(Enum):
-    FORWARD = "forward"
+    TO_PREV = 1
+    TO_NEXT = 2
 
 class Action(ExtractedObject):
     def __init__(self, verb):

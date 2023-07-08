@@ -1,15 +1,9 @@
 from typing import Optional
-
-from spacy.matcher import Matcher
 from spacy.tokens import Doc, Span, Token
-from spacy import Language
-
-from Model.Actor import Actor
 from Model.Process import Process
 from Model.Resource import Resource
 from Model.SentenceContainer import SentenceContainer
 from Utilities import find_dependency
-
 from ModelBuilder import create_actor, create_action, correct_model
 
 
@@ -235,6 +229,14 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
 
 
 def complement_model(container: SentenceContainer):
+    """
+    add the conjunctions of the actions to the list of processes, conjunctions are originally detected but only store as
+    an attribute in the action, this function extract the conjunctions and tried to find the proper place to add them
+
+    Args:
+        container: The container that contains the action.
+
+    """
     new_processes = container.processes.copy()
     for process in container.processes:
         if process.action is None:
@@ -266,6 +268,13 @@ def complement_model(container: SentenceContainer):
 
 
 def complement_actor(container: SentenceContainer):
+    """
+    some process only has an action but no actor, this is caused because the actor is in the main clause or the actor belongs
+    to the conjunction, this function tries to find the actor of the process and add it to the process
+
+    Args:
+        container: The container that contains the action.
+    """
     for process in container.processes:
         if process.action is not None:
             if process.actor is None:
@@ -296,10 +305,16 @@ def complement_actor(container: SentenceContainer):
 
 
 def complement_object(container: SentenceContainer):
+    """
+    if the object in an action is a pronoun, it is possible that this action is a subordinate clause and the real object
+    is in the main clause, this function tries to find the real object and add it to the action
+
+    Args:
+        container: The container that contains the action.
+    """
     for process in container.processes:
         if process.action is not None:
             if process.action.object is None:
-                # todo: develop algorithm
                 return
 
             elif process.action.object.token.pos_ == "PRON":
@@ -311,6 +326,16 @@ def complement_object(container: SentenceContainer):
 
 
 def find_xcomp_ancestor(token):
+    """
+    find the xcomp ancestor of a token. If a token has no dependency of xcomp but conj, xcomp is perhaps
+    in its conjunctions
+    Args:
+        token: spacy token object
+
+    Returns:
+        if xcomp is found, retuen its token, otherwise None.
+
+    """
     if token.dep_ == "xcomp":
         return next(token.ancestors)
 
@@ -321,6 +346,15 @@ def find_xcomp_ancestor(token):
 
 
 def belongs_to_action(container: SentenceContainer, token: Token):
+    """
+    Given a token, the function finds whether the token belongs to an action in the container
+    Args:
+        container: The container that contains the action.
+        token: a spacy token object
+
+    Returns:
+        if a token belongs to an action, return the action, otherwise None
+    """
     for process in container.processes:
         if process.action is not None:
             if process.action.token == token:

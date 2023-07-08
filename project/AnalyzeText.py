@@ -1,18 +1,14 @@
+from spacy.matcher import Matcher
 import Constant
-
-from typing import Optional
-
-from spacy.tokens import Doc, Span, Token
 from spacy import Language
-
-from Model.Action import Action
+from Model.Action import LinkType
 from Model.Process import Process
 from Model.SentenceContainer import SentenceContainer
 from Structure.Activity import Activity
-from Structure.Block import ConditionBlock, AndBlock
+from Structure.Block import ConditionBlock, AndBlock, ConditionType
 from Structure.Structure import LinkedStructure, Structure
 from Utilities import find_dependency, find_action, contains_indicator, find_process
-from WordNetWrapper import hypernyms_checker
+from WordNetWrapper import hypernyms_checker, verb_hypernyms_checker
 
 
 def determine_marker(container: SentenceContainer, nlp: Language):
@@ -26,6 +22,7 @@ def determine_marker(container: SentenceContainer, nlp: Language):
     """
     determine_single_marker(container)
     determine_compound_marker(container, nlp)
+    determine_jump_case_marker(container, nlp)
 
 
 def determine_single_marker(container: SentenceContainer):
@@ -101,16 +98,44 @@ def determine_compound_marker(container: SentenceContainer, nlp: Language):
         elif contains_indicator(Constant.COMPOUND_SEQUENCE_INDICATORS, process.sub_sentence, nlp):
             process.action.marker = "then"
 
-    return None
+
+def determine_jump_case_marker(container: SentenceContainer, nlp: Language):
+    """
+    Determines whether the sentence contains an "in former/ latter case" expression. If so, mark that action as a
+    jump case, which should later be added to a gateway
+
+    Args:
+        container: The container that contains the action.
+        nlp: The nlp language object.
+
+    """
+    for process in container.processes:
+        if process.action is None:
+            continue
+
+        matcher = Matcher(nlp.vocab)
+        for rule in Constant.CASE_INDICATORS:
+            for k, v in rule.items():
+                matcher.add(k, [v])
+
+        matches = matcher(process.sub_sentence)
+        if len(matches) > 0:
+            for match_id, start, end in matches:
+                matched_span = process.sub_sentence[start:end]
+                sent = matched_span.text
+                if "former" in sent.lower():
+                    process.action.link_type = LinkType.TO_PREV
+                elif "latter" in sent.lower():
+                    process.action.link_type = LinkType.TO_NEXT
 
 
 def correct_order(container: [SentenceContainer]):
     """
+    correct the sentence order in the container, the reason for this see the example below:
     # stop the maneuver if the pressure is too high -> if the pressure is too high, stop the maneuver
 
     Args:
         container: The container that contains the action.
-
     """
 
     for sentence in container:
@@ -128,17 +153,56 @@ def correct_order(container: [SentenceContainer]):
 
 
 def remove_redundant_processes(container: [SentenceContainer]):
+    """
+    Remove the processes that are redundant in context of BPMN modeling. three cases are considered:
+    1. The one whose action is None
+    2. The one whose action is "be" and has no adjective or attribute
+    3. The one who simply describes the start of the process
+
+    Args:
+        container: The container that contains the action.
+    """
     for sentence in container:
         for i in range(len(sentence.processes) - 1, -1, -1):
             if sentence.processes[i].action is None:
                 sentence.processes.remove(sentence.processes[i])
-            # elif sentence.processes[i].action.token.lemma_ == "be":
-            #     acomp = find_dependency(["acomp"], token=sentence.processes[i].action.token)
-            #     if len(acomp) == 0:
-            #         sentence.processes.remove(sentence.processes[i])
+            elif sentence.processes[i].action.token.lemma_ == "be":
+                acomp = find_dependency(["acomp", "attr"], token=sentence.processes[i].action.token)
+                if len(acomp) == 0:
+                    sentence.processes.remove(sentence.processes[i])
+            elif describe_process_start(sentence.processes[i]):
+                sentence.processes.remove(sentence.processes[i])
+
+
+def describe_process_start(process: Process):
+    """
+    Determine whether the process describes the start of the process. This is achieved by checking whether the verb and
+    it's hypernym has the meaning of "begin" and the actor has the meaning of "activity"
+    Args:
+        process: The process to be checked.
+
+    Returns:
+        true if the process describes the start of the process, false otherwise.
+
+    """
+    if process.actor is None:
+        return False
+    else:
+        if hypernyms_checker(process.actor.token, ["activity"]) and \
+                verb_hypernyms_checker(process.action.token, ["begin"]):
+            return True
+    return False
 
 
 def determine_end_activities(structure_list: [Structure]):
+    """
+    determine whether an activity is an end activity. there are two cases:
+    1. the last activity in the list is an end activity
+    2. If the verb of an activity or its hypernyms has meaning of "end" and the actor or its hypernyms has meaning of
+     "event", then it is an end activity
+    Args:
+        structure_list: the list of structures that contains the activities.
+    """
     for structure in structure_list:
         if structure_list.index(structure) == len(structure_list) - 1:
             structure.is_end_activity = True
@@ -185,11 +249,11 @@ def construct(container_list: [SentenceContainer]):
                 result.append(and_block)
 
         elif container.has_or():
-            and_block = AndBlock()
+            if_block = ConditionBlock()
             for process in container.or_processes:
-                branch = [Activity(process)]
-                and_block.branches.append(branch)
-            result.append(and_block)
+                branch = {"type": ConditionType.ELSE, "condition": [], "actions": [Activity(process)]}
+                if_block.branches.append(branch)
+            result.append(if_block)
 
         else:
             result.append(container)
@@ -200,17 +264,27 @@ def construct(container_list: [SentenceContainer]):
 def build_flows(container_list: [SentenceContainer]):
     flow_list = construct(container_list)
     result = []
+    last_gateway = None
 
     for i in range(len(flow_list)):
         if isinstance(flow_list[i], ConditionBlock):
+            last_gateway = flow_list[i]
             if not flow_list[i].is_complete():
                 flow_list[i].create_dummy_branch()
             result.append(flow_list[i])
         elif isinstance(flow_list[i], AndBlock):
+            last_gateway = flow_list[i]
             result.append(flow_list[i])
         else:
             for process in flow_list[i].processes:
-                result.append(Activity(process))
+                if process.action.link_type == LinkType.TO_PREV:
+                    if last_gateway is not None:
+                        last_gateway.add_to_branch(0, process)
+                elif process.action.link_type == LinkType.TO_NEXT:
+                    if last_gateway is not None:
+                        last_gateway.add_to_branch(1, process)
+                else:
+                    result.append(Activity(process))
 
     return result
 
@@ -237,7 +311,17 @@ def build_linked_list(container_list: [SentenceContainer]):
     return link
 
 
-def get_valid_actors(container_list: [SentenceContainer]):
+def get_valid_actors(container_list: [SentenceContainer]) -> list:
+    """
+    iterate the container list and get all the actors that are real actors
+
+    Args:
+        container_list: The container that contains the action.
+
+    Returns:
+        A list of actors that are real actors.
+
+    """
     result = []
     for container in container_list:
         for process in container.processes:

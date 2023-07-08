@@ -1,18 +1,27 @@
-the process starts
-a customer submits a claim
-sending relevant documentation
-the notification department at the car insurer checks the documents upon completeness
-the notification department at the car insurer register the claim
-the handling department picks up the claim
-the handling department check the insurance
-perform an assessment
------BEGIN_IF-----
-if: the assessment is positive:
-	authorise the repairs
-	phone a garage
-	schedule the payment
-else:
-	reject the claim
------END_IF-----
-send a letter in any case
-consider the process
+title: result07
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: customer
+	(start) as start
+	[submits a claim] as activity_6
+	[sending relevant documentation] as activity_7
+lane: notification department
+	[checks the documents upon completeness] as activity_8
+	[register the claim] as activity_9
+lane: handling department
+	[picks up the claim] as activity_10
+	[check the insurance] as activity_11
+	[perform an assessment] as activity_12
+	<the assessment is positive?> as gateway_1
+	[authorise the repairs] as activity_3
+	[phone a garage] as activity_4
+	[reject the claim] as activity_5
+	<> as gateway_1_end
+	[send a letter in any case] as activity_13
+	[consider the process] as activity_14
+	(end) as end
+
+start->activity_6->activity_7->activity_8->activity_9->activity_10->activity_11->activity_12->gateway_1
+gateway_1-"yes"->activity_3->activity_4->gateway_1_end
+gateway_1-"no"->activity_5->gateway_1_end
+gateway_1_end->activity_13->activity_14->end

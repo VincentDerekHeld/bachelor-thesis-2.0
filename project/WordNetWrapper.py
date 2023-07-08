@@ -1,6 +1,7 @@
-from Constant import PERSON_CORRECTOR_LIST, REAL_ACTOR_DETERMINERS, SUBJECT_PRONOUNS
 import spacy
+from Constant import PERSON_CORRECTOR_LIST, REAL_ACTOR_DETERMINERS, SUBJECT_PRONOUNS
 from spacy_wordnet.wordnet_annotator import WordnetAnnotator
+
 
 def can_be_person_or_system(full_noun: str, main_noun) -> bool:
     full_noun = full_noun.strip()
@@ -50,6 +51,20 @@ def hypernyms_checker(token, stop_list: list) -> bool:
         return False
 
 
+def verb_hypernyms_checker(token, stop_list: list) -> bool:
+    if token.text.lower() in stop_list:
+        return True
+
+    synsets = token._.wordnet.synsets()
+    if len(synsets) == 0:
+        return False
+    for synset in synsets:
+        if can_be_checked_token(synset, [], stop_list):
+            return True
+    else:
+        return False
+
+
 def can_be_checked_token(synset, checked_words: list, stop_list: list):
     if not synset.name() in checked_words:
         checked_words.append(synset.name())
@@ -57,7 +72,9 @@ def can_be_checked_token(synset, checked_words: list, stop_list: list):
         if len(hypernyms) == 0:
             return False
         hypernym_name = hypernyms[0].lemma_names()[0]
+
         # print(hypernym_name)
+
         if hypernym_name in stop_list:
             return True
         else:
@@ -71,6 +88,8 @@ def can_be_checked_token(synset, checked_words: list, stop_list: list):
 if __name__ == '__main__':
     nlp = spacy.load('en_core_web_sm')
     nlp.add_pipe("spacy_wordnet", after='tagger')
-    text_input = "the process will end"
+    text_input = "The loan approval process starts"
     document = nlp(text_input)
     hypernyms_checker(document[3], [])
+    print("-"*20)
+    verb_hypernyms_checker(document[4], [])

@@ -57,3 +57,13 @@ COMPOUND_SEQUENCE_INDICATORS = [
 EXCEPTION_INDICATORS = ["except"]
 
 STRING_EXCLUSION_LIST = []
+
+CASE_INDICATORS = [
+    {"in/for (the) former/latter case (of)": [
+        {"LEMMA": {"IN": ["in", "for"]}},
+        {"LEMMA": "the", "OP": "?"},
+        {"LEMMA": {"IN": ["former", "latter"]}},
+        {"LEMMA": "case"},
+        {"POS": "ADP", "OP": "?"},
+    ]}
+]

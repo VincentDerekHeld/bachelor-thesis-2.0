@@ -1,5 +1,6 @@
 from enum import Enum
 
+from Model.Actor import Actor
 from Model.Process import Process
 from Model.SentenceContainer import SentenceContainer
 from Structure.Activity import Activity
@@ -44,6 +45,11 @@ class ConditionBlock(Structure):
             elif len(self.branches) > 0:
                 self.branches[-1]["actions"].append(Activity(process))
 
+    def add_to_branch(self, index: int, process: Process):
+        for i in range(len(self.branches)):
+            if i == index:
+                self.branches[i]["actions"].append(Activity(process))
+
     def can_be_added(self, container: SentenceContainer) -> bool:
         for process in container.processes:
             if process.action is None:
@@ -54,6 +60,7 @@ class ConditionBlock(Structure):
             elif process.action.marker == "if":
                 for branch in self.branches:
                     for condition in branch["condition"]:
+
                         if condition.process.action.active:
                             reference_actor = condition.process.actor
                         else:
@@ -64,9 +71,12 @@ class ConditionBlock(Structure):
                         else:
                             compare_actor = process.action.object
 
-                        if compare_actor is not None:
+                        if compare_actor and reference_actor is not None:
                             if reference_actor.token.text.lower() == compare_actor.token.text.lower():
                                 return True
+                            elif isinstance(reference_actor, Actor) and isinstance(compare_actor, Actor):
+                                if reference_actor.full_name == compare_actor.full_name:
+                                    return True
                 return False
 
     def merge_branches(self, incoming: "ConditionBlock"):
@@ -129,6 +139,11 @@ class AndBlock(Structure):
                 branch.append(Activity(process))
 
         self.branches.append(branch)
+
+    def add_to_branch(self, index: int, process: Process):
+        for i in range(len(self.branches)):
+            if i == index:
+                self.branches[i].append(Activity(process))
 
     def __str__(self) -> str:
         string = ""

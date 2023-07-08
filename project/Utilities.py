@@ -302,6 +302,15 @@ def index_of(item: Token, l: []) -> int:
 
 
 def text_pre_processing(text: str) -> str:
+    """
+    preprocess the given text, remove the text between brackets and replace two or more spaces with one
+    Args:
+        text: the given text in form of string
+
+    Returns:
+        the preprocessed text
+
+    """
     # remove the text between brackets
     text = re.sub("[\(\[].*?[\)\]]", "", text)
     # replace two or more spaces with one

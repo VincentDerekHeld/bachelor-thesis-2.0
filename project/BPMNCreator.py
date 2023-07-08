@@ -12,8 +12,7 @@ def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str,
                       theme: str = "BLUEMOUNTAIN"):
     input_syntax = create_bpmn_description(structure_list, actor_list, title, theme=theme)
     print(input_syntax)
-    # render_bpmn_model(input_syntax, save_path)
-    print("debug model --> omit the rendering")
+    render_bpmn_model(input_syntax, save_path)
 
 
 def render_bpmn_model(input_syntax: str, path: str):
