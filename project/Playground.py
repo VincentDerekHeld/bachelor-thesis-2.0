@@ -15,8 +15,8 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    # text_input = open('Text/text09.txt', 'r').read().replace('\n', ' ')
-    text_input = "The first activity is to check and repair the hardware. The Evanstonian is an upscale independent hotel. The waiter is also responsible for nonalcoholic drinks. If the customer is high risk, the loan is denied."
+    text_input = open('Text/text_input/text05.txt', 'r').read().replace('\n', ' ')
+    # text_input = "In any of the cases, approval, rejection or change required the system will send the user a notification."
 
     text_input = text_pre_processing(text_input)
     document = nlp(text_input)

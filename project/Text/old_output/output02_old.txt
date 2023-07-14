@@ -1,0 +1,34 @@
+title: result02_old
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: customer
+	(start) as start
+	[brings a defective computer] as activity_9
+	<the customer decides?> as gateway_1
+	[the costs are acceptable] as activity_3
+	[the process continues] as activity_4
+	[customer takes her computer] as activity_5
+	<> as gateway_1_end
+	[the ongoing repair consists of two activities] as activity_12
+	[execute two activities in an arbitrary order] as activity_13
+	[the first activity is] as activity_14
+	[the first activity check the hardware] as activity_15
+	[the first activity repair the hardware] as activity_16
+	[the second activity checks the software] as activity_17
+	[the second activity configure the software] as activity_18
+	[test the proper system functionality after each of these activities] as activity_19
+	<detect an error?> as gateway_6
+	[execute another arbitrary repair activity] as activity_8
+	<> as gateway_6_end
+	(end) as end
+lane: crs
+	[checks the defect] as activity_10
+	[hand out a repair cost calculation] as activity_11
+
+start->activity_9->activity_10->activity_11->gateway_1
+gateway_1-"yes"->activity_3->activity_4->gateway_1_end
+gateway_1-"no"->activity_5->gateway_1_end
+gateway_1_end->activity_12->activity_13->activity_14->activity_15->activity_16->activity_17->activity_18->activity_19->gateway_6
+gateway_6-"yes"->activity_8->gateway_6_end
+gateway_6-"no"->gateway_6_end
+gateway_6_end->end

@@ -38,10 +38,14 @@ class ConditionBlock(Structure):
 
             if process.action.token.dep_ == "conj":
                 father = next(process.action.token.ancestors)
+                in_condition = False
                 for condition_activity in self.branches[-1]["condition"]:
                     if condition_activity.process.action.token == father:
+                        in_condition = True
                         self.branches[-1]["condition"].append(Activity(process))
                         break
+                if not in_condition:
+                    self.branches[-1]["actions"].append(Activity(process))
             elif len(self.branches) > 0:
                 self.branches[-1]["actions"].append(Activity(process))
 

@@ -88,8 +88,8 @@ def can_be_checked_token(synset, checked_words: list, stop_list: list):
 if __name__ == '__main__':
     nlp = spacy.load('en_core_web_sm')
     nlp.add_pipe("spacy_wordnet", after='tagger')
-    text_input = "The loan approval process starts"
+    text_input = "the claim is rejected"
     document = nlp(text_input)
-    hypernyms_checker(document[3], [])
+    hypernyms_checker(document[1], [])
     print("-"*20)
-    verb_hypernyms_checker(document[4], [])
+    verb_hypernyms_checker(document[3], [])

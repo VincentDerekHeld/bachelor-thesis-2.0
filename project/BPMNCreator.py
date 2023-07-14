@@ -1,6 +1,5 @@
 from typing import Optional
 
-from processpiper import ProcessMap, EventType, ActivityType, GatewayType
 from processpiper.text2diagram import render
 
 from Structure.Activity import Activity
@@ -10,17 +9,46 @@ from Structure.Structure import Structure
 
 def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str, save_path: str,
                       theme: str = "BLUEMOUNTAIN"):
+    """
+    Create a BPMN model from a list of structures and actors.
+    Args:
+        structure_list: the list of structures
+        actor_list: the list of valid actors
+        title: the title of the BPMN model
+        save_path: the path to save the BPMN model
+        theme: the theme of the BPMN model, default is BLUEMOUNTAIN
+    """
     input_syntax = create_bpmn_description(structure_list, actor_list, title, theme=theme)
     print(input_syntax)
     render_bpmn_model(input_syntax, save_path)
 
 
 def render_bpmn_model(input_syntax: str, path: str):
+    """
+    Render the BPMN model from the input syntax.
+    Args:
+        input_syntax: the generated input syntax
+        path: the path to save the BPMN model
+
+    """
     render(input_syntax, path)
 
 
 def create_bpmn_description(structure_list: [Structure], actor_list: list, title: str,
                             theme: str = "BLUEMOUNTAIN") -> str:
+    """
+    Create the input syntax for the BPMN model based on the list of structures and actors.
+    construct the lanes according to the actors
+    and then add the activities and gateways to the lanes according to the actor of the activity
+    Args:
+        structure_list: the list of structures
+        actor_list: the list of valid actors
+        title: the title of the BPMN model
+        theme: the theme of the BPMN model, default is BLUEMOUNTAIN
+
+    Returns:
+        the constructed syntax for rendering the BPMN model
+    """
     result = ""
     result += "title: " + title + "\n"
     result += "width: " + str(10000) + "\n"
@@ -145,12 +173,22 @@ def find_next_id(structure_list: [Structure], structure: Structure) -> str:
 
 def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, structure: Structure,
                    last_gateway: Optional[str]):
+    """
+    append the corresponding element to the lane that it belongs to
+    Args:
+        key:
+        lanes: the dictionary that contains the lanes
+        connection_id: the index of the connection that is being appended
+        connections: the list of connections
+        structure: the structure that is being appended
+        last_gateway: the last gateway that was appended
+
+    """
     if isinstance(structure, Activity):
         if structure.process.actor is not None:
             if structure.process.actor.full_name in lanes.keys():
                 lanes[key].append("[" + str(structure.process.action) + "] as activity_" + str(structure.id))
             else:
-                # todo: develop a better toString method for visualization
                 lanes[key].append(
                     "[" + str(structure.process.actor) + " " + str(structure.process.action) + "] as activity_" +
                     str(structure.id))
@@ -185,6 +223,17 @@ def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, s
 
 
 def belongs_to_lane(activity_list: [Structure], lanes: {}, structure: Structure, previous_actor: Optional[str]) -> str:
+    """
+    This method is used to determine which lane the activity belongs to.
+    Args:
+        activity_list: the list of activities
+        lanes: the dictionary of lanes
+        structure: the current structure that is being processed
+        previous_actor: the actor of the previous activity
+
+    Returns:
+        the name of the lane, if the lane has length 1, then it returns "dummy"
+    """
     if len(lanes) == 1:
         return "dummy"
 

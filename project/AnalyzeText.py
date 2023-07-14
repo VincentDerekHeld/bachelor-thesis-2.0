@@ -22,7 +22,8 @@ def determine_marker(container: SentenceContainer, nlp: Language):
     """
     determine_single_marker(container)
     determine_compound_marker(container, nlp)
-    determine_jump_case_marker(container, nlp)
+    # todo: uncomment this
+    # determine_jump_case_marker(container, nlp)
 
 
 def determine_single_marker(container: SentenceContainer):
@@ -157,6 +158,7 @@ def remove_redundant_processes(container: [SentenceContainer]):
     Remove the processes that are redundant in context of BPMN modeling. three cases are considered:
     1. The one whose action is None
     2. The one whose action is "be" and has no adjective or attribute
+    3. The one who describes "have to do something"
     3. The one who simply describes the start of the process
 
     Args:
@@ -166,9 +168,15 @@ def remove_redundant_processes(container: [SentenceContainer]):
         for i in range(len(sentence.processes) - 1, -1, -1):
             if sentence.processes[i].action is None:
                 sentence.processes.remove(sentence.processes[i])
+            elif sentence.processes[i].action.token.lemma_ in ["consist", "include"]:
+                sentence.processes.remove(sentence.processes[i])
             elif sentence.processes[i].action.token.lemma_ == "be":
                 acomp = find_dependency(["acomp", "attr"], token=sentence.processes[i].action.token)
                 if len(acomp) == 0:
+                    sentence.processes.remove(sentence.processes[i])
+            elif sentence.processes[i].action.token.lemma_ == "have":
+                xcomp = find_dependency(["xcomp"], token=sentence.processes[i].action.token)
+                if len(xcomp) > 0:
                     sentence.processes.remove(sentence.processes[i])
             elif describe_process_start(sentence.processes[i]):
                 sentence.processes.remove(sentence.processes[i])
@@ -200,6 +208,8 @@ def determine_end_activities(structure_list: [Structure]):
     1. the last activity in the list is an end activity
     2. If the verb of an activity or its hypernyms has meaning of "end" and the actor or its hypernyms has meaning of
      "event", then it is an end activity
+    3. If the verb of an activity or its hypernyms has meaning of "refuse" and the object or its hypernyms has meaning
+     of "message", then it is an end activity
     Args:
         structure_list: the list of structures that contains the activities.
     """
@@ -215,11 +225,24 @@ def determine_end_activities(structure_list: [Structure]):
                         actor = activity.process.action.object
                     if actor is not None:
                         if hypernyms_checker(actor.token, ["event"]) and \
-                                hypernyms_checker(activity.process.action.token, ["end"]):
+                                verb_hypernyms_checker(activity.process.action.token, ["end"]):
+                            activity.is_end_activity = True
+                            continue
+                        elif activity.process.action.object is not None and \
+                                hypernyms_checker(activity.process.action.object.token, ["message"]) and \
+                                verb_hypernyms_checker(activity.process.action.token, ["refuse"]):
                             activity.is_end_activity = True
 
 
 def construct(container_list: [SentenceContainer]):
+    """
+    given the container list, the function will convert the corresponding container into the right structure (activity of gateway)
+    Args:
+        container_list: the list of containers that contains the actions.
+
+    Returns:
+        the constructed structure list.
+    """
     result = []
     for i in range(len(container_list)):
         container = container_list[i]
@@ -262,6 +285,15 @@ def construct(container_list: [SentenceContainer]):
 
 
 def build_flows(container_list: [SentenceContainer]):
+    """
+    given the container list, the function will convert the corresponding container into the
+    right structure (activity of gateway) and perform some minor adjustments to the structure.
+    Args:
+        container_list: the list of containers that contains the actions.
+
+    Returns:
+        the constructed structure list.
+    """
     flow_list = construct(container_list)
     result = []
     last_gateway = None
@@ -332,16 +364,33 @@ def get_valid_actors(container_list: [SentenceContainer]) -> list:
     return result
 
 
-def adjust_actors(container_list: [SentenceContainer], valid_actors: [str]):
-    for container in container_list:
-        for process in container.processes:
-            if process.actor is not None and not process.actor.is_real_actor:
-                for valid_actor in valid_actors:
-                    if process.actor.full_name in valid_actor:
-                        process.actor.full_name = valid_actor
+def adjust_actor_list(container_list: [SentenceContainer], valid_actors: [str]) -> list:
+    result = []
+    add = True
+    for i in range(len(valid_actors)):
+        for j in range(len(valid_actors)):
+            if i != j:
+                if valid_actors[i] in valid_actors[j]:
+                    add = False
+                    break
+        if add:
+            result.append(valid_actors[i])
+        else:
+            add = True
+
+    return result
 
 
 def last_container_has_conditional_marker(container: SentenceContainer, container_list: [SentenceContainer]):
+    """
+    this function checks whether the last container has a conditional marker.
+    Args:
+        container: the container that is being checked.
+        container_list: the list of containers.
+
+    Returns:
+        true if the last container has a conditional marker, false otherwise.
+    """
     index = container_list.index(container)
     if index == 0:
         return False

@@ -50,6 +50,8 @@ gateway_4-"reject the request"->activity_6->end_6
 gateway_4-"ask the request"->activity_8->activity_9->activity_10->gateway_4_end
 gateway_4-"approve the request"->activity_12->activity_13->gateway_4_end
 gateway_4_end->gateway_14
+
 gateway_14-"yes"->activity_16->activity_17->gateway_14_end
 gateway_14-"no"->gateway_14_end
+
 gateway_14_end->activity_21->activity_22->activity_23->activity_24->activity_25->activity_26->activity_27->activity_28->activity_29->activity_30->activity_31->end

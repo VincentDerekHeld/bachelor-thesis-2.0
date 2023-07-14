@@ -61,12 +61,10 @@ class Action(ExtractedObject):
         if self.prt is not None:
             str_utility(self.prt, result)
 
-        # for mod in self.advmod:
-        #     str_utility(mod, result)
-
-        for spec in self.specifiers:
-            if spec.SpecifierType.value == "acomp":
-                str_utility(spec.token, result)
+        if self.token.lemma_ != "be":
+            for spec in self.specifiers:
+                if spec.SpecifierType.value == "acomp":
+                    str_utility(spec.token, result)
 
         if self.negated:
             index = index_of(self.token, result)
@@ -82,6 +80,16 @@ class Action(ExtractedObject):
                     str_utility(str(self.object), result, i=self.object.token.i)
             else:
                 str_utility(str(self.object), result, i=self.object.token.i)
+        elif self.token.lemma_ == "be":
+            for child in self.token.children:
+                if child.dep_ == "acomp":
+                    str_utility(child, result, i=child.i)
+                elif child.dep_ == "attr":
+                    str_utility(child, result, i=child.i)
+                    for det in child.children:
+                        if det.dep_ == "det":
+                            str_utility(det, result, i=det.i)
+                            break
 
         if self.prep is not None and self.prepositional_object is not None:
             pobj = str(self.prepositional_object)

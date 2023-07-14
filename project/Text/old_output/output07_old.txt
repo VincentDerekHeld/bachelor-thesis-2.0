@@ -1,0 +1,29 @@
+title: result07_old
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: customer
+	(start) as start
+	[the process starts] as activity_7
+	[submits a claim] as activity_8
+	[sending relevant documentation] as activity_9
+lane: notification department
+	[checks the documents upon completeness] as activity_10
+	[register the claim] as activity_11
+lane: handling department
+	[picks up the claim] as activity_12
+	[check the insurance] as activity_13
+	[perform an assessment] as activity_14
+	<the assessment is positive?> as gateway_1
+	[authorise the repairs] as activity_3
+	[phone a garage] as activity_4
+	[schedule the payment] as activity_5
+	[reject the claim] as activity_6
+	<> as gateway_1_end
+	[send a letter in any case] as activity_15
+	[consider the process] as activity_16
+	(end) as end
+
+start->activity_7->activity_8->activity_9->activity_10->activity_11->activity_12->activity_13->activity_14->gateway_1
+gateway_1-"yes"->activity_3->activity_4->activity_5->gateway_1_end
+gateway_1-"no"->activity_6->gateway_1_end
+gateway_1_end->activity_15->activity_16->end

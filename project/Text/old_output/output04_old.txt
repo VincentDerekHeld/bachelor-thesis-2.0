@@ -1,0 +1,23 @@
+title: result04_old
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: party
+	(start) as start
+	[sends a warrant possession request] as activity_1
+lane: client service back office
+	[receives the request] as activity_2
+	[retrieve the sct file] as activity_3
+	[forward the sct warrant possession to queensland police] as activity_4
+	[the back office store the sct physical file] as activity_5
+	[awaiting a report] as activity_6
+lane: police
+	[None] as activity_7
+	[receive the report] as activity_8
+	[retrieve the respective sct file] as activity_9
+	[back office attaches the new sct document] as activity_10
+	[back office store the expanded sct physical file] as activity_11
+lane: some other mc internal staff
+	[after that receives the physical sct file] as activity_12
+	(end) as end
+
+start->activity_1->activity_2->activity_3->activity_4->activity_5->activity_6->activity_7->activity_8->activity_9->activity_10->activity_11->activity_12->end

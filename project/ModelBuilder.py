@@ -6,7 +6,8 @@ from Model.Resource import Resource
 from Model.SentenceContainer import SentenceContainer
 from Model.Specifier import Specifier
 from Model.SpecifierType import SpecifierType
-from Utilities import find_dependency, anaphora_resolver, belongs_to_other_process, find_process, get_complete_actor_name
+from Utilities import find_dependency, anaphora_resolver, belongs_to_other_process, find_process, \
+    get_complete_actor_name
 
 from spacy.tokens import Token
 
@@ -35,9 +36,6 @@ def create_actor(main_actor: Token) -> Optional[Actor]:
 
     if not WordNetWrapper.can_be_person_or_system(complete_name, main_actor):
         actor.is_real_actor = False
-    # todo: examie the necessity of the meta-actor tag
-    # if WordNetWrapper.is_meta_actor(main_actor, threshold=1):
-    #     actor.is_meta_actor = True
     return actor
 
 
@@ -102,11 +100,20 @@ def create_action(verb: Token, noun: Token) -> Optional[Action]:
 
 
 def find_pobj(verb: Token):
+    """
+    Finds the prepositional object of a verb token.
+    Args:
+        verb: the verb token
+
+    Returns:
+        if the prepositional object token is found, it is returned, otherwise None is returned
+    """
     pobj = find_dependency(["pobj"], token=verb)
     if len(pobj) == 0:
         prep = find_dependency(["prep"], token=verb)
-        if len(prep) > 0:
-            pobj = find_dependency(["pobj"], token=prep[0])
+        for p in prep:
+            if p.text in ["for", "to", "into"]:
+                pobj = find_dependency(["pobj"], token=p)
 
     if len(pobj) > 0:
         return pobj[0]
@@ -115,6 +122,11 @@ def find_pobj(verb: Token):
 
 
 def determine_noun_specifiers(actor):
+    """
+    Determines the noun specifiers for an actor token.
+    Args:
+        actor: the actor token
+    """
     find_determiner(actor)
     find_compound(actor)
     find_amod_specifiers(actor)
@@ -122,24 +134,47 @@ def determine_noun_specifiers(actor):
 
 
 def find_verb_specifiers(action):
+    """
+    Determines the verb specifiers for an action token.
+    Args:
+        action: the action token
+
+    """
     find_prep_specifier(action)
     find_acomp_specifier(action)
 
 
 def find_determiner(actor):
+    """
+    Finds the determiner (the, a, any, some etc.) of an actor token.
+    Args:
+        actor: the actor token
+    """
     determiner_list = find_dependency(["det", "poss"], token=actor.token)
     if len(determiner_list) > 0:
         actor.determiner = determiner_list[0]
 
 
 def find_compound(actor):
+    """
+    Finds the compound noun of an actor token.
+    Args:
+        actor: the actor token
+    """
     compound_list = find_dependency(["compound"], token=actor.token, deep=True)
     actor.add_compound(compound_list)
 
 
 def find_amod_specifiers(actor):
-    # The "amod" tag is used to label an adjective that modifies a noun.
-    # For example, in the sentence "The red car is fast", the adjective "red" modifies the noun "car"
+    """
+    Finds the adjective modifiers of an actor token.
+    The "amod" tag is used to label an adjective that modifies a noun.
+    For example, in the sentence "The red car is fast", the adjective "red" modifies the noun "car"
+    Args:
+        actor: the actor token
+
+    """
+
     amod_specifiers = find_dependency(["amod"], token=actor.token)
     for a in amod_specifiers:
         specifier = Specifier(a, SpecifierType.AMOD, a.text)
@@ -147,8 +182,14 @@ def find_amod_specifiers(actor):
 
 
 def find_nn_specifier(actor):
-    # The "nn" tag is used to label a noun that is part of a compound noun.
-    # For example, in the compound noun "coffee mug", the word "coffee" is labeled as an "nn" because it modifies the noun "mug".
+    """
+    Finds the noun-noun modifiers of an actor token.
+    The "nn" tag is used to label a noun that is part of a compound noun.
+    For example, in the compound noun "coffee mug", the word "coffee" is labeled as an "nn" because it modifies the noun "mug".
+    Args:
+        actor: the actor token
+    """
+
     nn_specifiers = find_dependency(["nn"], token=actor.token)
     for s in nn_specifiers:
         specifier = Specifier(s, SpecifierType.NN, s.text)
@@ -156,6 +197,11 @@ def find_nn_specifier(actor):
 
 
 def find_prep_specifier(action):
+    """
+    Finds the prepositional modifiers of an action token.
+    Args:
+        action: the action token
+    """
     prep_specifiers = find_dependency(["prep"], token=action.token)
     for p in prep_specifiers:
         specifier = Specifier(p, SpecifierType.PREP, p.text)
@@ -163,16 +209,28 @@ def find_prep_specifier(action):
 
 
 def find_acomp_specifier(action):
+    """
+    Finds the adjectival complement modifiers of an action token.
+    Args:
+        action: the action token
+
+    """
     acomp_specifiers = find_dependency(["acomp"], token=action.token)
     for a in acomp_specifiers:
         specifier = Specifier(a, SpecifierType.ACOMP, a.text)
         action.add_modifier(specifier)
 
 
-
-
-
 def is_negated(verb: Token, noun: Token) -> bool:
+    """
+    Determines if a verb is negated.
+    Args:
+        verb: the verb token
+        noun: the noun token
+
+    Returns:
+        True if the verb is negated, otherwise False
+    """
     negation_list = ["no", "not", "n't"]
     for child in verb.children:
         if child.dep_ == "neg":

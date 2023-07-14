@@ -1,0 +1,24 @@
+title: result08_old
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[the loan approval process starts] as activity_10
+	[receiving a customer request for a loan amount] as activity_11
+	[invoke the risk assessment web service] as activity_12
+	[assess the request] as activity_13
+	<> as gateway_1
+	[the customer is] as activity_3
+	[approve the loan] as activity_4
+	[deny the loan] as activity_6
+	[the loan amount is for $ 10,000 or more] as activity_8
+	[send the request] as activity_9
+	<> as gateway_1_end
+	[the customer receives feedback from the assessor or approver] as activity_14
+	(end) as end
+
+start->activity_10->activity_11->activity_12->activity_13->gateway_1
+gateway_1-"the loan is small"->activity_3->activity_4->gateway_1_end
+gateway_1-"the customer is"->activity_6->gateway_1_end
+gateway_1-"the customer needs further review"->activity_8->activity_9->gateway_1_end
+gateway_1_end->activity_14->end

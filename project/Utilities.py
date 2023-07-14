@@ -2,16 +2,9 @@ import re
 from typing import Optional
 
 from spacy.matcher.matcher import Matcher
-from spacy.tokens import Doc, Span, Token
+from spacy.tokens import Span, Token
 
 from Constant import SUBJECT_PRONOUNS, OBJECT_PRONOUNS, STRING_EXCLUSION_LIST
-
-
-# from Model.Actor import Actor
-# from Model.ExtractedObject import ExtractedObject
-# from Model.Process import Process
-# from Model.SentenceContainer import SentenceContainer
-# from Model.Action import Action
 
 
 def find_dependency(dependencies: [str], sentence: Span = None, token: Token = None, deep=False) -> [Token]:
@@ -225,6 +218,14 @@ def belongs_to_other_process(root: Token, container):
 
 
 def get_complete_actor_name(main_actor):
+    """
+    get the complete actor name
+    Args:
+        main_actor: the main actor
+
+    Returns:
+
+    """
     result = []
     str_utility(main_actor, result)
     help_get_complete_actor_name(main_actor, result)
@@ -234,6 +235,15 @@ def get_complete_actor_name(main_actor):
 
 
 def help_get_complete_actor_name(main_actor, result):
+    """
+    help function for get_complete_actor_name
+    Args:
+        main_actor: the main actor
+        result: the result list
+
+    Returns:
+
+    """
     for child in main_actor.children:
         if child.dep_ in ["compound", "det", "prep", "pobj", "appos", "amod", "nmod"] \
                 and child.text.lower().strip() not in ["as", "within", "at", "of"]:
@@ -243,6 +253,16 @@ def help_get_complete_actor_name(main_actor, result):
 
 
 def str_utility(string, string_list: [], i=None) -> []:
+    """
+    add the given token or string to the given string list in the correct order
+    Args:
+        string: the token or string that needs to be added
+        string_list: the result list
+        i: the index that the string needs to be inserted to, default is None
+
+    Returns:
+
+    """
     if isinstance(string, Token):
         s = string.text.lower()
     else:
@@ -260,6 +280,17 @@ def str_utility(string, string_list: [], i=None) -> []:
 
 
 def insertion(string, string_list: [], i=None):
+    """
+    insert the given string to the given string list
+
+    Args:
+        string: the string that needs to be inserted
+        string_list: the string list that the string needs to be inserted to
+        i: the index that the string needs to be inserted to, default is None
+
+    Returns:
+
+    """
     for s in range(len(string_list)):
         if isinstance(string_list[s], str):
             continue
@@ -275,6 +306,14 @@ def insertion(string, string_list: [], i=None):
 
 
 def string_list_to_string(string_list: []) -> str:
+    """
+    convert the given string list to string
+    Args:
+        string_list: the given string list
+
+    Returns:
+        the string converted from the given string list
+    """
     result = ""
 
     for i in range(len(string_list)):
@@ -290,6 +329,15 @@ def string_list_to_string(string_list: []) -> str:
 
 
 def index_of(item: Token, l: []) -> int:
+    """
+    get the index of the given item in the given list
+    Args:
+        item: the given item
+        l: the given list
+
+    Returns:
+        the index of the given item in the list
+    """
     for i in range(len(l)):
         if isinstance(l[i], str):
             if item.lemma_ == l[i]:

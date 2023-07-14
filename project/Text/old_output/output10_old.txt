@@ -1,0 +1,56 @@
+title: result
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: any employee
+	(start) as start
+	[the process of an office supply request starts] as activity_19
+	[when submits an office supply request] as activity_20
+	[register once the requirement] as activity_21
+lane: immediate supervisor
+	[receive the request] as activity_22
+	<> as gateway_1
+lane: supervisor
+	[ask for a change] as activity_2
+	[approve a change] as activity_3
+	<> as gateway_1_end
+	<> as gateway_4
+	[the process end] as activity_6
+	[make a change] as activity_8
+	[return then it to the petitioner employee] as activity_9
+lane: petitioner employee
+	[review the comments for the change request] as activity_10
+	[request go to the purchase department] as activity_12
+lane: purchase department
+	[be in charge of making quotations] as activity_13
+	[making quotations] as activity_14
+	<> as gateway_4_end
+	[have] as activity_17
+	[choose a different vendor] as activity_18
+	<> as gateway_15_end
+	[select a vendor] as activity_23
+	[confirm a vendor] as activity_24
+	[the system generate a purchase order] as activity_25
+	[the system send a purchase order] as activity_26
+	[the system wait a purchase order] as activity_27
+	[deliver the product] as activity_28
+	[the invoice received] as activity_29
+	[the system in any case send a notification] as activity_30
+lane: vendor
+	<the vendor is not valid?> as gateway_15
+lane: user
+	[know] as activity_31
+	[the result was] as activity_32
+	[approval rejection or change in any of the cases required] as activity_33
+	(end) as end
+
+start->activity_19->activity_20->activity_21->activity_22->gateway_1
+gateway_1-""->activity_2->gateway_1_end
+gateway_1-""->activity_3->gateway_1_end
+gateway_1_end->gateway_4
+gateway_4-"reject the request"->activity_6->gateway_4_end
+gateway_4-"ask the request"->activity_8->activity_9->activity_10->gateway_4_end
+gateway_4-"approve the request"->activity_12->activity_13->activity_14->gateway_4_end
+gateway_4_end->gateway_15
+gateway_15-"yes"->activity_17->activity_18->gateway_15_end
+gateway_15-"no"->gateway_15_end
+gateway_15_end->activity_23->activity_24->activity_25->activity_26->activity_27->activity_28->activity_29->activity_30->activity_31->activity_32->activity_33->end 

@@ -1,0 +1,8 @@
+Your second job is to refine the extracted activities because some are incomplete and thus not understandable to the reader. Consider the given example.
+1. [finish the process instance in the former case] as activity_20 can be changed into [finish the process instance] as activity_20 because "in the former case" is actually not very relevant.
+2. [inform the storehouse and the engineering department in the latter case] as activity_21 can be changed into [inform the storehouse and the engineering department] as activity_21. The reason is the same as in example 1
+3. [reserve it] as activity_6 should be changed into [reserve the part] as activity_6. Whenever a pronoun is detected, you should find the word that the pronoun refers to in the context
+4. [order it] as activity_8 should be changed into [order the part] as activity_8. The reason is the same as in example 3
+5. [the meantime prepares everything for] as activity_11 should be changed into [prepares everything for the assembling] as activity_11 because "(in) the meantime" is not our interest here, and a single "for" followed by nothing is not desired, therefore you should find the related words that are followed by this "for"
+
+Based on such knowledge, try to refine the activities in the following text. 
