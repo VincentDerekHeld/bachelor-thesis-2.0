@@ -3,9 +3,9 @@ width: 10000
 colourtheme: BLUEMOUNTAIN
 lane: 
 	(start) as start
-	[i am] as activity_4
+	[i am the hr clerk] as activity_4
 	[report a vacancy to me] as activity_5
-	[i create a job description from the information] as activity_6
+	[i create a job description] as activity_6
 	[i ask the department] as activity_7
 	[i submitting the job description for consideration] as activity_8
 	[i wait for the approval] as activity_9

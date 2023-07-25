@@ -2,43 +2,38 @@ from processpiper.text2diagram import render
 
 if __name__ == '__main__':
     input_syntax = """
-title: result05
+title: result05_LLM_generation
 width: 10000
 colourtheme: BLUEMOUNTAIN
-lane: mail processing unit
-	(start) as start
-	[collect mail from the party] as activity_13
-lane: mail clerk
-	[sorts the unopened mail into the various business areas] as activity_14
-	[distribute the mail] as activity_15
-	[the registry receive the mail] as activity_16
-	[open it] as activity_17
-	[sort it into groups for distribution] as activity_18
-	[register it] as activity_19
-lane: assistant registry manager
-	[performs a quality check] as activity_20
-	<the mail is not compliant?> as gateway_1
-	[compile a list of requisition] as activity_3
-	[send a list of requisition] as activity_4
-	[capture the matter details] as activity_5
-	[provide the matter details to the cashier] as activity_6
-	<> as gateway_1_end
-	<@parallel> as gateway_8
-	[puts the receipt and copied documents into an envelope] as activity_9
-	[post receipt to the party] as activity_10
-	<@parallel> as gateway_8_end
-	(end) as end
-lane: cashier
-	[takes the applicable fees] as activity_7
-	[captures the party details] as activity_11
-	[print the physical court file] as activity_12
+lane: Mail Processing Unit
+(start) as start
+[collect mail] as activity_1
+[sort unopened mail into various business areas] as activity_2
+[distribute mail] as activity_3
 
-start->activity_13->activity_14->activity_15->activity_16->activity_17->activity_18->activity_19->activity_20->gateway_1
-gateway_1-"yes"->activity_3->activity_4->gateway_1_end
-gateway_1-"no"->activity_5->activity_6->activity_7->gateway_1_end
-gateway_1_end->gateway_8
-gateway_8->activity_9->activity_10->gateway_8_end
-gateway_8->activity_11->activity_12->gateway_8_end
-gateway_8_end->end
+lane: Registry
+[receive mail] as activity_4
+[open and sort mail into groups for distribution] as activity_5
+[register in a manual incoming Mail Register] as activity_6
+[Assistant Registry Manager performs a quality check] as activity_7
+<compliant?> as gateway_1
+[compile a list of requisition explaining the reason for rejection] as activity_8
+[send back list to the party] as activity_9
+<> as gateway_1_end
+[capture the matter details] as activity_10
+[provide matter details to the Cashier] as activity_11
+[put the receipt and copied documents into an envelope] as activity_12
+[post envelope to the party] as activity_13
+
+lane: Cashier
+[take the applicable fees] as activity_14
+[capture the Party Details] as activity_15
+[print the Physical Court File] as activity_16
+(end) as end
+
+start->activity_1->activity_2->activity_3->activity_4->activity_5->activity_6->activity_7->gateway_1
+gateway_1-"no"->activity_8->activity_9->gateway_1_end
+gateway_1-"yes"->activity_10->activity_11->activity_14->activity_12->activity_13->gateway_1_end
+gateway_1_end->activity_15->activity_16->end
        """
-    render(input_syntax, "Diagram/output/text05_bpmn.png")
+    render(input_syntax, "/Users/shuaiwei_yu/Desktop/bachelor-thesis/project/Diagram/output_LLM/text05_bpmn_gen.png")

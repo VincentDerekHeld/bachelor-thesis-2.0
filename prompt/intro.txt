@@ -1,4 +1,4 @@
-I'm trying to automatically generate BPMN models with the help of using the NLP technique; suppose you are a BPMN domain expert, and your job is to assist me with improving the generated output from my program. The input is pure textual descriptions, and the output is formatted textual output. Some rules are predefined here: 
+I'm trying to automatically generate BPMN models with the help of the NLP technique; suppose you are a BPMN domain expert, and your job is to assist me with improving the generated output from my program. The input is pure textual descriptions, and the output is formatted textual output. Some rules are predefined here: 
 
 Here are some rules:
 1. the start event is always displayed with (start), and end events are always displayed with (end).
@@ -6,46 +6,11 @@ Here are some rules:
 3. Exclusive gateways are indicated with <>, where the conditions can be specified within the <>
 4. The Parallel gateways are specified with <@parallel>.
 5. Every gateway that begins a branch should be followed by the same gateway that ends the branch.
-6. An ID will follow all these elements.
+6. An unique ID will follow all these elements.
 7. Based on the actor who carried out the corresponding elements, the elements will be added to corresponding lanes.
 8. Each lane with the same name can only appear once. If there is only one lane, it can have no name.
 9. After all events are registered in the lanes, they will be then connected using "->".
 10. For conditional gateways, if there should be some conditional specifications, it can be annotated like gateway_4-"the part is available in house"->activity_6->gateway_4_end.
+11. Tasks can only have one coming connection and one outgoing connection. Gateways can have several informing and outgoing connections. 
 
-Here is an example: 
-Example Input: 
-A customer brings in a defective computer and the CRS checks the defect and hands out a repair cost calculation back. If the customer decides that the costs are acceptable, the process continues, otherwise she takes her computer home unrepaired. The ongoing repair consists of two activities, which are executed, in an arbitrary order. The first activity is to check and repair the hardware, whereas the second activity checks and configures the software. After each of these activities, the proper system functionality is tested. If an error is detected another arbitrary repair activity is executed, otherwise the repair is finished.
-
-Example Output:
-lane: customer
-	(start) as start
-	[brings a defective computer] as activity_9
-	[takes her computer] as activity_4
-	<> as gateway_1_end
-	[the ongoing repair consists of two activities] as activity_12
-	[execute two activities in an arbitrary order] as activity_13
-	[the first activity check the hardware] as activity_14
-	[the first activity repair the hardware] as activity_15
-	[the second activity checks the software] as activity_16
-	[the second activity configure the software] as activity_17
-	[test the proper system functionality after each of these activities] as activity_18
-	<detect an error?> as gateway_5
-	[execute another arbitrary repair activity] as activity_7
-	[finish the repair] as activity_8
-	<> as gateway_5_end
-	(end) as end
-lane: crs
-	[checks the defect] as activity_10
-	[hand out a repair cost calculation] as activity_11
-	<the costs are acceptable?> as gateway_1
-	[the process continues] as activity_3
-
-start->activity_9->activity_10->activity_11->gateway_1
-gateway_1-"yes"->activity_3->gateway_1_end
-gateway_1-"no"->activity_4->gateway_1_end
-gateway_1_end->activity_12->activity_13->activity_14->activity_15->activity_16->activity_17->activity_18->gateway_5
-gateway_5-"yes"->activity_7->gateway_5_end
-gateway_5-"no"->activity_8->gateway_5_end
-gateway_5_end->end
-
-You don't need to do anything right now but learn the given rules.
+You can wait to learn the given rules.

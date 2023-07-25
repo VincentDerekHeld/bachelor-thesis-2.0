@@ -112,7 +112,7 @@ def find_pobj(verb: Token):
     if len(pobj) == 0:
         prep = find_dependency(["prep"], token=verb)
         for p in prep:
-            if p.text in ["for", "to", "into"]:
+            if p.text in ["for", "to", "into", "of"]:
                 pobj = find_dependency(["pobj"], token=p)
 
     if len(pobj) > 0:

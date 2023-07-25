@@ -1,15 +1,15 @@
-[0] Config.pm:307> INFO - This is Biber 2.17
+[0] Config.pm:307> INFO - This is Biber 2.19
 [0] Config.pm:310> INFO - Logfile is '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/.texpadtmp/main.blg'
-[44] biber-darwin:340> INFO - === Mon Jul 10, 2023, 15:23:23
-[54] Biber.pm:418> INFO - Reading '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/.texpadtmp/main.bcf'
-[101] Biber.pm:972> INFO - Found 16 citekeys in bib section 0
-[111] Biber.pm:4383> INFO - Processing section 0
-[117] Biber.pm:4574> INFO - Looking for bibtex file '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/literature.bib' for section 0
-[118] bibtex.pm:1713> INFO - LaTeX decoding ...
-[130] bibtex.pm:1518> INFO - Found BibTeX data source '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/literature.bib'
-[207] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[208] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[208] Biber.pm:4203> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
-[208] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
-[214] bbl.pm:654> INFO - Writing '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/.texpadtmp/main.bbl' with encoding 'UTF-8'
-[219] bbl.pm:757> INFO - Output to /Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/.texpadtmp/main.bbl
+[30] biber-darwin:340> INFO - === Sun Jul 16, 2023, 17:38:43
+[38] Biber.pm:419> INFO - Reading '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/.texpadtmp/main.bcf'
+[72] Biber.pm:979> INFO - Found 17 citekeys in bib section 0
+[79] Biber.pm:4419> INFO - Processing section 0
+[84] Biber.pm:4610> INFO - Looking for bibtex file '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/literature.bib' for section 0
+[85] bibtex.pm:1713> INFO - LaTeX decoding ...
+[93] bibtex.pm:1519> INFO - Found BibTeX data source '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/literature.bib'
+[161] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[161] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[161] Biber.pm:4239> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
+[161] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[166] bbl.pm:660> INFO - Writing '/Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/.texpadtmp/main.bbl' with encoding 'UTF-8'
+[173] bbl.pm:763> INFO - Output to /Users/shuaiwei_yu/Desktop/bachelor-thesis/thesis/.texpadtmp/main.bbl

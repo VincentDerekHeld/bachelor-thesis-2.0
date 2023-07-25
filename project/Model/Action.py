@@ -87,9 +87,8 @@ class Action(ExtractedObject):
                 elif child.dep_ == "attr":
                     str_utility(child, result, i=child.i)
                     for det in child.children:
-                        if det.dep_ == "det":
+                        if det.dep_ in ["det", "amod", "compound"]:
                             str_utility(det, result, i=det.i)
-                            break
 
         if self.prep is not None and self.prepositional_object is not None:
             pobj = str(self.prepositional_object)

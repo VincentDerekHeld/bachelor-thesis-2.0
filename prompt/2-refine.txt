@@ -1,8 +1,10 @@
-Your second job is to refine the extracted activities because some are incomplete and thus not understandable to the reader. Consider the given example.
-1. [finish the process instance in the former case] as activity_20 can be changed into [finish the process instance] as activity_20 because "in the former case" is actually not very relevant.
-2. [inform the storehouse and the engineering department in the latter case] as activity_21 can be changed into [inform the storehouse and the engineering department] as activity_21. The reason is the same as in example 1
-3. [reserve it] as activity_6 should be changed into [reserve the part] as activity_6. Whenever a pronoun is detected, you should find the word that the pronoun refers to in the context
-4. [order it] as activity_8 should be changed into [order the part] as activity_8. The reason is the same as in example 3
-5. [the meantime prepares everything for] as activity_11 should be changed into [prepares everything for the assembling] as activity_11 because "(in) the meantime" is not our interest here, and a single "for" followed by nothing is not desired, therefore you should find the related words that are followed by this "for"
+Your second job is to refine the extracted activities because some are incomplete and thus not understandable to the reader. You should also examine whether the anaphora resolution is correct. Namely, you should check whether the pronoun that occurred in the input text is correctly mapped to a valid actor. If there is a pronoun in the output, you should perform the anaphora resolution to find a proper actor for the pronoun.
+
+In the first example, 
+[takes her computer] as activity_4 should be changed into [takes her computer home unrepaired] as activity_4 because the "takes her computer" in the context is not a complete sentence. Therefore, the relevant information "home unrepaired" should be added to it
+
+In the second example, 
+[fetch wine] as activity_10 should be changed into [fetch wine from the cellar] as activity_10. With the extra information from the cellar, the activity becomes more accurate.
+<sommelier has another order?> as gateway_1 has the wrong anaphora resolution because in the original text, "The waiter may wait to do the billing if he has another order to prepare or deliver." this "he" refers to "the waiter", not to "sommelier", thus this gateway should be changed into <the waiter has another order?> as gateway_1
 
 Based on such knowledge, try to refine the activities in the following text. 

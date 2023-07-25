@@ -15,7 +15,7 @@ lane: client service back office
 	[back office attaches the new sct document] as activity_9
 	[back office store the expanded sct physical file] as activity_10
 lane: some other mc internal staff
-	[after that receives the physical sct file] as activity_11
+	[receives the physical sct file] as activity_11
 	(end) as end
 
 start->activity_1->activity_2->activity_3->activity_4->activity_5->activity_6->activity_7->activity_8->activity_9->activity_10->activity_11->end

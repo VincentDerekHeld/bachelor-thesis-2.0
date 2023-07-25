@@ -22,8 +22,7 @@ def determine_marker(container: SentenceContainer, nlp: Language):
     """
     determine_single_marker(container)
     determine_compound_marker(container, nlp)
-    # todo: uncomment this
-    # determine_jump_case_marker(container, nlp)
+    determine_jump_case_marker(container, nlp)
 
 
 def determine_single_marker(container: SentenceContainer):
@@ -311,10 +310,10 @@ def build_flows(container_list: [SentenceContainer]):
             for process in flow_list[i].processes:
                 if process.action.link_type == LinkType.TO_PREV:
                     if last_gateway is not None:
-                        last_gateway.add_to_branch(0, process)
+                        last_gateway.add_to_branch(1, process)
                 elif process.action.link_type == LinkType.TO_NEXT:
                     if last_gateway is not None:
-                        last_gateway.add_to_branch(1, process)
+                        last_gateway.add_to_branch(0, process)
                 else:
                     result.append(Activity(process))
 
@@ -328,11 +327,6 @@ def build_linked_list(container_list: [SentenceContainer]):
     for i in range(len(flow_list)):
         if isinstance(flow_list[i], ConditionBlock):
             link.add_structure(flow_list[i])
-            # todo: if the condition gateway has only one branch, we might have to search another to merge.
-            # if flow_list[i].is_complete():
-            #     link.add_structure(flow_list[i])
-            # else:
-            #     pass
         elif isinstance(flow_list[i], AndBlock):
             link.add_structure(flow_list[i])
         else:

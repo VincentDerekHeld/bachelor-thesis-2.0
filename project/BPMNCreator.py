@@ -94,8 +94,12 @@ def create_bpmn_description(structure_list: [Structure], actor_list: list, title
                         condition += str(c)
                         if branch["condition"].index(c) != len(branch["condition"]) - 1:
                             condition += ", "
-                    # if condition == "None":
-                    #     condition = ""
+                    index = 0
+                    for i in range(len(condition)):
+                        index += 1
+                        if condition[i] == " " and index > 15:
+                            condition = condition[:i] + "\\n" + condition[i + 1:]
+                            index = 0
                     connections.append("gateway_" + str(structure.id) + '-"' + condition + '"')
 
                 need_end_gateway = True

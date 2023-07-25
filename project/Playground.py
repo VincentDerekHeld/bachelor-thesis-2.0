@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text_input/text05.txt', 'r').read().replace('\n', ' ')
+    text_input = open('Text/text_input/text13.txt', 'r').read().replace('\n', ' ')
     # text_input = "In any of the cases, approval, rejection or change required the system will send the user a notification."
 
     text_input = text_pre_processing(text_input)

@@ -42,8 +42,8 @@ def start_task(debug=False):
     nlp.add_pipe("spacy_wordnet", after='tagger')
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text_input/text06.txt', 'r').read().replace('\n', ' ')
-    # text_input = "the Assistant Registry Manager within the Registry performs a quality check. If the mail is not compliant, a list of requisition explaining the reason for rejection is compiled and sent back to the party. Otherwise, the matter details (types of action) are captured and provided to the Cashier, who takes the applicable fees attached to the mail."
+    text_input = open('Text/text_input/text13.txt', 'r').read().replace('\n', ' ')
+    # text_input = "The last phase is the creation of a quotation."
 
     text_input = text_pre_processing(text_input)
     document = nlp(text_input)
@@ -59,6 +59,6 @@ def start_task(debug=False):
     flows = build_flows(containerList)
     determine_end_activities(flows)
 
-    create_bpmn_model(flows, valid_actors, "result06", "Diagram/output/text06_bpmn.png")
+    create_bpmn_model(flows, valid_actors, "result13", "Diagram/output/text13_bpmn.png")
 
     # print(build_linked_list(containerList))

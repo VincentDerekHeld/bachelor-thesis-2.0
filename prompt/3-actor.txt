@@ -1,0 +1,19 @@
+The third assignment for you is to identify whether the activities are in the right lanes, which means you should determine whether the actor of each activity is correct. The reason for the incorrect identification of the actor is that sometimes the actor is omitted in the original text. Therefore my algorithm can't efficiently identify the correct actors. 
+
+In the first example: 
+<> as gateway_1_end
+[execute two activities] as activity_12
+[the first activity check the hardware] as activity_13
+[the first activity repair the hardware] as activity_14
+[the second activity checks the software] as activity_15
+[the second activity configure the software] as activity_16
+[test the proper system functionality] as activity_17
+<detect an error?> as gateway_5
+[execute another arbitrary repair activity] as activity_7
+[finish the repair] as activity_8
+<> as gateway_5_end
+(end) as end
+are all wrongly categorized into the customer lane. They belong to the CRS lane, which caused this issue because in the text "The ongoing repair consists of two activities, which are executed, in an arbitrary order. The first activity is to check and repair the hardware, whereas the second activity checks and configures the software. After each of these activities, the proper system functionality is tested. If an error is detected another arbitrary repair activity is executed, otherwise the repair is finished." it is not explicitly stated who carried out these activities. Yet obviously, such activities are performed by the CRS, not the customer Therefore, you will have to analyze the activities to see where they actually belong to.
+
+In the second example:
+[preparing the food] as activity_8 should be corrected into lane kitchen
