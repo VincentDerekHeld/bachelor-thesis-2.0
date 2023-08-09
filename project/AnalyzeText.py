@@ -167,6 +167,8 @@ def remove_redundant_processes(container: [SentenceContainer]):
         for i in range(len(sentence.processes) - 1, -1, -1):
             if sentence.processes[i].action is None:
                 sentence.processes.remove(sentence.processes[i])
+            elif sentence.processes[i].action.token.pos_ == "AUX":
+                sentence.processes.remove(sentence.processes[i])
             elif sentence.processes[i].action.token.lemma_ in ["consist", "include"]:
                 sentence.processes.remove(sentence.processes[i])
             elif sentence.processes[i].action.token.lemma_ == "be":

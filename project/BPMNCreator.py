@@ -162,19 +162,6 @@ def create_bpmn_description(structure_list: [Structure], actor_list: list, title
     return result
 
 
-def find_next_id(structure_list: [Structure], structure: Structure) -> str:
-    index = structure_list.index(structure)
-    if index + 1 < len(structure_list):
-        if isinstance(structure_list[index + 1], Activity):
-            return "activity_" + str(structure_list[index + 1].id)
-        elif isinstance(structure_list[index + 1], ConditionBlock):
-            return "gateway_" + str(structure_list[index + 1].id)
-        elif isinstance(structure_list[index + 1], AndBlock):
-            return "gateway_" + str(structure_list[index + 1].id)
-    else:
-        return "end"
-
-
 def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, structure: Structure,
                    last_gateway: Optional[str]):
     """
@@ -243,9 +230,16 @@ def belongs_to_lane(activity_list: [Structure], lanes: {}, structure: Structure,
 
     if previous_actor is None:
         for activity in activity_list:
-            if activity.process.actor is not None:
-                if activity.process.actor.full_name in lanes.keys():
-                    return activity.process.actor.full_name
+            if isinstance(activity, Activity):
+                if activity.process.actor is not None:
+                    for key in lanes.keys():
+                        if not " " in activity.process.actor.full_name:
+                            if activity.process.actor.full_name in key:
+                                return key
+                        else:
+                            if activity.process.actor.full_name == key:
+                                return activity.process.actor.full_name
+
     else:
         if structure.process.actor is None:
             return previous_actor

@@ -27,7 +27,7 @@ def download_all_dependencies():
     nltk.download('wordnet')
 
 
-def start_task(debug=False):
+def start_task(input_path, title, output_path, debug=False):
     os.environ['TRANSFORMERS_NO_ADVISORY_WARNINGS'] = 'true'
     warnings.filterwarnings('ignore')
     # download_all_dependencies()
@@ -42,7 +42,7 @@ def start_task(debug=False):
     nlp.add_pipe("spacy_wordnet", after='tagger')
     nlp.add_pipe('coreferee')
 
-    text_input = open('Text/text_input/text13.txt', 'r').read().replace('\n', ' ')
+    text_input = open(input_path, 'r').read().replace('\n', ' ')
     # text_input = "The last phase is the creation of a quotation."
 
     text_input = text_pre_processing(text_input)
@@ -59,6 +59,6 @@ def start_task(debug=False):
     flows = build_flows(containerList)
     determine_end_activities(flows)
 
-    create_bpmn_model(flows, valid_actors, "result13", "Diagram/output/text13_bpmn.png")
+    create_bpmn_model(flows, valid_actors, title, output_path)
 
     # print(build_linked_list(containerList))

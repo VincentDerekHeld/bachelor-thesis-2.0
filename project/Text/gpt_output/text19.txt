@@ -1,7 +1,3 @@
-from processpiper.text2diagram import render
-
-if __name__ == '__main__':
-    input_syntax = """
 title: result19_LLM
 width: 10000
 colourtheme: BLUEMOUNTAIN
@@ -29,5 +25,3 @@ lane: warehouse & distribution
 start->activity_2->gateway_1->activity_5->activity_6->activity_7->activity_8->activity_9->activity_10->gateway_1_end
 gateway_1->activity_11->activity_12->activity_13->activity_15->activity_16->gateway_1_end
 gateway_1_end->activity_17->activity_18->end
-       """
-    render(input_syntax, "/Users/shuaiwei_yu/Desktop/bachelor-thesis/project/Diagram/output_LLM/text19_bpmn.png")

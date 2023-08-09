@@ -26,14 +26,19 @@
 %
 %About 1 page.
 
-
 	The main research question (\textbf{RQ}) is formulated as: "\textit{How can business process models be automatically generated from textual descriptions using Natural language processing techniques?}". To better answer the main research question, three embedded aspects can be revealed: \textbf{RQ1}: "\textit{Which NLP methods can be used to extract information?}"; \textbf{RQ2}: "\textit{How can the extracted information be analyzed and composed to generate business process models?}" and finally \textbf{RQ3}: "\textit{How can the Large Language Models assist to improve the performance and the accuracy of the generated business process models}"
 
 	
 	Currently, there exist various tools, libraries, and dependencies for NLP. Therefore, the first research question \textbf{RQ1} tries to figure out which methods are the most suitable ones to use to extract information from textual descriptions. Currently, there exist several Natural language processing tools in academia and industry, and this work wants to explore their strengths and limitations. The work also aims to use the most suitable state-of-art-technique to perform the information extraction from the natural language text documents. 
 	In the next step, \textbf{RQ2} explores how can the information in the text descriptions be analyzed and extracted and then be built into the business process model. The activities recognition here is an essential but challenging task here because the identified business activities and actors serve as a basis for the BPMN generation. To address this problem, the work aims to discover the typical structure of the business activities' textual representations in natural language documents by exploring the syntactical and grammatical relationships of the words. Furthermore, reconstructing the extracted business information is also challenging. The work will focus on identifying the conditional and sequential relationships of the business activities to develop algorithms that can generate a business process model with high accuracy.
-	In light of the recent success of the Large Language Models' (LLM) in natural language processing, the last research question intends to determine whether Large Language Models can assist with the process model generation. According to \cite{t2m_1}, the redundant information in the textual description input, such as examples, allows the human reader to understand the process better but will limit the performance of the BPMN generation. \textbf{RQ3} tries to leverage the LLM to perform more through semantic analysis to identify such irrelevant information. Furthermore, it is also desired to have the LLM examine the generated process model and provide necessary corrections if needed.
-%	The last research question \textbf{RQ3} tries to compare different complexity levels of the natural language documents. This research question aims to discover the adaptability of the proposed approach. The work will reveal the performance of our approach given natural language documents with different complexity levels, e.g., usual textual process descriptions, company policies, legal regulatory documents, and so on. Since such regulatory documents with higher complexity levels are always formulated in a more complex manner. The work should determine whether the explored extraction strategies still apply to such documents and whether the recognition accuracy drops. 
+	In light of the recent success of the Large Language Models (LLM) in natural language processing, they show great potential in understanding and generating natural language text. A famous example is the \textit{ChatGPT} from the \textit{OpenAI}, where the \textit{ChatGPT} can help humans perform various tasks from article generation to code interpretation. Therefore, the last research question intends to determine whether Large Language Models can assist with the process model generation. \textbf{RQ3} tries to leverage the LLM to perform more through semantic analysis to facilitate and examine the generated BPMN diagram. Furthermore, the work will also try to let the LLM generate BPMN models using the same textual descriptions so that we can run benchmarking and analysis on the different diagrams.
+
+	
+	
+	%	According to \cite{t2m_1}, the redundant information in the textual description input, such as examples, allows the human reader to understand the process better but will limit the performance of the BPMN generation. 
+	
+	
+	%	The last research question \textbf{RQ3} tries to compare different complexity levels of the natural language documents. This research question aims to discover the adaptability of the proposed approach. The work will reveal the performance of our approach given natural language documents with different complexity levels, e.g., usual textual process descriptions, company policies, legal regulatory documents, and so on. Since such regulatory documents with higher complexity levels are always formulated in a more complex manner. The work should determine whether the explored extraction strategies still apply to such documents and whether the recognition accuracy drops. 
 
 
 \section{Contribution}
@@ -41,7 +46,7 @@
 
 %What will/have I do/done that nobody else has done before. About 1/2 page.
 
-This work developed a tool that takes textual description as input and automatically generates a BPMN as output. The algorithms used in this work are mainly based on \cite{t2m_1}, yet many modifications are made to improve the algorithms' performance and accuracy. This work used \textit{Spacy} together with several open-sourced libraries, which are more up-to-date technologies compared to \cite{t2m_1}. As a result, such technologies could potentially lead to a better interpretation of generating BPMN models. Besides providing a BPMN diagram as output, the work also provides a formatted text output that can be used to render the BPMN diagram. By doing so, our tool provides great extensibility and offers users a simple way to improve the BPMN models and alter the generated output according to users' needs. The user can now generate and model the BPMN diagram with considerable time-saving with the help of our tool. Lastly, the work also explores the possibility of using Large Language Models such as \textit{GPT-4} in assisting BPMN model generation. The work leverages the LLM's ability to perform semantic analysis to improve the generated outcome and discover the strengths and weaknesses of BPMN model generation using LLM. The work also provides a suggestion on how to give the LLM the proper prompt to achieve a better result.
+This work developed a tool that takes textual description as input and automatically generates a BPMN as output. The algorithms used in this work are mainly based on \cite{t2m_1}, which is considered to be the current state-of-art technique. Yet the work still sees room for improvement, and as a result, many modifications are made in order to improve the algorithms' performance and accuracy so that the generated BPMN models will be more accurate and logical as well as have a better visual effect. This work used \textit{Spacy} together with several open-sourced libraries, which are more up-to-date technologies compared to \cite{t2m_1}. As a result, such technologies could potentially lead to a better interpretation of generating BPMN models. Besides providing a BPMN diagram as output, the work also provides a formatted text output that can be used to render the BPMN diagram. By doing so, our tool provides great extensibility and offers users a simple way to improve the BPMN models and alter the generated output according to users' needs. The user can now generate and model the BPMN diagram with considerable time-saving with the help of our tool. Lastly, the work also explores the possibility of using Large Language Models such as \textit{GPT-4} in assisting BPMN model generation. The work leverages the LLM's ability to perform semantic analysis to improve the generated outcome and discover the strengths and weaknesses of BPMN model generation using LLM. The work also provides a suggestion on how to give the LLM the proper prompt to achieve a better result.
 
 \section{Methodology}
 \label{sec:intro:meth}
@@ -52,18 +57,20 @@ This work developed a tool that takes textual description as input and automatic
 
 %About 1.5 pages.
 
-Design science is a paradigm of real-world problem-solving by creating innovative artifacts. Therefore, Design science research tightly connected the IT artifact with the application domain. Furthermore, the need and desire to improve the current environment and methods motivate Design science research and therefore requires innovative artifacts to address such problems \cite{DSM_1}. The work adopted the research methodology of \cite{DSM_2} here and followed the research process model given in their work.
+Design science is a paradigm of real-world problem-solving by creating innovative artifacts. Therefore, Design science research tightly connected the IT artifact with the application domain. Furthermore, the need and desire to improve the current environment and methods motivate Design science research and thus requires innovative artifacts to address such problems \cite{DSM_1}. The work adopted the research methodology of \cite{DSM_2} here and followed the research process model given in their work.
 
 \subsection{Problem centered approach}
 Although some work in the current field was done, this work aims to develop better tools to automatically extract the business process model for the broad audience of end users, i.e., users within a business organization with little knowledge about business process modeling or underlying technologies. Such motivation provides us with an opportunity to work on creating the tool mentioned above. This problem-centered approach leads us to the first step of the research process, according to \cite{DSM_2}.
 
 \subsection{Problem Identification And Motivation}
-Currently no automated approach exists that can create business process visualizations from text in sufficient quality and generalizability
+Current automated approaches that can create business process-visualizations from text are far from perfect, and there is significant room for improvement.
+
+%Currently the automated approaches exists that can create business process visualizations from text in sufficient quality and generalizability
 
 %Modeling business processes requires experts with relevant knowledge and can be exhausting and time-consuming. Thus, small companies usually cannot afford such experts and business managers usually prefer to describe processes using natural language. As a result, an organization usually process a large amount of text documents  \cite{literature_review_2}. However, the business process provides an intuitional overview of the business process and can potentially increase a company's productivity.
 
 \subsection{Objectives of a solution}
-Our objective is to create an easy-to-use tool that uses the Nature language processing technology to automatically extract information from organizations' texual documents and generate business process models.
+Our objective is to create an easy-to-use tool that uses the Nature Language Processing technology to automatically extract information from organizations' texual documents and generate business process models.
 
 \subsection{Design \& development}
 The development of the new artifact adopted the critical success chain (CSC) method, which uses literature to support and consolidate the conceptual basis of the artifact designing \cite{DSM_2}. This work addressed the issues and the needs identified earlier, such as how to find a proper tool to extract information from texual documents or how to process such information to generate a BPMN model. The work conducted a literature review and used the helpful information from the selected papers to combine their ideas and develop our own artifact. The intended artifact is to develop a prototype that leverages the NLP technique to automatically extract business process models from texual documents.
@@ -73,14 +80,15 @@ In the demonstration activity, The work want to illustrate how can one use the p
 
 \section{Evaluation}
 \label{sec:intro:ev}
-
+%todo: write the evaluation part
 How will I evaluate that my proposal is good. This ties into the research questions.
 
 About 1 page.
 
 \section{Structure}
 \label{sec:intro:struct}
+%todo: change discussion maybe!
+%Which chapters will my thesis have, and what are they all about. About 1/4 page.
+The work consists of the following part: In section \ref{sec:rel}, a systematic literature is performed, and the related works are identified. Through the literature review, the work presents the current research gap as well as the strengths and weaknesses of the state-of-art technique. Section \ref{sec:solution} presents the potential challenges in the automatic generating process diagram from textual descriptions and the designed approaches to overcome such challenges. In section \ref{sec:implementation}, the actual implementations of the designed solution are presented. The \ref{sec:evaluation} section performs a series of qualitative and quantitative evaluation steps to verify our solution's improvement. In section \ref{sec:discussion}, the work discussed the designed approach and the possible next step. Finally, the section \ref{sec:conclusion} concludes the whole work.
 
-Which chapters will my thesis have, and what are they all about.
 
-About 1/4 page.

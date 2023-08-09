@@ -725,6 +725,36 @@
       \field{pages}{146\bibrangedash 150}
       \range{pages}{5}
     \endentry
+    \entry{dependencies_manual}{report}{}
+      \name{author}{2}{}{%
+        {{hash=fc767abf0a121131df5e60daf5ecde56}{%
+           family={De\bibnamedelima Marneffe},
+           familyi={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Marie-Catherine},
+           giveni={M\bibinithyphendelim C\bibinitperiod}}}%
+        {{hash=2214edb8305f7ccd7cdc310b3a8ae1b4}{%
+           family={Manning},
+           familyi={M\bibinitperiod},
+           given={Christopher\bibnamedelima D},
+           giveni={C\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Technical report, Stanford University}%
+      }
+      \strng{namehash}{f6f90d82702848d604399a74addc6a6c}
+      \strng{fullhash}{f6f90d82702848d604399a74addc6a6c}
+      \strng{bibnamehash}{f6f90d82702848d604399a74addc6a6c}
+      \strng{authorbibnamehash}{f6f90d82702848d604399a74addc6a6c}
+      \strng{authornamehash}{f6f90d82702848d604399a74addc6a6c}
+      \strng{authorfullhash}{f6f90d82702848d604399a74addc6a6c}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Stanford typed dependencies manual}
+      \field{type}{techreport}
+      \field{year}{2008}
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

@@ -1,12 +1,118 @@
 \chapter{Solution Design}
 \label{sec:solution}
 
-Extracting information from documents written in text is not a simple task due to the nature of the complexity of natural language. \cite{t2m_1} identified several obstacles to performing the information extraction: \textit{Syntactic Leeway} describes the problem of inconsistency between the semantic and syntactic aspects of the textual representation. \textit{Atomicity} refers to the problem of adequately mapping the phase-activities. \textit{Relevance} checks whether some part of the text input is irrelevant to the process model, such as examples offered by authors, which helps the human reader to understand the described process but introduces noise for information extraction. \textit{Referencing} deals with the question of how to identify the references between sentences, e.g., the pronouns "This" and "it", from the sentence "After this step, it will be delivered to ...".
+%todo: introduce the BPMN first! its component, how it is build etc.
 
-Our approach will consider using textual process descriptions as input files in the format of \textit{.txt}. In the first step, the input file will be pre-processed. The documents will be split into sentences and words using tokenization. Correctly identifying the end of sentences is crucial for further information processing. Then, the words in the sentence should be tagged with a proper grammatical label using the part-of-speech technique so that the relationship between words can be analyzed. An essential step of this part is to identify the business activities. \cite{t2m_5} and \cite{complement_1} suggest that the identification can be achieved by the pre-defined rules based on the grammatical properties of the words. Once the business activities are identified, they can be used as the fundament of the work.
+Extracting information from documents written in text is not a simple task due to the nature of the complexity of natural language. Our approach will consider using textual process descriptions as input files in the format of \textit{.txt}. In the first step, the input file will be pre-processed. The documents will be split into sentences and words using tokenization. Then, the words in the sentence should be tagged with a proper grammatical label using the part-of-speech technique so that the relationship between words can be analyzed. An essential step of this part is to identify the business activities. \cite{t2m_5} and \cite{complement_1} suggest that the identification can be achieved by the pre-defined rules based on the grammatical properties of the words. Once the business activities are identified, they can be used as the fundament of the work.
+
+\cite{t2m_1} identified four category of obstacles to performing the information extraction from natural language: \textit{Syntactic Leeway} describes the problem of inconsistency between the semantic and syntactic aspects of the textual representation. \textit{Atomicity} refers to the problem of adequately mapping the phase-activities. \textit{Relevance} checks whether some part of the text input is irrelevant to the process model, such as examples offered by authors, which helps the human reader to understand the described process but introduces noise for information extraction. \textit{Referencing} deals with the question of how to identify the references between sentences, e.g., the pronouns "This" and "it", from the sentence "After this step, it will be delivered to ...".
+
+%todo: check and add the reference!
+%todo: rename the sub-challenge! 
+%todo: add the toString aspect, sth. like output refinement
+
+	\begin{table}[]
+		\begin{center}
+		\caption{\centering Obstacles in performing BPMN extraction}
+		\label{table:obstacles}
+		\begin{tabular}{ll}
+    	\textbf{Issue}\hspace{60mm} & \textbf{References} \\
+    	\hline
+		1. Syntactic Leeway             	   					&      		\\
+		\quad 1.1 Active/Passive Voice recognition  			& 			\\
+		\quad 1.2 Condition recognition			  			& 			\\
+		\quad 1.3 Missing actor 					  		& 			\\
+		\hline
+		2. Atomicity                 						&       		\\
+		\quad 2.1 Sentences	decomposition					&			\\
+		\quad 2.2 Subordinate Clauses						&			\\
+		\hline
+		3. Relevance                      					&      		\\
+		\quad 3.1 Example Sentences	and explaining information						&			\\
+		\quad 3.2 Irrelevant Information						&			\\
+		\hline
+		4. Referencing           							&      		\\
+		\quad 4.1 Anaphora									&			\\
+		\end{tabular}
+		\end{center}
+		\floatfoot{Issues that should be solved in the implementation.}
+	\end{table}
+
+Within these four categories of obstacles, the work explored the potential problems more deeply. According to the nature of the issues identified, they are categorized into the four major challenges as listed in table \ref{table:obstacles}. 
+
+\section{Syntactic Leeway}
+%todo: add reference! look at friedrich's paper
+Within the category \textit{Syntactic Leeway}, a major challenge to be overcome is the recognition of active and passive voice. A sentence with the same meaning can be expressed through two possibilities, namely, active or passive. Consider the following example: the first sentence is written in active voice, and the second in passive voice. 
+
+\begin{itemize}
+	\item A customer brings in a defective computer
+	\item A defective computer is brought in by a customer
+\end{itemize}
 
 
-This step should also tackle the problem of active and passive voice. After all tasks in pre-processing, the tagged documents will be used for the analysis of the relationship between sentences.
+In the given example, two expressions here have the same semantic meaning; the two sentences' syntactic structures are totally different. In order to further illustrate the problem, the work used the \textit{displacy}, a visualization tool offered by \textit{spacy}, to visualize the syntactical relationship of the word components.
+
+\begin{figure}[h]
+    \centering
+    \caption{syntactical visualization of the first example}
+    \includegraphics[width=0.8\textwidth]{tum-resources/images/active_example.png}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \caption{syntactical visualization of the second example}
+    \includegraphics[width=0.8\textwidth]{tum-resources/images/passive_example.png}
+\end{figure}
+In the active voice sentence, the actor of the sentence is indicated through the \textit{spacy dependency} \textbf{nsubj} and the actor in the passive sentence is indicated through \textbf{pobj}. Therefor, if the work wishes to extracted the correct actors in the process descriptions, this problem must be solved and the proper pre-processing must be performed so that the different extraction rules and be applied accordingly.  
+
+Another issue to be addressed in this challenge category is recognizing conditional markers. Conditional markers are used to identify whether a sentence or a sub-sentence expresses a condition's meaning. There are majorly two group categories of conditional markers: 
+
+\begin{enumerate}
+	\item if
+	\item else
+\end{enumerate}
+
+These two marker groups correspond highly to the if-else condition in the computer programming language. The if condition indicates what actions will happen after some specific condition, whereas the else condition indicates what will happen otherwise. The condition marker can also be expressed in various ways in natural language. Therefore it is challenging to correctly identify the conditional markers stated differently. 
+
+\begin{itemize}
+	\item If an error is detected, a repair activity is executed
+	\item In case an error is detected, a repair activity is executed
+	\item In case of an error, a repair activity is executed
+\end{itemize}
+
+From the examples above, it is not hard to find out that the conditions here express the same meaning yet are written with different styles. Therefore, it is not sufficient only to perform a single string matching activity because this will lead to the potential ignorance of some markers. Considering the mentioned properties of conditional markers, the work intended to use a multi-step recognition with the spacy dependency recognition and spacy matcher to ensure we have covered the broadest range of the conditional marker. 
+
+Another challenge is the situation where sometimes the actor that is to be included in the lanes in the BPMN models are not explicitly expressed. This can happen due to several reasons, the first possible scenario is that the action is embedded in a subordinate sentence, and therefore there is no need for the main sentence to explicitly indicate who performs the action.
+
+\begin{itemize}
+	\item the room-service manager gives an order to the sommelier to fetch wine from the cellar.
+\end{itemize}
+
+In this sentence, the action "fetch wine from the cellar" should be performed by the "sommelier", yet purely extracting the action will lead to the Actor missing problem because this action is an \textit{object of a preposition (pobj)} from the preposition "to" \cite{dependencies_manual}. Therefore, it is sometimes necessary to perform a backwards-checking to see whether an actor is included in the main clause. 
+
+Another possibility for the problem is using a passive voice sentence. Because in passive voices, the actor of the sentence is typically addressed using "by", yet this is not mandatory. Such component is also a \textit{agent dependency}, which represents the actor introduced by the preposition "by" who does the action \cite{dependencies_manual}. As a result of this phenomenon, when parsing a passive voice sentence that does not have an \textit{agent dependency}, it is not possible to find a valid actor, and therefore, we cannot place the action into the lanes correctly.
+
+Finally, the last situation occurs when the direct actor of a action is not in the valid lane actor candidates. It is neither efficient nor wise to gather all actors in each sentence in textual descriptions and add use this actor list to construct the lanes. Only some actors that are relevant to the process descriptions are desired, the actor selection process problem will be further discussed in the Implementation section \ref{sec:implementation}.
+
+\begin{itemize}
+	\item CRS checks the defect and hands out a repair cost calculation back. The ongoing repair consists of two activities. The first activity is to check and repair the hardware
+\end{itemize}
+
+In the last sentence from the example above, the direct actor of the action is "The first activity". However, it is not appropriate to have "The first activity" listed in the lanes of the BPMN diagram. Although this action is carried out by the actor "The first activity", it is implicitly indicated that the real actor performing this task is the "CRS". To address the latter challenges, the work propose the idea to find the real actor in the context if the current actor is not listed in the real actor list. Further technical details will also be explained in the Implementation section \ref{sec:implementation}.
+
+
+
+\section{Atomicity}
+
+In the next step, we would like to discuss the \textit{atomical} challenges introduced by the complexity of the sentences. 
+
+
+
+
+
+
+
+
+
 
 The primary step of information extraction is text-level analysis, where sentences' sequential, conditional relationships will be exploited. In the pre-processing, the work has already tackled the problem of business activity identification. However, the identified business activities might not be complete because of the referencing problem and active/passive voice problem. In the central part of the work, the anaphora resolution problem has to be solved, which refers to the word that represents a word or a phrase that occurred beforehand \cite{literature_review_4}. Next, the approach has to solve the problem of finding conditional relationships between sentences. The conditional relationship is usually represented through a conditional word like "if", "else", "otherwise", etc. Finding these relationships is very crucial for the construction of logical conjunctions in the business model. Another essential task in text-level analysis is flow generation. A flow indicates how the business activities are related to each other and could be used to translate the processed information above into the business process model \cite{t2m_1}.
 

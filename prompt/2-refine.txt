@@ -1,10 +1,16 @@
-Your second job is to refine the extracted activities because some are incomplete and thus not understandable to the reader. You should also examine whether the anaphora resolution is correct. Namely, you should check whether the pronoun that occurred in the input text is correctly mapped to a valid actor. If there is a pronoun in the output, you should perform the anaphora resolution to find a proper actor for the pronoun.
+Your second job is to refine the extracted activities because some are incomplete and thus not understandable to the reader. You should also examine whether the anaphora resolution is correct. Namely, you should check whether the pronoun that occurred in the input text is correctly mapped to a valid actor. If there is a pronoun in the output, you should perform the anaphora resolution to find a proper actor for the pronoun. please don't change the type of processes and gateways.
 
 In the first example, 
-[takes her computer] as activity_4 should be changed into [takes her computer home unrepaired] as activity_4 because the "takes her computer" in the context is not a complete sentence. Therefore, the relevant information "home unrepaired" should be added to it
+[takes her computer] as activity_4 should be changed into [takes her computer home unrepaired] as activity_4 because the "takes her computer" in the context is not a complete sentence. Therefore, the relevant information "home unrepaired" should be added to it.
 
 In the second example, 
 [fetch wine] as activity_10 should be changed into [fetch wine from the cellar] as activity_10. With the extra information from the cellar, the activity becomes more accurate.
 <sommelier has another order?> as gateway_1 has the wrong anaphora resolution because in the original text, "The waiter may wait to do the billing if he has another order to prepare or deliver." this "he" refers to "the waiter", not to "sommelier", thus this gateway should be changed into <the waiter has another order?> as gateway_1
 
+Here are some rules that must be followed:
+1. short phrase is preferred, don't create long sentence unless necessary.
+2. the information included as a noun or verb phrase in "after", "before", "if", "to" is not needed.
+3. If the actor of one activity equals the name of the lane, then this actor in this activity can be omitted.
+
 Based on such knowledge, try to refine the activities in the following text. 
+please give the refined output and the corresponding connections. 
