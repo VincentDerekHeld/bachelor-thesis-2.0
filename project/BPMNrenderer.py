@@ -2,32 +2,49 @@ from processpiper.text2diagram import render
 
 if __name__ == '__main__':
     input_syntax = """
-title: result19_LLM
+title: result20
 width: 10000
 colourtheme: BLUEMOUNTAIN
-lane: sales department
-	[confirm the order] as activity_6
-	[emit an invoice] as activity_7
-	[wait for the payment] as activity_8
-	[complete the order archival] as activity_10
-	[confirm the purchase order] as activity_17
-	[archive the purchase order] as activity_18
-	(end) as end
-lane: warehouse & distribution
-    (start) as start
-	[check the purchase order] as activity_2
-	<is the product in stock?> as gateway_1
-	[retrieve the product] as activity_5
-	[ship the product] as activity_9
+lane:
+	(start) as start
+	[receive expense report from employee] as activity_11
+	[notify employee of report receipt] as activity_12
+	<employee has no account?> as gateway_1
+	[create new account for employee] as activity_3
 	<> as gateway_1_end
-	[check the raw materials availability] as activity_11
-	[access the suppliers catalog] as activity_12
-	[obtain the raw materials] as activity_13
-	[manufacture the product] as activity_15
-	[complete the manufacturing process] as activity_16
+	[review report for approval] as activity_13
+	<automatic approval?> as gateway_2
+	(end) as gateway_2_end
+	[request manual approval] as activity_15
+	<report is rejected?> as gateway_3
+	[send rejection notice to employee] as activity_4
+	<> as gateway_3_end
+	[deposit reimbursement to employee's account] as activity_16
+	[send approval notice to employee] as activity_17
+	<employee requests rectification?> as gateway_4
+	[register rectification request] as activity_19
+	[review report post-rectification] as activity_20
+	<> as gateway_4_end
+	<report not handled in 30 days?> as gateway_5
+	[terminate process] as activity_8
+	[send cancellation notice to employee] as activity_9
+	[employee resubmits report] as activity_10
+	<> as gateway_5_end
+	(end) as end
 
-start->activity_2->gateway_1->activity_5->activity_6->activity_7->activity_8->activity_9->activity_10->gateway_1_end
-gateway_1->activity_11->activity_12->activity_13->activity_15->activity_16->gateway_1_end
-gateway_1_end->activity_17->activity_18->end
+start->activity_11->activity_12->gateway_1
+gateway_1-"yes"->activity_3->gateway_1_end
+gateway_1-"no"->gateway_1_end
+gateway_1_end->activity_13->gateway_2
+gateway_2-"yes"->gateway_2_end
+gateway_2-"no"->activity_15->gateway_3
+gateway_3-"yes"->activity_4->gateway_3_end
+gateway_3-"no"->activity_16->activity_17->gateway_4
+gateway_4-"yes"->activity_19->activity_20->gateway_4_end
+gateway_4-"no"->gateway_4_end
+gateway_4_end->gateway_5
+gateway_5-"yes"->activity_8->activity_9->activity_10->gateway_5_end
+gateway_5-"no"->gateway_5_end
+gateway_5_end->end
        """
-    render(input_syntax, "/Users/shuaiwei_yu/Desktop/bachelor-thesis/project/Diagram/output_LLM/text19_bpmn.png")
+    render(input_syntax, "/Users/shuaiwei_yu/Desktop/bachelor-thesis/project/Diagram/output_LLM/text20_bpmn.png")

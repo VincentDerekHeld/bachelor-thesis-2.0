@@ -43,7 +43,6 @@ def start_task(input_path, title, output_path, debug=False):
     nlp.add_pipe('coreferee')
 
     text_input = open(input_path, 'r').read().replace('\n', ' ')
-    # text_input = "The last phase is the creation of a quotation."
 
     text_input = text_pre_processing(text_input)
     document = nlp(text_input)
@@ -54,7 +53,7 @@ def start_task(input_path, title, output_path, debug=False):
     correct_order(containerList)
     remove_redundant_processes(containerList)
     valid_actors = get_valid_actors(containerList)
-    valid_actors = adjust_actor_list(containerList, valid_actors)
+    valid_actors = adjust_actor_list(valid_actors)
 
     flows = build_flows(containerList)
     determine_end_activities(flows)

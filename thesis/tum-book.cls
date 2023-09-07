@@ -369,3 +369,9 @@
 
 \newcommand{\paragraphWithHeading}[1]{\paragraph{#1}\mbox{}\newline}
 \pgfplotsset{compat=1.15}
+
+%\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{caption}
+\usepackage{subcaption}

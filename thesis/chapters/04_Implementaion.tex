@@ -1,2 +1,498 @@
 \chapter{Implementation}
 \label{sec:implementation}
+
+The implementation of our approach consist of four part: 
+
+\begin{enumerate}
+	\item Sentence Level Analysis
+	\item Context Level Analysis
+	\item BPMN Construction
+	\item LLM Refinement
+\end{enumerate}
+
+During the Sentence Level Analysis, the work will focus on extracting the information from the main clause and sub-clauses of each sentence which will be stored in the designed data structures for further processing. The next stage, namely Context Level Analysis, tackles the issue of identifying process-relevant gateways by detecting the corresponding signal words. In the next step, the work uses the information stored in the intermediate storage to construct the BPMN diagram, which will be displayed in a structured textual output that can be rendered into BPMN diagrams. The last step of the work will use the GPT-4 as an in-context learning model to refine and adjust the generated output. A overview of the implementation of the system is visualized in figure \ref{sec:implementation:imp}. The code can be found on the GitHub repository of the author\footnote{https://github.com/ShuaiweiYu/text2BPMN}.
+
+\begin{figure}[h]
+    \centering
+    \caption{The overview of system's implementation}
+    \label{sec:implementation:imp}
+    \includegraphics[width=1.0\textwidth]{tum-resources/images/implementation.png}
+\end{figure}
+
+\section{Sentence Level Analysis}
+
+\subsection{Document preprocessing}
+The first part of the whole procedure is the entry point of our system, where the system takes a textual description as input. Algorithm \ref{alg:01} described the preprocessing stage of the input document. In order to address the problem of relevance mentioned in the section \ref{sec:solution:relevance}, the additional explanation information contained in the braces will be removed, which guarantees the additional information will not cause confusion when using the algorithms to process the passed sentence. The removal of braces can be achieved in various ways; this work took advantage of a regular expression to detect and remove the information contained within braces and square braces by detecting "()" and "[]."After that, the input document will firstly be decomposed into separated sentences using \textit{spacy}, which will be stored in the class \textit{SentenceContainer}. Then the system will use algorithm \ref{alg:02} to further process each separated sentence into finer pieces where each decomposed clause only contains one verb. Such clauses will be stored in class \textit{Process}, and a further information extraction strategy will be performed upon them.
+
+\begin{algorithm}
+\caption{Sentence Preporcessing}
+\label{alg:01}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{String} text\_input
+		\STATE text\_input $\leftarrow$ remove\_braces(text\_input)
+		\STATE $List<SentenceContainer>$ container $\leftarrow$ sentence\_divider(text\_input)
+		\FORALL{sentence $\in$ container} 
+		\STATE clause\_list = sub\_sentence\_finder(sentence)
+		\FORALL{clause $\in$ clause\_list} 
+			\STATE process $\leftarrow Process($clause$)$
+			\STATE extract\_information(process)
+			\STATE sentence.processes.add(process) 
+		\ENDFOR
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+To divide the sentence into several clauses, a constituency parser is needed so that the syntactic tree structure of a sentence can be determined. A parsed tree structure of the sentence "A customer brings in a defective computer, and the CRS checks the defect." is given in section \ref{sec:implementation:constituency_parser} by using the python library \textit{benepar}\footnote{https://github.com/nikitakit/self-attentive-parser}, which offers a python implementation of the work \cite{constituency_parser} and \cite{constituency_parser_2}. 
+
+\begin{figure}[h]
+    \centering
+    \caption{A customer brings in a defective computer and the CRS checks the defect.}
+    \label{sec:implementation:constituency_parser}
+    \includegraphics[width=0.8\textwidth]{tum-resources/images/Constituency_Parse_2.png}
+    \floatfoot{generated using https://christos-c.com/treeviewer/}
+\end{figure}
+
+From the diagram, we can observe that the root of a sentence is given using the tag "S", which stands for "Simple declarative clause" according to \cite{penn_tree}. Nevertheless, If we look deeper into the leaves of the root, we identify another two "S" labels concatenated by a "CC", which stands for "Coordinating conj.". The goal of algorithm \ref{alg:02} is to extract and divide such clauses embedded in the main clause. Two types of clauses should be extracted: Simple declarative clause (S) and Subordinate clause (SBAR) \cite{penn_tree_explanation_2}. The work proposes a recursive algorithm to look for the index of the "S" or "SBAR" tagged clauses. The algorithm searches the tags from the root to the leaves recursively, which in the beginning, will acquire the tag of the current clause (line 1). If the length of the tags is zero, this means that the algorithm has searched until the leaves, and thus the list that contains the index of the clauses can be returned. Otherwise, if the tag "SBAR" is contained in the label list (line 5), the algorithm will add this clause's start and end to the index list. If the "S" is included in the labels, the algorithm must distinguish two possible scenarios. If the clause does not have a parent clause (line 8), this indicates that the found "S" tag represents the root of the syntax tree, and therefore the begin and the end of the sentence could be added. In another scenario where a "S" tagged clause whose parent clause does not belong to a "SBAR" tagged clause is found, that clause's begin and end index can only be added to the index list. The reason for this is because conditional sentences like "If the customer decides that the costs are acceptable", such "SBAR" tagged sentences are composed of a preposition "IN" (in this case, if), and the rest of the clause is a "S" tagged clause. The algorithm has no intention to divide a "S" tag inside a "SBAR" tag. Therefore, such countermeasure is essential. Line 14-17 performs a recursive invocation of the algorithm, and the list of the index will be returned at the end.
+
+\begin{algorithm}
+\caption{subclause decomposition}
+\label{alg:02}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{String} sentence, \textbf{List} index\_list
+			\STATE $List<Int>$ labels = sentence.get\_labels()
+			\IF{length(labels) == 0} 
+			\RETURN index\_list
+			\ENDIF 
+			
+			\IF{"SBAR" $\in$ labels} 
+			\STATE index\_list = index\_list $\cup$ sentence.start $\cup$ sentence.end
+			\ELSIF{"S" $\in$ labels} 
+			\IF{sentence.parent \textbf{is} None}
+			\STATE index\_list = index\_list $\cup$ sentence.start $\cup$ sentence.end 
+			\ELSIF{\textbf{not} "SBAR" $\in$ sentence.parent.labels} 
+			\STATE index\_list = index\_list $\cup$ sentence.start $\cup$ sentence.end
+			\ENDIF
+			\ENDIF
+			
+			\STATE childern = sentence.get\_childern()
+			\FORALL{child $\in$ childern} 
+				\STATE subclause\_decomposition(child, index\_list)
+			\ENDFOR
+			\RETURN index\_list
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Information extraction}
+Once the input document is preprocessed, the system can now extract information from each clauses stored in the python class \textit{Process}. The goal of this stage is to determine the verb, subject and object of the clause and construct proper object to contain them. To achieve this, the system will scan the POS tagging and the dependency of each token contained in the given clause. The given clause is stored in a special python spacy class called \textit{span}, which represents a slice of a series of tokens \footnote{https://spacy.io/api/span}.
+
+To address issue 1.1 mentioned in the solution design section \ref{sec:solution:syn_lee}, an algorithm is to be developed to identify whether a clause is in positive or passive voice. The algorithm \ref{alg:03} tackles this problem by scanning the dependency tag "auxpass". \cite{dependencies_manual} states that the "auxpass" stands for passive auxiliary, a non-main verb of the clause containing the passive indication. Searching for this dependency tag is sufficient to determine whether a sentence is written in active or passive voice. 
+
+\begin{algorithm}
+\caption{active passive voice determination}
+\label{alg:03}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{Span} sentence
+		\FORALL{token $\in$ sentence}
+		\IF {token.dependency == "auxpass"}
+		\RETURN false
+		\ENDIF
+		\ENDFOR
+		\RETURN true
+	\end{algorithmic}
+\end{algorithm}
+
+Algorithm \ref{alg:04} and \ref{alg:05} offers an idea of how to extract subject and object from a clause. Extracting a subject from a clause is very intuitive and straightforward, where the algorithm only needs to identify "nsubj" or "agent" dependency based on the voice of the clause \cite{t2m_1_main}. Extracting objects needs more strategies, on the contrary. If the clause is in passive voice, the algorithm will search for the "nsubjpass" dependency, which stands for the passive nominal subject, indicating that the tagged noun phrases are the syntactic subject of this passive clause \cite{dependencies_manual}. However, If the clause is written in active voice, the algorithm will first search for a direct object (dobj) in the given clause. If no such object is found, the algorithm will search for an object of a preposition (pobj), which stands for a noun phrase followed by a preposition.
+
+\begin{algorithm}
+\caption{subject determination}
+\label{alg:04}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{Span} sentence, \textbf{bool} is\_active
+		\IF{is\_active} 
+		\STATE $Token$ subject = find\_dependency("nsubj", sentence)
+		\ELSE 
+		\STATE $Token$ subject = find\_dependency("agent", sentence)
+		\ENDIF
+		\RETURN subject
+
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{object determination}
+\label{alg:05}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{Token} verb, \textbf{bool} is\_active
+		\IF{is\_active} 
+		\STATE $Token$ object = find\_dependency("dobj", verb)
+		\IF {object $= \epsilon$}
+		\STATE object = find\_dependency("pobj", verb)
+		\ENDIF
+		\ELSE 
+		\STATE $Token$ object = find\_dependency("nsubjpass", verb)
+		\ENDIF
+		\RETURN object
+	\end{algorithmic}
+\end{algorithm}
+
+Once the subject, verb and object are extracted, the verb and the object can be used to construct a new python class \textit{action}. The conjuncts and the open clausal complements are also stored in this class object. Conjuncts is the relation between several elements connected through a coordinating conjunction, for example: “and”, “or”. 
+
+\begin{itemize}
+    \item The first activity \textbf{checks} and \textbf{repairs} the hardware.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{tum-resources/images/conj.png}
+\end{figure}
+
+In the given example, we identify a pair of conjuncts, namely \textit{conj}(checks, repairs). However, this is still considered a simple clause and, therefore, will not be divided into two parts, and as a result, only the root verb "checks" is recorded in the class object, and the conjunct is omitted. The appearance of conducts also introduces the problem of finding the proper objects since the objects are connected in the dependency of the conjuncts but not to the root verb. The algorithm \ref{alg:06} tackles the mentioned problem by scanning through the dependency tags of the root verb to see whether the verb has conjuncts. The algorithm only scans for the conjuncts whose index is between the index of the given sentence fragments (line 5) to ensure only fetching the conjuncts within the given clause. If one or more conjuncts are found, the algorithm constructs an action for the conjunct and adds this newly constructed object to the root verb's list of conjuncts. Finally, the algorithm examines whether the root verb lacks an object; if so, the algorithm will try to find one in the verb's conjuncts.
+
+\begin{algorithm}
+\caption{construct conjuncts}
+\label{alg:06}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{Action} verb, \textbf{Span} sentence, \textbf{bool} is\_active
+		\FORALL{conjunct $\in$ verb.token.conjuncts}
+		\IF {conjunct == verb.token}
+		\STATE \textbf{continue}
+		\ENDIF 
+		\IF {sentence.start $<$ verb.token.i $<$ sentence.end}
+		\STATE conjunct\_obj = determine\_object(conjunct, is\_active)
+		\STATE conjunct\_action = create\_action(conjunct, conjunct\_obj)
+		\STATE verb.conjunct\_actions.add(conjunct\_action)
+		\ENDIF 
+		\ENDFOR
+		\FORALL{conjunct $\in$ verb.conjunct\_actions}
+		\IF {verb.object $= \epsilon$ and conjunct.object $\neq \epsilon$}
+		\STATE verb.object = conjunct.object
+		\ENDIF
+		\ENDFOR
+		\end{algorithmic}
+\end{algorithm}
+
+\subsection{Extracted elements refinement}
+In the last part of the sentence-level analysis, the system tends to complete subjects and objects and make some narrative order adjustments to ensure the extracted information is complete and displayed in a logical order.
+
+Because the system leverages a divide and conquer principle, a sentence could be divided into several clauses which will be analyzed individually. As a result, the subordinate clause could possibly lack the subject. Consider the following sentence as an example.
+
+\begin{itemize}
+    \item The ongoing repair consists of two activities, which are executed in an arbitrary order.
+\end{itemize}
+
+This sentence would be divided into two clauses, namely: 
+
+\begin{itemize}
+    \item (The ongoing repair)$_{subject}$ (consists)$_{verb}$ of (two activities)$_{object}$, 
+    \item (which)$_{object}$ are (executed)$_{verb}$ in an arbitrary order.
+\end{itemize}
+
+The first clause seems to be an ordinary clause, while the algorithm \ref{alg:05} will consider "which" in the second clause to be the object of the clause because this token process the dependency of "nsbujpass". However, this is not desired because "which" is a pronoun and refers to the "two activities" in the previous clause because using a pronoun as an object could lead to confusion and misunderstanding in BPMN modeling. Therefore, the algorithm \ref{alg:07} addresses this problem by examining whether the object of a process has the POS tagging of PRON and the verb has the dependency of "relcl". This algorithm removes the pronoun introduced by the subordinate clause and offers a more precise indication using constructing the BPMN diagram.
+
+\begin{algorithm}
+\caption{object complementation}
+\label{alg:07}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{SentenceContainer} container
+		\FORALL{process $\in$ container.processes}
+		\STATE \textit{Token} verb = process.action.token
+		\STATE \textit{Token} object = process.action.object.token
+		\IF {verb.dependency == "relcl" \textbf{and} object.POS == "PRON"}
+		\STATE process.action.object = Resource(new\_obj = verb.ancestors[0])
+		\ENDIF
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+Not only the objects need to be complemented, the subjects of a clause sometimes also need complementation due to the separation of the sentence. 
+
+\begin{itemize}
+    \item The room-service manager also gives an order to the sommelier to fetch wine from the cellar
+\end{itemize}
+
+This sentence can also be separate into two clauses using the constituency parsing.
+
+\begin{itemize}
+    \item The (room-service manager)$_{subject}$ also (gives)$_{verb}$ (an order)$_{object}$ to (the sommelier)$_{dative}$ 
+    \item to (fetch)$_{verb}$ (wine)$_{object}$ from the cellar
+\end{itemize}
+
+As demonstrated here, the second clause here is not a subordinate clause connected using a pronoun, but the second clause is in an "acl" relation to the token "order" in the first clause, i.e., \textit{acl}(order, fetch). Therefore, the subject of the second clause should be the dative component in the first clause, and this issue should be solved. "acl" stands for a clausal modifier of a noun, indicating a clause that modifies a noun phrase\footnote{https://universaldependencies.org/docsv1/u/dep/all.html}. "ccomp" stands for a clausal complement. A clausal complement has an internal subject that acts like the object of the dependent verb or adjective \cite{dependencies_manual}. The algorithm \ref{alg:08} tackles this problem by checking whether the dependency of a verb belongs to "ccomp" or "acl" (line 3). If this is the case, the algorithm will find the main verb in the main clause (line 4) and the dative component of the main verb. If the dative component is a usual noun phrase, then it can be used as the desired subject, otherwise, the dative could be an adposition ("ADP"). Thus the algorithm looks for its "pobj" (object of a preposition) and uses this as the subject. If the process processes a subject, then the algorithm will run a pronoun checking following the same principle given in algorithm \ref{alg:07} (lines 14 - 16).
+
+\begin{algorithm}
+\caption{subject complementation}
+\label{alg:08}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{SentenceContainer} container
+		\FORALL{process $\in$ container.processes}
+		\IF {process.actor $= \epsilon$}
+		\IF {process.action.token.dependency $\in$  ["ccomp", "acl"]}
+		\STATE \textit{Token} main\_verb = process.action.token.ancestors[0]
+		\STATE \textit{Token} dative = find\_dependency(["dative", "prep"])
+		\IF {dative.POS == "NOUN"}
+		\STATE process.actor = create\_actor(dative)
+		\ELSIF {dative.POS == "ADP"}
+		\STATE \textit{Token} pobj = find\_dependency(["pobj"])
+		\STATE process.actor = create\_actor(pobj)
+		\ENDIF
+		\ENDIF
+		\ELSE 
+		\IF {process.action.token.dependency == "relcl" \textbf{and}\\ process.actor.token.POS == "PRON"}
+		\STATE process.actor = Actor(process.action.token.ancestors)
+		\ENDIF
+		\ENDIF
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+\section{Context Level Analysis}
+After all the information is collected and stored in the intermediate storage in the first stage, the system is now able to execute the second stage of processing, namely the Context Level Analysis. In this stage, the system tends to explore the connections and relationships between the extracted elements and based on which construct the proper structures representing the activity flows.
+
+\subsection{Anaphora resolution}
+The solution design section \ref{sec:solution:referencing} discussed the challenge of anaphora resolution, which should be overcome in this implementation stage. The work \cite{t2m_1_main} developed an anaphora resolution algorithm while the work \cite{t2m_1_successor} used a well established library \textit{neuralcoref}, which doesn't support the newer spacy version this work used. \textit{SOURCECoreferenceResolver} as a later version of anaphora resolution is developed as an experimental project and is not yet integrated into the core of spacy \footnote{https://spacy.io/api/coref}. Therefore, this work uses another library \textit{Coreferee} to perform the anaphora resolution \footnote{https://github.com/richardpaulhudson/coreferee}.
+
+After the library \textit{coreferee} is added to the spacy pipeline, it will perform the anaphora resolution automatically and the resolved referencing will be stored in a chain. The library's documentation offers such an example:
+
+\begin{itemize}
+    \item Although he was very busy with his work, Peter had had enough of it. He and his wife decided they needed a holiday. They travelled to Spain because they loved the country very much.
+\end{itemize}
+
+The stored anaphora resolution information is stored in the \textit{coref\_chains} attribute:
+ 
+\begin{lstlisting}
+>>> doc._.coref_chains.print()
+0: he(1), his(6), Peter(9), He(16), his(18)
+1: work(7), it(14)
+2: [He(16); wife(19)], they(21), They(26), they(31)
+3: Spain(29), country(34)	
+\end{lstlisting}
+
+Therefore, this library offers the system to perform a quick anaphora resolution using algorithm \ref{alg:09} by checking the resolved attribute in the \textit{coref\_chains}. If the given word is a not pronoun, then there is no need to resolve this word's anaphora. Otherwise, the algorithm will invoke the \textit{resolve()} function of the library, and a list of resolved nouns will be returned, which could be later stored in the \textit{resolved\_token} attribute of the class object \textit{actor} or \textit{resource}. The usage of the external library and storing the resolved tokens in an additional attribute instead of replacing the token offers the system will great compatibility. If the user of the system would like to replace the \textit{coreferee} library with a more up-to-date one, this can be achieved without interrupting the main structure of the system.
+
+\begin{algorithm}
+\caption{anaphora resolution}
+\label{alg:09}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{Token} word, \textbf{Doc} doc
+		\IF {word.text \textbf{not in} PRONOUNS\_LIST}
+		\RETURN []
+		\ELSE
+		\STATE $List<Token>$ resolved\_words = doc.\_.coref\_chains.resolve(wors)
+		\RETURN resolved\_words
+		\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Markers detection}
+A significant part of the Context Level Analysis is the detection of the markers, which are essential to capture the conditional and parallel information about the BPMN model. Based on the algorithms proposed in the \cite{t2m_1_main}, this work implements the proposed algorithms and makes proper modifications and improvements so that more pieces of information can be captured. The system can not only capture single-worded markers like "if", "whether", or "else", but also capture markers consisting of several words like "in case of", and "in the meantime". The system introduced a list of indicators:  SINGLE\_IF\_CONDITIONAL\_INDICATORS, SINGLE\_ELSE\_CONDITIONAL\_INDICATORS, COMPOUND\_CONDITIONAL\_INDICATORS are used to detect the conditional markers that can be used to construct conditional gateways. The system distinguishes two types of conditional markers, namely: if and else. SINGLE\_PARALLEL\_INDICATORS and COMPOUND\_PARALLEL\_INDICATORS detect the words that have the meaning of parallelism. At last, CASE\_INDICATORS scans for phrases indicating what kind of action should be performed in the latter, former, or both case(s).
+
+\begin{figure}[h]
+    \centering
+    \caption{Example of a conditional sentence}
+    \includegraphics[width=0.8\textwidth]{tum-resources/images/marker.png}
+\end{figure}
+
+The "mark" dependency stands for the marker, which is a word leading a subordinate clause to another clause. In a complement clause, a marker can typically be "that" or "whether", whereas within an adverbial clause, a marker is usually a preposition like "while" or "although" \cite{dependencies_manual}. Therefore, to detect the occurrence of a conditional clause, the marker dependency is the system's entry point. Nevertheless, both conditional and parallel markers can also be introduced by the dependency "advmod", which stands for adverb modiﬁer \cite{t2m_1_main}. Therefore, the proposed algorithm \ref{alg:10} runs two loops to check for two dependencies individually. Once a marker is detected, a particular attribute will be added to the action that possesses the verb related to this marker. "if" and "else" indicate that the action is a conditional action while "while" indicates that the action has the meaning of parallelism. 
+ 
+\begin{algorithm}
+\caption{determine single marker}
+\label{alg:10}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{SentenceContainer} container
+		\STATE $List<Token>$ markers = find\_dependency(["mark"], container.sentence)
+		\FORALL{marker $\in$ markers}
+		\STATE $Token$ verb = marker.ancestors
+		\STATE $Action$ action = find\_action(verb, container)
+		\IF{marker.text $\in$ SINGLE\_IF\_CONDITIONAL\_INDICATORS} 
+		\STATE action.marker = "if" 
+		\ELSIF{marker.text $\in$ SINGLE\_IF\_CONDITIONAL\_INDICATORS}
+		\STATE action.marker = "else"
+		\ENDIF
+		\ENDFOR
+		\STATE $List<Token>$ advmods = find\_dependency(["advmod"], container.sentence)
+		\FORALL{advmod $\in$ advmods}
+		\STATE $Token$ verb = advmod.ancestors
+		\STATE $Action$ action = find\_action(verb, container)
+		\IF{advmod.text $\in$ SINGLE\_IF\_CONDITIONAL\_INDICATORS} 
+		\STATE action.marker = "if" 
+		\ELSIF{advmod.text $\in$ SINGLE\_IF\_CONDITIONAL\_INDICATORS}
+		\STATE action.marker = "else"
+		\ELSIF{advmod.text $\in$ SINGLE\_PARALLEL\_INDICATORS}
+		\STATE action.marker = "while"
+		\ENDIF
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+Algorithm \ref{alg:10} only addresses the problem of finding the single-worded conditional markers, yet in natural language, the meaning of a condition can also be expressed through a phrase. The following examples demonstrate how can a author use short phrases to express the meaning of a condition. 
+
+\begin{itemize}
+    \item \textbf{In case} the customer does not exist in the customer data base
+    \item \textbf{In the case of} supplier concurrence the grid operator would inform all involved suppliers
+    \item \textbf{In the meantime}, the engineering department prepares everything for the assembling of the ordered bicycle.
+\end{itemize}
+
+Therefore, another algorithm is to be developed to detect such phrases. \cite{t2m_1_main} used the string to match such phrases, yet this is not efficient because of the complexity of the natural language the author of the textual description could make grammatical mistakes or use different phrases by writing "in the case of" or "for the case" instead of "in case". To overcome this challenge, this work leverages the advantage of spacy by using the \textit{spacy Matcher}, which lets the system find phrases using pre-defined rules describing attributes of tokens \footnote{https://spacy.io/api/matcher}. A usage example is given below to find the conditional phrases, where the match searches for any strings that match the given rule in the form of "in/for (the) case (of)". A single matcher is easy to define and search for various expressions at the same time, which makes it suitable to be implemented in the system for finding the relevant phrases. A complete list of Matcher can be found in the project's source code. 
+
+\begin{lstlisting}
+COMPOUND_CONDITIONAL_INDICATORS = [
+    {"in/for (the) case (of)": [
+        {"LEMMA": {"IN": ["in", "for"]}},
+        {"LEMMA": "the", "OP": "?"},
+        {"LEMMA": "case"},
+        {"POS": "ADP", "OP": "?"},
+    ]}
+]
+\end{lstlisting}
+
+The system identifies three types of Matcher: conditional indicators, parallel indicators, and case indicators. Conditional indicators are used to identify conditional phrases like in the given example "in/for (the) case (of)" while parallel indicators are used to identify parallelism like "in (the) meantime". Additionally, this work proposes a novel type of indicator, namely case indicators, which are used to identify the conditions described in specific phrases, for example, "in the former case". Action objects belonging to such clauses will be tagged with a particular attribute and will be added to the proper position in the BPMN construction procedure.
+
+\subsection{Redundancy removal}
+As described in the section \ref{sec:solution:relevance}, the undesired redundant information which has little to do with business process should be removed. Furthermore, due to the divide-and-conquer principle this system leveraged, the system will sometimes produce undesired clause separation. To address these issues, a final clean up process should be executed to remove the redundant information. 
+
+\begin{itemize}
+    \item If the vendor is not valid in the system the purchase department will have to choose a different vendor.
+    \item The first step is to determine contact details of potential customers.
+\end{itemize}
+
+Both of the given sentences are not simple clauses and can be torn into several clauses through constituency parsing. The first sentence will be divided into three clauses: "If the vendor is not valid in the system", "the purchase department will have", "to choose a different vendor" and the second sentence will be divided into: "The first step is", "to determine contact details of potential customers". As a result, the clause "the purchase department will have" and "The first step is" become redundant information because the verb "have" and "is" function here as auxiliary and form a verb phrase with the clause followed. Therefore, if the clause contains the verb "have", the algorithms will check whether it has a "xcomp" component. If this is the case, this clause is considered as redundant clause and will be removed (lines 6-10). If the clause contains the verb "be", the algorithm will check whether this verb has adjectives or attributes, if this is not the case, this clause will also be removed (lines 11-15).
+
+Moreover, if the verb of a clause has the POS tag of "AUX", indicating it is an auxiliary verb, this clause can also be removed. In the end, the algorithm will determine whether the clause describes that the process begins, if so, this process can also be removed because the begin of the BPMN process is already indicated through the start event element. This is achieved by checking the hypernyms of the verb and the subject to see whether the subject has the hypernym of activity and the verb of begin.
+
+\begin{algorithm}
+\caption{remove redundant process}
+\label{alg:11}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{SentenceContainer} container
+		\FORALL{clause $\in$ container}
+		\IF{clause.action $= \epsilon$}
+		\STATE container.remove(clause)
+		\ELSIF {clause.action.token.POS == "AUX"}
+		\STATE container.remove(clause)
+		\ELSIF {clause.action.token.POS $\in$ ["be"]}
+		\STATE clause = find\_dependency(["acomp", "attr"], \\ \qquad\qquad\qquad\qquad\qquad\qquad token=clause.action.token)
+		\IF {clause $= \epsilon$}
+		\STATE container.remove(clause)
+		\ENDIF
+		\ELSIF {clause.action.token.POS $\in$ ["have"]}
+		\STATE clause = find\_dependency(["xcomp"], \\ \qquad\qquad\qquad\qquad\qquad\qquad token=clause.action.token)
+		\IF {clause $\neq \epsilon$}
+		\STATE container.remove(clause)
+		\ENDIF
+		\ELSIF {clause.action.token.lemma $\in$ STOP\_LIST}
+		\STATE container.remove(clause)
+		\ELSIF {describe\_process\_start(clause)}
+		\STATE container.remove(clause)
+		\ENDIF
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Valid actor retrieval and adjustment}
+
+It is also vital for the system to find the valid actors in the textual description that will be used in lanes when constructing BPMN models. It is essential to distinguish between the valid actor and the subject of a sentence. 
+
+\begin{itemize}
+    \item \textbf{A customer} brings in a defective computer.
+    \item \textbf{The CRS} checks the defect and hands out a repair cost calculation back.
+    \item \textit{The first activity} is to check and repair the hardware.
+\end{itemize}
+
+In the first two examples, the subject of the sentence is at the same time the valid actor, but in the third example, the actor of the sentence is only the subject of this clause. The reason behind this is because "customer" and "CRS" are both considered as the participant of the business process while "the first activity" is carried out by the CRS serving as an abstract concept and do not participate in the business process. This work implements the algorithm offer in \cite{t2m_1_main} by recursively checking the hypernyms of a given word to see whether it has the hypernyms of a person, an organization or a software system. 
+
+The hypernyms checking is achieved by querying the \textit{WordNet}, which is a large English lexical database. As spacy nor python has an implemented \textit{WordNet} component, this work used an open-sourced library \textit{spacy-wordnet} \footnote{https://github.com/argilla-io/spacy-wordnet}. When the algorithm wants to determine whether a given word is a valid actor, it will first check whether the given word is contained in a pre-defined stop list. If not, the algorithm will then check whether the given word is a pronoun. Finally, the algorithm will query the \textit{WordNet} the hypernyms of the given word recursively, which means that all the hypernyms of the word will be traversed. Once one of the hypernyms matches the stop list given in the \cite{t2m_1_main} as “person”, “social group”, and “software system”, the word is considered to be a valid actor.
+
+\section{BPMN Construction}
+After the required information is extracted and stored in to the relevant class object and the relevant conditional information is detected, the information can now be used to construct the BPMN diagram. 
+
+The tool to generate the BPMN diagram this work leverages is an open-sourced library called \textit{processpiper}, which offers a very intuitive but powerful API \footnote{https://github.com/csgoh/processpiper}. \textit{processpiper} offers the possibility to construct a BPMN diagram from a structured text input called \textit{PiperFlow syntax} which delivers the opportunity for the participant who lacks the technical background to easily modify the generated diagram. The construction consists of two steps: The first step will convert the \textit{process} objects into one of the subclasses of the class \textit{Structure} (explained in figure \ref{class_diagram}) based on the property of the \textit{process} objects. The second step concatenates the \textit{Structure} objects in the correct order. Finally, the generated syntax will be rendered into a diagram in the format of \textit{.png} or \textit{.svg}.\
+
+Transforming the \textit{process} objects into \textit{Structure} objects is straightforward. The conditional and parallel indicators from the textual description are stored as an attribute in the object. Therefore, the algorithm will look at the attribute's type of the given \textit{process} object and then construct a proper \textit{Structure} object, which will be stored in a list passed to the second processing stage. 
+
+\begin{algorithm}
+\caption{determine to which lane the structure belongs to}
+\label{alg:12}
+	\begin{algorithmic} [1]
+		\REQUIRE \textbf{Structure} structure, \textbf{String} previous\_subject, \textbf{Dictionary} lanes, \textbf{List$<$Structure$>$} structure\_list
+		
+		\IF{previous\_subject $= \epsilon$}
+		\FORALL {structure $\in$ structure\_list}
+		\IF {structure.process.subject.name$\neq \epsilon$ \\ \textbf{and} structure.process.subject.name $\in$ lanes.keys()}
+		\RETURN structure.process.subject.name
+		\ENDIF
+		\ENDFOR
+		\ELSE
+		
+		\IF {structure.process.subject $= \epsilon$}
+		\RETURN previous\_subject
+		\ELSE
+		\IF {structure.process.subject.name $\in$ lanes.keys()}
+		\RETURN structure.process.subject.name
+		\ELSE
+		\RETURN previous\_subject
+		\ENDIF
+		\ENDIF		
+		\ENDIF
+		
+	\end{algorithmic}
+\end{algorithm}
+
+As this work introduces the lane element in BPMN, it is crucial for the system to find to which lane a task or a gateway belongs. Algorithm \ref{alg:12} tackles this problem by comparing the subject of a process with the valid actor list. The previous\_subject is set initially to None, when the function is invoked for the first time, the algorithm will try to find whether the subject of the first clause is in the valid actor list. If not, the algorithm will search the list of structures until a valid actor is found (lines 1 - 6). The last found subject is set as previous\_subject. If the subject of a clause is empty, the previous subject will be returned, otherwise, the algorithm checks the validity of the subject of the clause.
+
+Once each process's belonging is determined, they can be added to the proper lanes and the \textit{PiperFlow syntax} can be constructed to generate the BPMN diagram. Below is an example of the so-called \textit{PiperFlow syntax}; each process is added to the corresponding lanes and is indicated through a key which will be used to connect all the activities together. Events, tasks, and gateways are indicated through different braces and symbols. 
+
+\begin{lstlisting}
+title: example output
+colourtheme: BLUEMOUNTAIN
+lane: customer
+	(start) as start
+	[brings a defective computer] as activity_1
+	[accept the repair cost] as activity_4
+	[take the repaired computer home] as activity_6
+	(end) as end
+lane: crs
+	[checks the defect] as activity_2
+	[hand out a repair cost calculation] as activity_3
+	[execute the repair] as activity_5
+
+start->activity_1->activity_2->activity_3->activity_4->activity_5->activity_6->end
+\end{lstlisting}
+
+Such \textit{PiperFlow syntax} output can then be rendered into a BPMN diagram. The text-based output offers a high level of flexibility and adaptability. The user of our system can add or remove an element by only adding or removing the relevant lines. Even though our system only supports some basic BPMN elements, the user of our system can still extend the generated BPMN diagram by adding the desired textual representation in the lanes.
+
+\begin{figure}[h]
+    \centering
+    \caption{Example of a BPMN diagram generated using processpiper}
+    \includegraphics[width=1\textwidth]{tum-resources/images/BPMN_example.png}
+\end{figure}
+
+\section{LLM Refinement}
+\cite{LLM_1} introduces the possibility of using in-context learning to perform a multi-turn dialogue of question answering to perform the process information extraction task. The idea behind in-context learning is having the model solve the problem by providing knowledge provided in the input. Such input is called a \textit{prompt}, which specifies the task instruction, examples, etc. 
+
+This work intends to use the Generative Pre-trained Transformer 4 model (GPT-4) for process information extraction.\cite{LLM_1} illustrate the work to use a \textbf{Defs+2Shots} setting to perform the in-context learning process. \textbf{Defs}, on the one hand, stands for adding the contextual knowledge in the prompt to narrow the model's reasoning abilities. \textbf{2Shots}, on the other hand, means adding the example component to the prompt. Instead of having the Large Language Model generate the BPMN diagram representation, the work uses the generated \textit{PiperFlow syntax} output as input and asks the model to refine and adjust the generated output.
+
+Based on the idea of \textbf{Defs+2Shots} principle, this work designs the prompt as follows: In the beginning, a meta definition will be given describing the role of the model as well as introducing the \textit{PiperFlow syntax}. Two examples of inputs and generated output from the system are also given in the prompt. Then the LLM is expected to perform four tasks: Irrelevant information recognition and removal, Expressions refinement, Anaphora resolution enhancement, Gateways checking and adjustments. During each task, a task definition will be given to specify what the task is and what kind of output is desired. Additionally, two examples will be offered. 
+
+\begin{figure}[h]
+    \centering
+    \caption{LLM refinement procedure}
+    \includegraphics[width=0.8\textwidth]{tum-resources/images/GPT_refinement.png}
+\end{figure}
+
+The first task (Irrelevant information recognition and removal) further tackles the issues 3. The work leverages the LLM's ability to perform semantic analysis to identify the irrelevant and meta information in the textual description. Once such information is identified, it will be removed to make the output more precise and understandable. The task of Expressions refinement focus on correcting grammar errors in the generated output. Because the system uses a rule-based algorithm to generate the expression output, the algorithm is only responsible for concatenating the string form of subject, verb, and object, as well as some modifiers. Through this procedure, the algorithm can make grammar mistakes, or some information could be missed due to the complexity of natural language. Therefore, the LLM is asked to help the proposed system refine the text output to make the generated BPMN diagram more understandable.  
+
+Another critical task for the LLM is the Anaphora resolution enhancement. The library \textit{Coreferee} this system leveraged is only sufficient resolving personal pronouns, making the anaphora like "this" and "that" unresolved. Thus the LLM is asked to assist with the anaphora resolution, in which the LLM will check whether the resolved anaphora is correct and resolve the remained token. In the example below, "this procedure" is resolved to "the process of checking and ordering" which further enhances the understandability of the generated BPMN diagram.
+
+\begin{enumerate}
+    \item repeat \textbf{this procedure} for each item on the part list
+    \item repeat \textbf{the process of checking and ordering} for each item on the part list
+\end{enumerate}
+
+The last task for the LLM is to check and adjust the gateways. In some cases of conditional gateways, only one condition is specifically given, as in the example listed below. Only one condition that "the part is available and preparation is finished" is expressly stated, which leads to the conditional gateway having only one branch. It is also not explicitly indicated in the context what will happen if the preparation activity fails.
+
+\begin{itemize}
+    \item If the storehouse has successfully reserved or back-ordered every item of the part list and the preparation activity has finished, the engineering department assembles the bicycle. Afterwards, the sales department ships the bicycle to the customer and finishes the process instance.
+\end{itemize}
+
+Facing such situation, the rule-based system can do little about it. It is challenging to determine the other possible scenario where the conditions and the followed activities are expressed indirectly. Therefore, this work intends to use the LLM's ability to understand the context to perform the adjustment of the gateways to achieve a better and more precise outcome. All the conversations with the GPT-4 can be found as shared links in the appendix \ref{appendix:gpt}.
+

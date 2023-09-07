@@ -360,7 +360,7 @@ def get_valid_actors(container_list: [SentenceContainer]) -> list:
     return result
 
 
-def adjust_actor_list(container_list: [SentenceContainer], valid_actors: [str]) -> list:
+def adjust_actor_list(valid_actors: [str]) -> list:
     result = []
     add = True
     for i in range(len(valid_actors)):

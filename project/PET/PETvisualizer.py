@@ -10,16 +10,23 @@ import json
 #             print(f"{data['tokens'][i]:{width}}{data['ner_tags'][i]}")
 
 if __name__ == '__main__':
-    with open("text02.json") as file:
+    with open("text15.json") as file:
         data = json.load(file)
 
-        red = '<span style="color: red;">'
-        blue = '<span style="color: blue;">'
-        green = '<span style="color: green;">'
-        orange = '<span style="color: orange;">'
-        brown = '<span style="color: brown;">'
-        purple = '<span style="color: purple;">'
-        end = '</span>'
+        # red = '<span style="color: red;">'
+        # blue = '<span style="color: blue;">'
+        # green = '<span style="color: green;">'
+        # orange = '<span style="color: orange;">'
+        # brown = '<span style="color: brown;">'
+        # purple = '<span style="color: purple;">'
+        # end = '</span>'
+        red = '\\textcolor{red}{'
+        blue = '\\textcolor{blue}{'
+        green = '\\textcolor{green}{'
+        orange = '\\textcolor{orange}{'
+        brown = '\\textcolor{brown}{'
+        purple = '\\textcolor{purple}{'
+        end = '}'
 
         result = ""
         for i in range(len(data["tokens"])):
@@ -46,6 +53,6 @@ if __name__ == '__main__':
                 if data['tokens'][i + 1] not in [',', '.', '!', '?', ':', ';']:
                     result += " "
 
-        file_path = "example.md"
+        file_path = "example.txt"
         with open(file_path, "w") as file:
             file.write(result)
