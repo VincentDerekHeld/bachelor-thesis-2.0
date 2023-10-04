@@ -1,7 +1,7 @@
 from typing import Optional
 from spacy.tokens import Span
-from Model.Action import Action
-from Model.Actor import Actor
+from project.Model.Action import Action
+from project.Model.Actor import Actor
 
 
 class Process:

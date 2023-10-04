@@ -1,6 +1,8 @@
-from Model.ExtractedObject import ExtractedObject
+from Playgrounds.Playground_Actors_Similarity import determinate_full_name
+from Playgrounds.Playground_Helpers import tokens_to_string
+from project.Model.ExtractedObject import ExtractedObject
 from spacy.tokens import Token
-from Utilities import str_utility, string_list_to_string
+from project.Utilities import str_utility, string_list_to_string
 
 
 class Actor(ExtractedObject):
@@ -31,3 +33,7 @@ class Actor(ExtractedObject):
             str_utility(self.token, actor)
 
         return string_list_to_string(actor)
+
+    def determinate_full_name1(self):
+        if self.token is not None:
+            self.full_name: str = tokens_to_string(determinate_full_name(self.token))

@@ -86,7 +86,7 @@ def can_be_checked_token(synset, checked_words: list, stop_list: list):
 
 
 if __name__ == '__main__':
-    nlp = spacy.load('en_core_web_sm')
+    nlp = spacy.load('en_core_web_lg')
     nlp.add_pipe("spacy_wordnet", after='tagger')
     text_input = "the claim is rejected"
     document = nlp(text_input)

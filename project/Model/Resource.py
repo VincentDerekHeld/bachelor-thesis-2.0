@@ -1,6 +1,6 @@
-from Model.ExtractedObject import ExtractedObject
+from project.Model.ExtractedObject import ExtractedObject
 from spacy.tokens import Token
-from Utilities import str_utility, string_list_to_string
+from project.Utilities import str_utility, string_list_to_string
 
 
 class Resource(ExtractedObject):

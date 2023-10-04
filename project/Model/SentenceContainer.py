@@ -1,6 +1,6 @@
 from spacy.tokens import Doc, Span, Token
-from Model.Process import Process
-from Utilities import find_process, find_dependency
+from project.Model.Process import Process
+from project.Utilities import find_process, find_dependency
 
 
 class SentenceContainer:
@@ -85,3 +85,10 @@ class SentenceContainer:
             for process in self.processes:
                 if process.sub_sentence is not None and process.sub_sentence == sub_sentence:
                     self.processes.remove(process)
+
+    def has_Verb_and_Verb_constuction(self): #TODO: VH
+        if self.sentence.root.pos_ == "VERB":
+            for token in self.sentence.root.children:
+                if token.dep_ == "cc" and token.text.lower() == "and":
+                    return True
+        return False

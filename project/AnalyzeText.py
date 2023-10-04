@@ -235,6 +235,111 @@ def determine_end_activities(structure_list: [Structure]):
                             activity.is_end_activity = True
 
 
+def construct_VH_1(container_list: [SentenceContainer]):
+    """
+    given the container list, the function will convert the corresponding container into the right structure (activity of gateway)
+    Args:
+        container_list: the list of containers that contains the actions.
+
+    Returns:
+        the constructed structure list.
+    """
+    result = []
+    for i in range(len(container_list)):
+        container = container_list[i]
+
+        if container.has_if() or container.has_else():
+            if last_container_has_conditional_marker(container, container_list):
+                if isinstance(result[-1], ConditionBlock):
+                    if result[-1].can_be_added(container):
+                        result[-1].add_branch(container)
+                    else:
+                        if_block = ConditionBlock()
+                        if_block.add_branch(container)
+                        result.append(if_block)
+            else:
+                if_block = ConditionBlock()
+                if_block.add_branch(container)
+                result.append(if_block)
+
+        elif container.has_while():
+            if isinstance(result[-1], AndBlock):
+                result[-1].add_branch(container)
+            elif not isinstance(result[-1], ConditionBlock):
+                and_block = AndBlock()
+                and_block.add_branch(result[-1])
+                and_block.add_branch(container)
+                result.remove(result[-1])
+                result.append(and_block)
+
+        elif container.has_or():
+            if_block = ConditionBlock()
+            for process in container.or_processes:
+                branch = {"type": ConditionType.ELSE, "condition": [], "actions": [Activity(process)]}
+                if_block.branches.append(branch)
+            result.append(if_block)
+        elif len(container.processes) > 0 and container.processes[0].action is not None and container.processes[
+            0].action[0].conjunction is not None:
+            print("*" * 20)
+            print("conjunction:" + container.processes.action.conjunction)
+        else:
+            result.append(container)
+
+    return result
+
+
+def construct_VH(container_list: [SentenceContainer]):
+    """
+    given the container list, the function will convert the corresponding container into the right structure (activity of gateway)
+    Args:
+        container_list: the list of containers that contains the actions.
+
+    Returns:
+        the constructed structure list.
+    """
+    result = []
+    for i in range(len(container_list)):
+        container = container_list[i]
+
+        if container.has_if() or container.has_else():
+            if last_container_has_conditional_marker(container, container_list):
+                if isinstance(result[-1], ConditionBlock):
+                    if result[-1].can_be_added(container):
+                        result[-1].add_branch(container)
+                    else:
+                        if_block = ConditionBlock()
+                        if_block.add_branch(container)
+                        result.append(if_block)
+            else:
+                if_block = ConditionBlock()
+                if_block.add_branch(container)
+                result.append(if_block)
+
+        elif container.has_while():
+            if isinstance(result[-1], AndBlock):
+                result[-1].add_branch(container)
+            elif not isinstance(result[-1], ConditionBlock):
+                and_block = AndBlock()
+                and_block.add_branch(result[-1])
+                and_block.add_branch(container)
+                result.remove(result[-1])
+                result.append(and_block)
+        elif container.has_or():
+            if_block = ConditionBlock()
+            for process in container.or_processes:
+                branch = {"type": ConditionType.ELSE, "condition": [], "actions": [Activity(process)]}
+                if_block.branches.append(branch)
+            result.append(if_block)
+        elif container.has_Verb_and_Verb_constuction():
+            and_block = AndBlock()
+            and_block.add_branch(container)
+            result.append(and_block)
+        else:
+            result.append(container)
+
+    return result
+
+
 def construct(container_list: [SentenceContainer]):
     """
     given the container list, the function will convert the corresponding container into the right structure (activity of gateway)
@@ -295,7 +400,7 @@ def build_flows(container_list: [SentenceContainer]):
     Returns:
         the constructed structure list.
     """
-    flow_list = construct(container_list)
+    flow_list = construct_VH(container_list)
     result = []
     last_gateway = None
 
@@ -305,6 +410,7 @@ def build_flows(container_list: [SentenceContainer]):
             if not flow_list[i].is_complete():
                 flow_list[i].create_dummy_branch()
             result.append(flow_list[i])
+
         elif isinstance(flow_list[i], AndBlock):
             last_gateway = flow_list[i]
             result.append(flow_list[i])

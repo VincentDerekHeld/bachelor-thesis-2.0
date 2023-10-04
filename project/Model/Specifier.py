@@ -1,5 +1,5 @@
 from spacy.tokens import Token
-from Model import SpecifierType
+from project.Model import SpecifierType
 
 
 class Specifier:

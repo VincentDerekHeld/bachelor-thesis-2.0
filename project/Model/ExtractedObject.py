@@ -1,8 +1,8 @@
 from typing import Optional
 from spacy.tokens import Token
-from Model.Specifier import Specifier
-from Model.SpecifierType import SpecifierType
-from Utilities import str_utility
+from project.Model.Specifier import Specifier
+from project.Model.SpecifierType import SpecifierType
+from project.Utilities import str_utility
 
 
 class ExtractedObject:

@@ -1,12 +1,12 @@
 from enum import Enum
 
-from Model.Actor import Actor
-from Model.ExtractedObject import ExtractedObject
-from Model.Resource import Resource
+from project.Model.Actor import Actor
+from project.Model.ExtractedObject import ExtractedObject
+from project.Model.Resource import Resource
 from spacy.tokens import Token
 from typing import Optional
 
-from Utilities import str_utility, string_list_to_string, index_of
+from project.Utilities import str_utility, string_list_to_string, index_of
 
 
 class LinkType(Enum):

@@ -1,10 +1,10 @@
 from typing import Optional
 from spacy.tokens import Doc, Span, Token
-from Model.Process import Process
-from Model.Resource import Resource
-from Model.SentenceContainer import SentenceContainer
-from Utilities import find_dependency
-from ModelBuilder import create_actor, create_action, correct_model
+from project.Model.Process import Process
+from project.Model.Resource import Resource
+from project.Model.SentenceContainer import SentenceContainer
+from project.Utilities import find_dependency
+from project.ModelBuilder import create_actor, create_action, correct_model
 
 
 def sub_sentence_finder(sentence: Span) -> [Span]:
@@ -22,7 +22,7 @@ def sub_sentence_finder(sentence: Span) -> [Span]:
     sentence_list.sort()
     result = []
     symbols = ['.', ',', ';', ':', '!', '?', '(', ')', '[', ']', '{', '}', '"', "'", '``', "''", '“', '”', '‘', '’',
-               '—']
+               '—', 'a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h)', 'i)', 'j)', 'k)', 'l)', 'm)', 'n)', 'o)', 'p)']
 
     for i in range(len(sentence_list) - 1):
         left = sentence_list[i]
@@ -94,6 +94,7 @@ def analyze_document(doc: Doc) -> [SentenceContainer]:
 
         sub_sentence_list = sub_sentence_finder(sentence)
         for sub_sentence in sub_sentence_list:
+            print("sub_sentence", sub_sentence)
             process = Process(sub_sentence)
             extract_elements(sub_sentence, process)
             container.add_process(process)
@@ -127,7 +128,6 @@ def extract_elements(sentence, process):
 
     if process.action is not None:
         process.action.active = sentence_is_active
-
         for conjunct in process.action.token.conjuncts:
             if conjunct == process.action.token:
                 continue
@@ -169,7 +169,7 @@ def determine_actor(sentence: Span, active: bool) -> Optional[Token]:
         # find whether the sentence has "agent" dependency -> the "by" in the sentence
         agent = find_dependency(["agent"], sentence=sentence)
         main_actor = next(agent[0].children) if len(agent) > 0 else None
-
+    #TODO: Why does he not use....
     return main_actor
 
 
@@ -227,6 +227,45 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
 
     return None
 
+
+
+def complement_model_VH(container: SentenceContainer):
+    """
+    add the conjunctions of the actions to the list of processes, conjunctions are originally detected but only store as
+    an attribute in the action, this function extract the conjunctions and tried to find the proper place to add them
+
+    Args:
+        container: The container that contains the action.
+
+    """
+    new_processes = container.processes.copy()
+    for process in container.processes:
+        if process.action is None:
+            continue
+
+        # add the conjunctions to the list
+        if len(process.action.conjunction) > 0:
+            index_in_list = new_processes.index(process)
+            for conjunction in process.action.conjunction:
+                # if the process doesn't have an object, the real object might belong to the conjunction
+                if process.action.object is None and conjunction.object is not None:
+                    process.action.object = conjunction.object
+
+                # to determine whether to add the conjunctions before or after this process
+                if conjunction.token.i < process.action.token.i:
+                    index_in_list -= 1
+                # create a new process for the conjunction
+                conjunction_process = Process(process.sub_sentence)
+                conjunction_process.action = conjunction
+                if conjunction.object is None:
+                    conjunction_process.action.object = process.action.object
+                conjunction_process.actor = process.actor
+
+                new_processes.insert(index_in_list + 1, conjunction_process)
+                index_in_list += 1
+
+    # substitute the old processes with the new ones (because we performed the adding element in the loop)
+    container.processes = new_processes
 
 def complement_model(container: SentenceContainer):
     """

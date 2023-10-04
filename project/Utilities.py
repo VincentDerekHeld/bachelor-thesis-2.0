@@ -4,7 +4,7 @@ from typing import Optional
 from spacy.matcher.matcher import Matcher
 from spacy.tokens import Span, Token
 
-from Constant import SUBJECT_PRONOUNS, OBJECT_PRONOUNS, STRING_EXCLUSION_LIST
+from project.Constant import SUBJECT_PRONOUNS, OBJECT_PRONOUNS, STRING_EXCLUSION_LIST
 
 
 def find_dependency(dependencies: [str], sentence: Span = None, token: Token = None, deep=False) -> [Token]:

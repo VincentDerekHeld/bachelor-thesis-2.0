@@ -2,6 +2,8 @@ from typing import Optional
 
 from processpiper.text2diagram import render
 
+# from processpiper.src.processpiper.text2diagram import render
+
 from Structure.Activity import Activity
 from Structure.Block import ConditionBlock, AndBlock, ConditionType
 from Structure.Structure import Structure
@@ -18,9 +20,10 @@ def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str,
         save_path: the path to save the BPMN model
         theme: the theme of the BPMN model, default is BLUEMOUNTAIN
     """
-    input_syntax = create_bpmn_description(structure_list, actor_list, title, theme=theme)
-    print(input_syntax)
-    render_bpmn_model(input_syntax, save_path)
+    input_syntax = create_bpmn_description_VH(structure_list, actor_list, title, theme=theme)
+    filtered_string = input_syntax.replace("as applicable", "") #TODO: done by me
+    print(filtered_string)
+    render_bpmn_model(filtered_string, save_path)
 
 
 def render_bpmn_model(input_syntax: str, path: str):
@@ -32,6 +35,132 @@ def render_bpmn_model(input_syntax: str, path: str):
 
     """
     render(input_syntax, path)
+
+
+def create_bpmn_description_VH(structure_list: [Structure], actor_list: list, title: str,
+                               theme: str = "BLUEMOUNTAIN") -> str:
+    """
+    Create the input syntax for the BPMN model based on the list of structures and actors.
+    construct the lanes according to the actors
+    and then add the activities and gateways to the lanes according to the actor of the activity
+    Args:
+        structure_list: the list of structures
+        actor_list: the list of valid actors
+        title: the title of the BPMN model
+        theme: the theme of the BPMN model, default is BLUEMOUNTAIN
+
+    Returns:
+        the constructed syntax for rendering the BPMN model
+    """
+    result = ""
+    result += "title: " + title + "\n"
+    result += "width: " + str(10000) + "\n"
+    result += "colourtheme: " + theme + "\n"
+
+    lanes = {}
+    connections = []
+    if len(actor_list) < 2:
+        lanes["dummy"] = []
+    else:
+        for actor in actor_list:
+            lanes[actor] = []
+    key = None
+    connection_id = 0
+    last_gateway = None
+    for structure in structure_list:
+        if structure_list.index(structure) == 0:
+            key = belongs_to_lane(structure_list, lanes, structure, key)
+            lanes[key].append("(start) as start")
+            connections.append("start")
+        if isinstance(structure, Activity):
+            key = belongs_to_lane(structure_list, lanes, structure, key)
+            append_to_lane(key, lanes, connection_id, connections, structure, last_gateway)
+        elif isinstance(structure, ConditionBlock):
+            end_gateway = "gateway_" + str(structure.id) + "_end"
+
+            if len(structure.branches[0]["condition"]) > 0:
+                key = belongs_to_lane(structure_list, lanes, structure.branches[0]["condition"][0], key)
+            append_to_lane(key, lanes, connection_id, connections, structure, last_gateway)
+
+            for branch in structure.branches:
+                connection_id += 1
+                if structure.is_simple() and branch["type"] == ConditionType.IF:
+                    connections.append("gateway_" + str(structure.id) + '-"yes"')
+                elif structure.is_simple() and branch["type"] == ConditionType.ELSE:
+                    connections.append("gateway_" + str(structure.id) + '-"no"')
+                else:
+                    condition = ""
+                    for c in branch["condition"]:
+                        condition += str(c)
+                        if branch["condition"].index(c) != len(branch["condition"]) - 1:
+                            condition += ", "
+                    index = 0
+                    for i in range(len(condition)):
+                        index += 1
+                        if condition[i] == " " and index > 15:
+                            condition = condition[:i] + "\\n" + condition[i + 1:]
+                            index = 0
+                    connections.append("gateway_" + str(structure.id) + '-"' + condition + '"')
+
+                need_end_gateway = True
+                for activity in branch["actions"]:
+                    key = belongs_to_lane(structure_list, lanes, activity, key)
+                    append_to_lane(key, lanes, connection_id, connections, activity, last_gateway)
+                    if activity.is_end_activity:
+                        need_end_gateway = False
+                        end_id = "end_" + str(activity.id)
+                        early_end_gateway = "(end) as end_" + str(activity.id)
+                        lanes[key].append(early_end_gateway)
+                        connections[connection_id] += "->" + end_id
+                        continue
+
+                if need_end_gateway:
+                    connections[connection_id] += "->" + end_gateway
+
+            lanes[key].append("<> as " + end_gateway)
+            connection_id += 1
+            last_gateway = end_gateway
+        elif isinstance(structure, AndBlock):
+            end_gateway = "gateway_" + str(structure.id) + "_end"
+            append_to_lane(key, lanes, connection_id, connections, structure, last_gateway)
+            for branch in structure.branches:
+                connection_id += 1
+                for activity in branch:
+                    connections.append("gateway_" + str(structure.id))
+                    key = belongs_to_lane(structure_list, lanes, activity, key)
+                    append_to_lane(key, lanes, connection_id, connections, activity, last_gateway)
+                    connections[connection_id] += "->" + end_gateway
+                    connection_id += 1
+                    last_gateway = end_gateway
+            lanes[key].append("<@parallel> as " + end_gateway)
+
+        if structure.is_end_activity:
+            lanes[key].append("(end) as end")
+            if connection_id < len(connections):
+                connections[connection_id] += "->end"
+            else:
+                connections.append(last_gateway)
+                connections[connection_id] += "->end"
+
+    for lane in lanes:  # TODO: Changed code here to give dummy node also a name in the BPMN model
+        if lane == "dummy" and len(lanes) == 1 and len(actor_list) == 1:
+            result += "lane: " + actor_list[0] + "\n"
+        elif lane == "dummy":
+            result += "lane: \n"
+
+        else:
+            result += "lane: " + lane + "\n"
+
+        for element in lanes[lane]:
+            print("BPMNCreator: " + element.__str__())
+            result += "\t" + element + "\n"
+
+    result += "\n"
+
+    for connection in connections:
+        result += connection + "\n"
+
+    return result
 
 
 def create_bpmn_description(structure_list: [Structure], actor_list: list, title: str,
@@ -66,6 +195,7 @@ def create_bpmn_description(structure_list: [Structure], actor_list: list, title
     key = None
     connection_id = 0
     last_gateway = None
+
     for structure in structure_list:
         if structure_list.index(structure) == 0:
             key = belongs_to_lane(structure_list, lanes, structure, key)
@@ -178,6 +308,7 @@ def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, s
     if isinstance(structure, Activity):
         if structure.process.actor is not None:
             if structure.process.actor.full_name in lanes.keys():
+
                 lanes[key].append("[" + str(structure.process.action) + "] as activity_" + str(structure.id))
             else:
                 lanes[key].append(

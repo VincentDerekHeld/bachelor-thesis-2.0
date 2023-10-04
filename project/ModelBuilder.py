@@ -26,6 +26,7 @@ def create_actor(main_actor: Token) -> Optional[Actor]:
         return None
 
     actor = Actor(main_actor)
+
     anaphora_resolver(actor)
     determine_noun_specifiers(actor)
     if len(actor.resolved_token) > 0:
