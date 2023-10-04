@@ -13,6 +13,8 @@ def run__all_texts():
 
 
 if __name__ == '__main__':
-    #run__all_texts()
+    # run__all_texts()
     input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/project/Text/text_input_vh/Text6.txt"
-    BPMNStarter.start_task(input_path, "example", "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text6_mod3.png", debug=False)
+    BPMNStarter.start_task(input_path, "example",
+                           "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text6_mod3.png",
+                           debug=True)
