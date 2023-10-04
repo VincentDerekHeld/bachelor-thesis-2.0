@@ -135,7 +135,7 @@ def custom_sentencizer(doc):
     return doc
 
 
-input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis-shuiwei/project/Text/text_input_vh/Text5.txt"
+input_path = "//project/Text/text_input_vh/Text5.txt"
 text_input = open(input_path, 'r').read().replace('\n',
                                                   ' ')
 pre_processed_text = text_pre_processing(text_input)

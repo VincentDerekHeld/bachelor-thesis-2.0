@@ -7,7 +7,7 @@ import spacy
 
 from project.Utilities import text_pre_processing
 
-input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis-shuiwei/project/Text/text_input_vh/Text05.txt"
+input_path = "//project/Text/text_input_vh/Text05.txt"
 
 text_input = text_pre_processing(open(input_path, 'r').read().replace('\n', ' '))
 

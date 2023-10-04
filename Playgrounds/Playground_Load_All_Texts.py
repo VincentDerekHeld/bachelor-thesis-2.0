@@ -4,8 +4,8 @@ import spacy
 def load_all_texts(texts=[]) -> list[str]:
     itaration = 1
     while itaration < 24:
-        input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis-shuiwei/project/Text/text_input_vh/Text" + itaration.__str__() + ".txt"
-        output_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis-shuiwei/Evaluation/Text1" + itaration.__str__() + ".png"
+        input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/project/Text/text_input_vh/Text" + itaration.__str__() + ".txt"
+        output_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text1" + itaration.__str__() + ".png"
         # BPMNStarter.start_task(input_path, "example", output_path)
         texts.append(open(input_path, 'r').read().replace('\n', ' '))
         itaration += 1
