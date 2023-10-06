@@ -1,9 +1,6 @@
 # Define the two phrases for comparison
 from numpy import double
 
-phrase1 = "member of sales department"
-phrase2 = "department"
-
 
 def determinate_full_name(token):
     """
@@ -38,7 +35,7 @@ def compare_actors_similarity(Actor1: str, Actor2: str, nlp):
     criteria_similarity_score = 0.5
     criteria_similarity_ratio = 0.5
     similarity_score = compare_actors_with_similarity(Actor1, Actor2, nlp)
-    similarity_ratio = compare_actors_with_token1(Actor1, Actor2, nlp)
+    similarity_ratio = compare_actors_with_token(Actor1, Actor2, nlp)
     result = similarity_score > criteria_similarity_score and similarity_ratio > criteria_similarity_ratio
     print("{:<60}{:<60}{:<20}{:<10}{:<10}".format(Actor1, Actor2, similarity_score, similarity_ratio, result.__str__()))
     return result
@@ -47,14 +44,12 @@ def compare_actors_similarity(Actor1: str, Actor2: str, nlp):
 def compare_actors_with_similarity(Actor1: str, Actor2: str, nlp):
     doc1 = nlp(Actor1)
     doc2 = nlp(Actor2)
-    similarity_score = round(doc1.similarity(doc2),2)
-
-    #print("Similarity Score:", similarity_score)
+    similarity_score = round(doc1.similarity(doc2), 2)
     return similarity_score
 
 
 # Define a function to compare actor names based on token lemma similarity
-def compare_actors_with_token1(Actor1: str, Actor2: str, nlp):
+def compare_actors_with_token(Actor1: str, Actor2: str, nlp):
     # Process the actor names using spaCy
     doc1 = nlp(Actor1)
     doc2 = nlp(Actor2)
@@ -124,7 +119,14 @@ def get_valid_actors_vh(container_list: [], nlp) -> list:
                         result.append(process.actor.full_name)
     return result
 
+
+phrase1 = "sales person"
+phrase2 = "sales department"
+
+import spacy
+nlp_similarity = spacy.load("en_core_web_lg")
+
 # Example usage:
 
-# result = compare_actors_similarity(phrase1, phrase2)
-# print(result)
+print(
+    f"phrase1: {phrase1}, phrase2: {phrase2}, compare_actors_with_similarity(phrase1, phrase2): {compare_actors_with_similarity(phrase1, phrase2, nlp_similarity)}")
