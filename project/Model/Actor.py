@@ -34,6 +34,6 @@ class Actor(ExtractedObject):
 
         return string_list_to_string(actor)
 
-    def determinate_full_name1(self):
+    def determinate_full_name_vh(self):
         if self.token is not None:
             self.full_name: str = tokens_to_string(determinate_full_name(self.token))

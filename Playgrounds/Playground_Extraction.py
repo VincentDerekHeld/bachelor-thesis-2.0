@@ -1,9 +1,10 @@
 # from project.AnalyzeSentence import is_active, determine_actor, determine_predicate, determine_object, create_actor, create_action
-from typing import Any
+from typing import Any, Optional
 
 import benepar, spacy
 from spacy import Language
-from spacy.tokens import Span
+from spacy.tokens import Span, Token
+from project.ModelBuilder import create_actor, create_action
 
 """
 def extract_elements(sentence, process):
@@ -15,14 +16,10 @@ def extract_elements(sentence, process):
     verb = determine_predicate(sentence, sentence_is_active)
     obj = determine_object(verb, sentence_is_active)
     process.action = create_action(verb, obj)
-
-
-
-
-        
 """
 subject_dependencies = ["nsubj", "nsubjpass", "csubj", "csubjpass", "agent", "expl"]
 object_dependencies = ["dobj", "dative", "attr", "oprd", "pobj", "iobj", "obj"]
+check_for_actor_marker: bool = False
 
 
 def immediately_dominates(A: Span, B: Span):
@@ -66,7 +63,9 @@ def determine_NP(sent) -> Span:
 
 labels = ["MD", "NP", "VP", "IN", "PP", "SBAR", "SINV"]
 
-ACTOR_MARKERS = ("organization", "Organization", "the organization", "The organization")
+ACTOR_MARKERS = (
+    "organization", "Organization", "the organization", "The organization", "sales", "department", "sales department",
+    "the sales", "the sales department")
 """set(["organization", "Organization", "the organization", "The organization",
                  "Actor", "Physician", "expert", "company",
                  "judge", "prosecutor", "driver", "officer",
@@ -80,16 +79,22 @@ def check_for_label_dominating_actor_marker(sent: Span, label: str):  # subject 
     dominates any of the specified actor markers.
     """
     results = []
-    print("sent._.constituents", list(sent._.constituents))
+    # print("sent._.constituents", list(sent._.constituents))
     for subtree in sent._.constituents:
-        """if len(subtree._.labels) > 0:
-            #print("subtree._.labels", subtree._.labels, "len(subtree._.labels) > 0", len(subtree._.labels) > 0, "subtree._.labels[0] == NP ", subtree._.labels[0], "Token:", any(
-                token.text in ACTOR_MARKERS for token in subtree).__str__())
-        for token in subtree:
-            print("Token:", token.text)"""
-        if len(subtree._.labels) > 0 and subtree._.labels[0] == label and any(
-                token.text in ACTOR_MARKERS for token in subtree):
-            results.append(subtree)
+        """
+        if len(subtree._.labels) > 0:
+            print("subtree._.labels", subtree._.labels,
+                  "len(subtree._.labels) > 0", len(subtree._.labels) > 0,
+                  "subtree._.labels[0] == NP ", subtree._.labels[0], "Token:",
+                  any(token.text in ACTOR_MARKERS for token in subtree).__str__())
+            #for token in subtree:
+             #   print("Token:", token.text)
+             """
+        if len(subtree._.labels) > 0 and subtree._.labels[0] == label:
+            if check_for_actor_marker and any(token.text in ACTOR_MARKERS for token in subtree):
+                results.append(subtree)
+            elif not check_for_actor_marker:
+                results.append(subtree)
     return results
 
 
@@ -148,6 +153,7 @@ def check_conditions3(doc):
 
     return False
 
+
 def find_constituents_by_label(sent: Span, label: str) -> list[Span]:
     results = []
     for constituents in sent._.constituents:
@@ -155,19 +161,19 @@ def find_constituents_by_label(sent: Span, label: str) -> list[Span]:
             results.append(constituents)
     return results
 
+
 def determine_actor_vh(sentence: Span) -> Span | None:
     'Condition 1: subject dependency and NP < (actormarker)'
     for possible_actor in check_for_label_dominating_actor_marker(sentence, "NP"):
         if any(token.dep_ in subject_dependencies for token in possible_actor):
             return possible_actor
 
-    print("Condition 2: object dependency and passive voice and PP < IN$(NP < (actormarker))")
     'Condition 2: object dependency and passive voice and PP < IN$(NP < (actormarker))'
     for possible_actor in check_for_label_dominating_actor_marker(sentence, "NP"):
         print("possible_actor:", possible_actor)
         is_object_dependency = any(token.dep_ in object_dependencies for token in possible_actor)
         print("is_object_dependency:", is_object_dependency)
-        is_passive_voice = any(token.dep_ == "auxpass" for token in sent)
+        is_passive_voice = any(token.dep_ == "auxpass" for token in sentence)
         print("is_passive_voice:", is_passive_voice)
         if not (is_object_dependency and is_passive_voice):
             print("not (is_object_dependency and is_passive_voice)")
@@ -181,26 +187,81 @@ def determine_actor_vh(sentence: Span) -> Span | None:
                 for token in possible_PP:
                     print("child.text:", token.text, token.dep_, token.pos_, token.tag_)
                     if token.text == 'by' and 'IN' == token.tag_:
-                        span_by = doc[token.i:token.i+1]
+                        span_by = sentence[token.i:token.i + 1]
                         print(span_by)
                         print(immediately_dominates(possible_PP, span_by))
                         print(are_sisters(span_by, possible_actor))
                         print("Success!")
-                #if are_sisters(possible_PP, possible_actor):
-                 #   for child in possible_PP._.children:
-                  #      print("child.text:", child.text, "child.dep_:", child.dep_)
-                   #     if child.text == "by":
-                    #        return possible_actor
+                # if are_sisters(possible_PP, possible_actor):
+                #   for child in possible_PP._.children:
+                #      print("child.text:", child.text, "child.dep_:", child.dep_)
+                #     if child.text == "by":
+                #        return possible_actor
 
-    print("Condition 3: object dependency and active voice and NP < (actormarker))")
     'Condition 3: object dependency and active voice and NP < (actormarker))'
     for possible_actor in check_for_label_dominating_actor_marker(sentence, "NP"):
         is_object_dependency = any(token.dep_ in object_dependencies for token in possible_actor)
-        is_active_voice = not any(token.dep_ == "auxpass" for token in sent)
+        is_active_voice = not any(token.dep_ == "auxpass" for token in sentence)
         if not (is_object_dependency and is_active_voice):
             return None
         else:
             return possible_actor
+
+
+def determine_predicate_vh(sentence: Span, active, actor):
+    print("actor[0].ancestors:", actor[0].ancestors)
+    if actor is not None and len(actor) > 0:
+        verb = next(actor[0].ancestors)
+        print("verb:", verb)
+        return verb
+    return None
+
+
+def determine_object_vh(predicate: Token, active: bool) -> Optional[Token]:
+    from project.Utilities import find_dependency
+    if active:
+        if predicate is None:
+            return None
+
+        obj = find_dependency(["dobj"], token=predicate)
+        if len(obj) == 0:
+            prep = find_dependency(["prep"], token=predicate)
+            if len(prep) > 0:
+                obj = find_dependency(["pobj"], token=prep[0])
+    else:
+        obj = find_dependency(["nsubjpass"], token=predicate)
+    if len(obj) > 0:
+        return obj[0]
+    return None
+
+
+def extract_elements_vh(sentence, process):
+    from project.AnalyzeSentence import is_active
+    sentence_is_active = is_active(sentence)
+    actor = determine_actor_vh(sentence)
+    from project.AnalyzeSentence import determine_actor
+    print("determine_actor_vh: actor:", actor)
+    # print(actor.__len__())
+    if actor:
+        actor = actor[actor.__len__() - 1]  # TODO:
+    print("actor:", actor)
+    # actor = determine_actor(actor, sentence_is_active)
+    process.actor = create_actor(actor)
+
+    from project.AnalyzeSentence import determine_predicate
+    verb = determine_predicate(sentence, sentence_is_active)
+    obj = determine_object_vh(verb, sentence_is_active)
+    process.action = create_action(verb, obj)
+
+    if process.action is not None:
+        process.action.active = sentence_is_active
+        for conjunct in process.action.token.conjuncts:
+            if conjunct == process.action.token:
+                continue
+            if sentence.start < conjunct.i < sentence.end:
+                conjunct_obj = determine_object_vh(conjunct, sentence_is_active)
+                conjunct_action = create_action(conjunct, conjunct_obj)
+                process.action.conjunction.append(conjunct_action)
 
 
 """
@@ -218,52 +279,6 @@ for const in sent._.constituents:
     elif token.dep_ in object_dependencies and sentence_is_active == True and "NP" in token.sent._.labels:
         return token.text
 """
-
-nlp = spacy.load('en_core_web_lg')
-nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
-
-
-@Language.component("custom_sentencizer")  # TODO: me
-def custom_sentencizer(doc):
-    """Custom sentencizer that sets 'LS' tokens as sentence starts."""
-    for token in doc:
-        # By default, don't set anything (i.e., keep existing sent starts)
-        # token.is_sent_start = False
-        if token.tag_ == "LS":
-            token.is_sent_start = True
-    return doc
-
-    # Register the custom sentencizer and add it to the pipeline before the parser
-
-
-nlp.add_pipe("custom_sentencizer", before="parser")  # TODO: me
-doc = nlp("""The organization shall determine:
-a) what needs to be monitored and measured, including information security processes and controls;
-b) the methods for monitoring, measurement, analysis and evaluation, as applicable, to ensure valid results. The methods selected should produce comparable and reproducible results to be considered valid;
-c) when the monitoring and measuring shall be performed;
-d) who shall monitor and measure;
-e) when the results from monitoring and measurement shall be analysed and evaluated; and
-f) who shall analyse and evaluate these results.
-Documented information shall be available as evidence of the results. The organization shall evaluate the information security performance and the effectiveness of the information security management system.""")
-doc = nlp("The dog was punished by the organization.")
-# determine_actor_vh(list(doc.sents)[0])
-# for sent in doc.sents:
-sent = list(doc.sents)[0]
-print(sent.text)
-constituents = list(doc.sents)[0]._.parse_string
-print(constituents)
-
-for const in sent._.constituents:
-    #print("const:", const)
-    if len(const._.labels) > -1:
-       print("const:", const, "*" * 20, "const._.labels", const._.labels)
-# print("sent._.constituents", list(sent._.constituents))
-print("sent._.labels", sent._.labels)
-print("determine_actor_vh: ", determine_actor_vh(sent).__str__())
-# determine_actor_vh(sent)
-
-
-# labels = sentence._.labels
 
 """sent = list(doc.sents)[0]
 constituents = list(sent._.constituents)

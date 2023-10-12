@@ -107,7 +107,7 @@ def get_valid_actors_vh(container_list: [], nlp) -> list:
     for container in container_list:
         for process in container.processes:
             if process.actor is not None:
-                process.actor.determinate_full_name1()
+                process.actor.determinate_full_name_vh()
                 if process.actor.is_real_actor:
                     temp_bool_add = True
                     for actor in result:
@@ -120,13 +120,13 @@ def get_valid_actors_vh(container_list: [], nlp) -> list:
     return result
 
 
-phrase1 = "sales person"
-phrase2 = "sales department"
+#phrase1 = "sales person"
+#phrase2 = "sales department"
 
-import spacy
-nlp_similarity = spacy.load("en_core_web_lg")
+#import spacy
+#nlp_similarity = spacy.load("en_core_web_lg")
 
 # Example usage:
 
-print(
-    f"phrase1: {phrase1}, phrase2: {phrase2}, compare_actors_with_similarity(phrase1, phrase2): {compare_actors_with_similarity(phrase1, phrase2, nlp_similarity)}")
+#print(
+   # f"phrase1: {phrase1}, phrase2: {phrase2}, compare_actors_with_similarity(phrase1, phrase2): {compare_actors_with_similarity(phrase1, phrase2, nlp_similarity)}")

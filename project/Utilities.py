@@ -36,7 +36,9 @@ def find_dependency(dependencies: [str], sentence: Span = None, token: Token = N
 
     elif sentence is not None:
         for token in sentence:
+            #print("token: " + token.text + " " + token.dep_)
             for child in token.children:
+                #print("\t child: " + child.text + " " + child.dep_)
                 if child.dep_ in dependencies:
                     result.append(child)
 

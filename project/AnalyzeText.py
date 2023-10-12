@@ -336,7 +336,6 @@ def construct_VH(container_list: [SentenceContainer]):
             result.append(and_block)
         else:
             result.append(container)
-
     return result
 
 
@@ -403,14 +402,12 @@ def build_flows(container_list: [SentenceContainer]):
     flow_list = construct_VH(container_list)
     result = []
     last_gateway = None
-
     for i in range(len(flow_list)):
         if isinstance(flow_list[i], ConditionBlock):
             last_gateway = flow_list[i]
             if not flow_list[i].is_complete():
                 flow_list[i].create_dummy_branch()
             result.append(flow_list[i])
-
         elif isinstance(flow_list[i], AndBlock):
             last_gateway = flow_list[i]
             result.append(flow_list[i])

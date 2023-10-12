@@ -21,9 +21,9 @@ def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str,
         theme: the theme of the BPMN model, default is BLUEMOUNTAIN
     """
     input_syntax = create_bpmn_description_VH(structure_list, actor_list, title, theme=theme)
-    filtered_string = input_syntax.replace("as applicable", "") #TODO: done by me
-    print(filtered_string)
-    render_bpmn_model(filtered_string, save_path)
+    input_syntax = input_syntax.replace("as applicable", "") #TODO: done by me
+    print(input_syntax)
+    render_bpmn_model(input_syntax, save_path)
 
 
 def render_bpmn_model(input_syntax: str, path: str):
@@ -59,7 +59,7 @@ def create_bpmn_description_VH(structure_list: [Structure], actor_list: list, ti
 
     lanes = {}
     connections = []
-    if len(actor_list) < 2:
+    if len(actor_list) < 1:
         lanes["dummy"] = []
     else:
         for actor in actor_list:
@@ -152,7 +152,6 @@ def create_bpmn_description_VH(structure_list: [Structure], actor_list: list, ti
             result += "lane: " + lane + "\n"
 
         for element in lanes[lane]:
-            print("BPMNCreator: " + element.__str__())
             result += "\t" + element + "\n"
 
     result += "\n"
@@ -308,7 +307,6 @@ def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, s
     if isinstance(structure, Activity):
         if structure.process.actor is not None:
             if structure.process.actor.full_name in lanes.keys():
-
                 lanes[key].append("[" + str(structure.process.action) + "] as activity_" + str(structure.id))
             else:
                 lanes[key].append(
@@ -356,7 +354,7 @@ def belongs_to_lane(activity_list: [Structure], lanes: {}, structure: Structure,
     Returns:
         the name of the lane, if the lane has length 1, then it returns "dummy"
     """
-    if len(lanes) == 1:
+    if len(lanes) < 1: #TODO: changed this from "if len(lanes) == 1":
         return "dummy"
 
     if previous_actor is None:

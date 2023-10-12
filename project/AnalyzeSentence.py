@@ -5,6 +5,7 @@ from project.Model.Resource import Resource
 from project.Model.SentenceContainer import SentenceContainer
 from project.Utilities import find_dependency
 from project.ModelBuilder import create_actor, create_action, correct_model
+from Playgrounds.Playground_Extraction import extract_elements_vh
 
 
 def sub_sentence_finder(sentence: Span) -> [Span]:
@@ -22,7 +23,7 @@ def sub_sentence_finder(sentence: Span) -> [Span]:
     sentence_list.sort()
     result = []
     symbols = ['.', ',', ';', ':', '!', '?', '(', ')', '[', ']', '{', '}', '"', "'", '``', "''", '“', '”', '‘', '’',
-               '—', 'a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h)', 'i)', 'j)', 'k)', 'l)', 'm)', 'n)', 'o)', 'p)']
+               '—']
 
     for i in range(len(sentence_list) - 1):
         left = sentence_list[i]
@@ -36,6 +37,8 @@ def sub_sentence_finder(sentence: Span) -> [Span]:
 
 
 def find_sub_sentence_start_end_index(sentence: Span, index_list: [int]):
+    # TODO:Lets have a look if this can help us with the regulatory ducuments
+
     """find the start and end index of the sub-sentences
 
        Args:
@@ -76,6 +79,54 @@ def add_index(index_list, index):
         return index_list
 
 
+def analyze_document_vh(doc: Doc) -> [SentenceContainer]:
+    container_list = []
+    for sentence in doc.sents:
+        container = SentenceContainer(sentence)
+        container_list.append(container)
+
+        process = Process(sentence)
+        extract_elements_vh(sentence, process)
+        container.add_process(process)
+
+    for sentence in container_list:
+        complement_actor(sentence)
+        complement_object(sentence)
+        correct_model(sentence)
+        complement_model(sentence)
+
+    return container_list
+
+
+def analyze_document_vh1(doc: Doc) -> [SentenceContainer]:
+    """Analyze the document and return a list of SentenceContainer which contains the extracted information stored in
+        the models.
+
+       Args:
+           nlp: The spacy language model
+           doc: The document that contains the sentence
+
+       Returns:
+           A list SentenceContainer
+    """
+    container_list = []
+    for sentence in doc.sents:
+        print("Spacy standard Splitting:" + sentence.text + "\n")
+        container = SentenceContainer(sentence)
+        container_list.append(container)
+
+        process = Process(sentence)
+        extract_elements_vh(sentence, process)
+        container.add_process(process)
+
+    for sentence in container_list:
+        complement_actor(sentence)
+        complement_object(sentence)
+        correct_model(sentence)
+        complement_model(sentence)
+    return container_list
+
+
 def analyze_document(doc: Doc) -> [SentenceContainer]:
     """Analyze the document and return a list of SentenceContainer which contains the extracted information stored in
         the models.
@@ -89,12 +140,13 @@ def analyze_document(doc: Doc) -> [SentenceContainer]:
     """
     container_list = []
     for sentence in doc.sents:
+        print("Spacy standard Splitting:" + sentence.text + "\n")
         container = SentenceContainer(sentence)
         container_list.append(container)
 
         sub_sentence_list = sub_sentence_finder(sentence)
         for sub_sentence in sub_sentence_list:
-            print("sub_sentence", sub_sentence)
+            print("\t sub_sentence", sub_sentence)
             process = Process(sub_sentence)
             extract_elements(sub_sentence, process)
             container.add_process(process)
@@ -160,7 +212,6 @@ def determine_actor(sentence: Span, active: bool) -> Optional[Token]:
         Returns:
             if the actor is identified, return it as a token, otherwise return None
     """
-
     if active:
         # find whether the sentence has "nsubj" dependency -> the subject of the sentence
         search = find_dependency(["nsubj"], sentence=sentence)
@@ -169,7 +220,6 @@ def determine_actor(sentence: Span, active: bool) -> Optional[Token]:
         # find whether the sentence has "agent" dependency -> the "by" in the sentence
         agent = find_dependency(["agent"], sentence=sentence)
         main_actor = next(agent[0].children) if len(agent) > 0 else None
-    #TODO: Why does he not use....
     return main_actor
 
 
@@ -228,7 +278,6 @@ def determine_object(predicate: Token, active: bool) -> Optional[Token]:
     return None
 
 
-
 def complement_model_VH(container: SentenceContainer):
     """
     add the conjunctions of the actions to the list of processes, conjunctions are originally detected but only store as
@@ -266,6 +315,7 @@ def complement_model_VH(container: SentenceContainer):
 
     # substitute the old processes with the new ones (because we performed the adding element in the loop)
     container.processes = new_processes
+
 
 def complement_model(container: SentenceContainer):
     """
