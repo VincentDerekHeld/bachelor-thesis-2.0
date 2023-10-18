@@ -1,0 +1,16 @@
+The data subject has the right to obtain from the controller confirmation on the processing of personal data concerning him or her.
+If personal data concerning the data subject are being processed, the data subject has the right to access the personal data.
+The data subject has the right to know the purposes of the processing.
+The data subject has the right to know the categories of personal data concerned.
+The data subject has the right to know the recipients or categories of recipient to whom the personal data have been or will be disclosed, especially recipients in third countries or international organisations.
+The data subject has the right to know the envisaged storage period for the personal data or the criteria used to determine that period.
+The data subject has the right to request from the controller rectification, erasure, or restriction of processing of personal data.
+The data subject has the right to object to such processing.
+The data subject has the right to lodge a complaint with a supervisory authority.
+If the personal data are not collected from the data subject, the data subject has the right to know the source.
+The data subject has the right to know about automated decision-making, including profiling, and meaningful information about the logic involved and the consequences of such processing.
+If personal data are transferred to a third country or international organisation, the data subject must be informed of the safeguards related to the transfer.
+The controller must provide a copy of the personal data undergoing processing.
+If the data subject requests further copies, the controller may charge a fee based on administrative costs.
+If the data subject makes a request electronically, the information must be provided in a commonly used electronic form unless specified otherwise by the data subject.
+The right to obtain a copy should not affect the rights and freedoms of others.

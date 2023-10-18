@@ -36,9 +36,9 @@ def find_dependency(dependencies: [str], sentence: Span = None, token: Token = N
 
     elif sentence is not None:
         for token in sentence:
-            #print("token: " + token.text + " " + token.dep_)
+            # print("token: " + token.text + " " + token.dep_)
             for child in token.children:
-                #print("\t child: " + child.text + " " + child.dep_)
+                # print("\t child: " + child.text + " " + child.dep_)
                 if child.dep_ in dependencies:
                     result.append(child)
 
@@ -153,7 +153,6 @@ def anaphora_resolver(obj):
         return
     resolved_words = resolve_reference(obj.token)
     obj.resolved_token.extend(resolved_words)
-
 
 
 def needs_resolve_reference(word: Token) -> bool:

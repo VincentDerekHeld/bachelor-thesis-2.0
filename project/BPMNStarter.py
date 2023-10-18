@@ -11,7 +11,7 @@ from Playgrounds.Playground_Introduction_sentence import remove_introduction_sen
 from project.AnalyzeSentence import analyze_document, analyze_document_vh, analyze_document_vh1
 from project.AnalyzeText import determine_marker, correct_order, build_flows, get_valid_actors, \
     remove_redundant_processes, determine_end_activities, adjust_actor_list
-from project.BPMNCreator import create_bpmn_model
+from project.BPMNCreator import create_bpmn_model, create_bpmn_model_vh
 from Playgrounds.Playground_Actors_Similarity import get_valid_actors_vh
 from project.Utilities import text_pre_processing
 
@@ -71,6 +71,7 @@ def start_task(input_path, title, output_path, debug=False):
     print("Document: " + document.text + "\n")
 
     containerList = analyze_document_vh1(document)
+    #containerList = analyze_document(document)
     for container in containerList:
         determine_marker(container, nlp)
     correct_order(containerList)
@@ -78,10 +79,12 @@ def start_task(input_path, title, output_path, debug=False):
 
     from Playgrounds.Playgorund_Coreference import get_valid_actors_vh1
     valid_actors = get_valid_actors_vh1(containerList, nlp_similarity)
+    #valid_actors = get_valid_actors(containerList)
     valid_actors = adjust_actor_list(valid_actors)
     flows = build_flows(containerList)
     for flow in flows:
         print(flow)
     print("Valid Actors: " + valid_actors.__str__() + "\n")
     determine_end_activities(flows)
-    create_bpmn_model(flows, valid_actors, title, output_path)
+    #create_bpmn_model(flows, valid_actors, title, output_path)
+    create_bpmn_model_vh(flows, valid_actors, title, output_path)

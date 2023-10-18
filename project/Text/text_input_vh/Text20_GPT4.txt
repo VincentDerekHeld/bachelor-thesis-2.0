@@ -1,0 +1,6 @@
+The customer interface (H1) on the meter must be activated or deactivated from the central system.
+It is deactivated by default.
+The control center receives an information status as ALARM or EVENT.
+The customer decides to use or not use the customer interface (H1).
+There is an entry in the logbook when the customer interface (H1) on the meter is activated or deactivated.
+The meter reports its status to the control panel as ALARM or EVENT.

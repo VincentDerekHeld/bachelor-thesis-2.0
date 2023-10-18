@@ -9,7 +9,7 @@ from Structure.Block import ConditionBlock, AndBlock, ConditionType
 from Structure.Structure import Structure
 
 
-def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str, save_path: str,
+def create_bpmn_model_vh(structure_list: [Structure], actor_list: list, title: str, save_path: str,
                       theme: str = "BLUEMOUNTAIN"):
     """
     Create a BPMN model from a list of structures and actors.
@@ -22,6 +22,23 @@ def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str,
     """
     input_syntax = create_bpmn_description_VH(structure_list, actor_list, title, theme=theme)
     input_syntax = input_syntax.replace("as applicable", "") #TODO: done by me
+    input_syntax = input_syntax.replace("[\" ", "[")  # TODO: done by me: Text
+
+    print(input_syntax)
+    render_bpmn_model(input_syntax, save_path)
+
+def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str, save_path: str,
+                      theme: str = "BLUEMOUNTAIN"):
+    """
+    Create a BPMN model from a list of structures and actors.
+    Args:
+        structure_list: the list of structures
+        actor_list: the list of valid actors
+        title: the title of the BPMN model
+        save_path: the path to save the BPMN model
+        theme: the theme of the BPMN model, default is BLUEMOUNTAIN
+    """
+    input_syntax = create_bpmn_description(structure_list, actor_list, title, theme=theme)
     print(input_syntax)
     render_bpmn_model(input_syntax, save_path)
 
@@ -59,7 +76,7 @@ def create_bpmn_description_VH(structure_list: [Structure], actor_list: list, ti
 
     lanes = {}
     connections = []
-    if len(actor_list) < 1:
+    if len(actor_list) < 2:
         lanes["dummy"] = []
     else:
         for actor in actor_list:
@@ -354,7 +371,7 @@ def belongs_to_lane(activity_list: [Structure], lanes: {}, structure: Structure,
     Returns:
         the name of the lane, if the lane has length 1, then it returns "dummy"
     """
-    if len(lanes) < 1: #TODO: changed this from "if len(lanes) == 1":
+    if len(lanes) < 2: #TODO: changed this from "if len(lanes) == 1":
         return "dummy"
 
     if previous_actor is None:
