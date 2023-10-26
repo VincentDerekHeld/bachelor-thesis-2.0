@@ -1,0 +1,2511 @@
+
+
+
+The Evanstonian is an upscale independent hotel. When a guest calls room service at The Evanstonian, the room-service manager takes down the order. She then submits an order ticket to the kitchen to begin preparing the food. She also gives an order to the sommelier (i.e., the wine waiter) to fetch wine from the cellar and to prepare any other alcoholic beverages. Eighty percent of room-service orders include wine or some other alcoholic beverage. Finally, she assigns the order to the waiter. While the kitchen and the sommelier are doing their tasks, the waiter readies a cart (i.e., puts a tablecloth on the cart and gathers silverware). The waiter is also responsible for nonalcoholic drinks. Once the food, wine, and cart are ready, the waiter delivers it to the guestís room. After returning to the room-service station, the waiter debits the guestís account. The waiter may wait to do the billing if he has another order to prepare or deliver.
+chat_response: 
+ 	When a guest calls room service at The Evanstonian, the room-service manager takes down the order.
+ 	The room-service manager submits an order ticket to the kitchen. The kitchen begins preparing the food.
+ 	The room-service manager gives an order to the sommelier to fetch wine from the cellar and to prepare any other alcoholic beverages. The room-service manager assigns the order to the waiter. The waiter readies a cart, puts a tablecloth on the cart and gathers silverware. The waiter is responsible for nonalcoholic drinks. When the food, wine, and cart are ready, the waiter delivers them to the guest's room. After delivering, the waiter debits the guest's account. If the waiter has another order to prepare or deliver, the waiter may wait to do the billing.
+
+Spacy standard Splitting:When a guest calls room service at the hotel, the room-service manager records the order.
+
+determine_actor_vh: actor: a guest
+actor: guest
+Spacy standard Splitting:The room-service manager then submits an order ticket to the kitchen, which begins preparing the food.
+
+determine_actor_vh: actor: The room-service manager
+actor: manager
+Spacy standard Splitting:The room-service manager also instructs the sommelier to fetch wine from the cellar and to prepare any other alcoholic beverages.
+
+determine_actor_vh: actor: The room-service manager
+actor: manager
+Spacy standard Splitting:Meanwhile, the room-service manager assigns the order to the waiter.
+
+determine_actor_vh: actor: the room-service manager
+actor: manager
+Spacy standard Splitting:The waiter prepares a cart by placing a tablecloth on it and gathering silverware, and is also responsible for nonalcoholic drinks.
+
+determine_actor_vh: actor: The waiter
+actor: waiter
+Spacy standard Splitting:Once the food and wine are ready, and the cart is prepared, the waiter delivers everything to the guest's room.
+
+determine_actor_vh: actor: the food and wine
+actor: wine
+Spacy standard Splitting:After returning to the room-service station, the waiter charges the guest's account.
+
+determine_actor_vh: actor: the waiter
+actor: waiter
+Spacy standard Splitting:If the waiter has another order to prepare or deliver, he may delay the billing.
+
+determine_actor_vh: actor: the waiter
+actor: waiter
+get_valid_actors_vh1
+Actor: guest 
+Actor: room service manager 
+room service manager                                        guest                                                       0.33                0.0       False     
+Actor: room service manager 
+room service manager                                        guest                                                       0.33                0.0       False     
+room service manager                                        room service manager                                        1.0                 1.0       True      
+Actor: room service manager 
+room service manager                                        guest                                                       0.33                0.0       False     
+room service manager                                        room service manager                                        1.0                 1.0       True      
+Actor: waiter 
+waiter                                                      guest                                                       0.31                0.0       False     
+waiter                                                      room service manager                                        0.28                0.0       False     
+Actor: wine 
+Actor: waiter 
+waiter                                                      guest                                                       0.31                0.0       False     
+waiter                                                      room service manager                                        0.28                0.0       False     
+waiter                                                      waiter                                                      1.0                 1.0       True      
+Actor: waiter 
+waiter                                                      guest                                                       0.31                0.0       False     
+waiter                                                      room service manager                                        0.28                0.0       False     
+waiter                                                      waiter                                                      1.0                 1.0       True      
+a guest calls room service at the hotel
+the room service manager submits an order ticket to the kitchen
+-----BEGIN_AND-----
+1:
+	the room service manager instructs the sommelier
+2:
+	the room service manager assigns the order to the waiter
+-----END_AND-----
+-----BEGIN_AND-----
+1:
+	the waiter prepares a cart
+-----END_AND-----
+wine prepare the cart
+the waiter charges the guest 's account
+-----BEGIN_IF-----
+if: the waiter has another order
+else:
+
+-----END_IF-----
+Valid Actors: ['guest ', 'room service manager ', 'waiter ']
+
+title: Text3own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: guest 
+	(start) as start
+	[calls room service at the hotel] as activity_8
+lane: room service manager 
+	[submits an order ticket to the kitchen] as activity_9
+	<@parallel> as gateway_1
+	[instructs the sommelier] as activity_2
+	[assigns the order to the waiter] as activity_3
+	<@parallel> as gateway_1_end
+	<@parallel> as gateway_4
+lane: waiter 
+	[prepares a cart] as activity_5
+	<@parallel> as gateway_4_end
+	[wine prepare the cart] as activity_10
+	[charges the guest 's account] as activity_11
+	<the waiter has another order?> as gateway_6
+	<> as gateway_6_end
+	(end) as end
+
+start->activity_8->activity_9->gateway_1
+gateway_1->activity_2->gateway_1_end
+gateway_1
+gateway_1_end->activity_3->gateway_1_end
+gateway_1_end->gateway_4
+gateway_4->activity_5->gateway_4_end
+gateway_4_end->activity_10->activity_11->gateway_6
+gateway_6-"yes"->gateway_6_end
+gateway_6-"no"->gateway_6_end
+gateway_6_end->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text3own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("guest") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_8 = lane1.add_element("calls room service at the hotel", ActivityType.TASK)
+  6     with my_process_map.add_lane("room service manager") as lane2:
+  7         activity_9 = lane2.add_element("submits an order ticket to the kitchen", ActivityType.TASK)
+  8         gateway_1 = lane2.add_element("", GatewayType.PARALLEL)
+  9         activity_2 = lane2.add_element("instructs the sommelier", ActivityType.TASK)
+ 10         activity_3 = lane2.add_element("assigns the order to the waiter", ActivityType.TASK)
+ 11         gateway_1_end = lane2.add_element("", GatewayType.PARALLEL)
+ 12         gateway_4 = lane2.add_element("", GatewayType.PARALLEL)
+ 13     with my_process_map.add_lane("waiter") as lane3:
+ 14         activity_5 = lane3.add_element("prepares a cart", ActivityType.TASK)
+ 15         gateway_4_end = lane3.add_element("", GatewayType.PARALLEL)
+ 16         activity_10 = lane3.add_element("wine prepare the cart", ActivityType.TASK)
+ 17         activity_11 = lane3.add_element("charges the guest 's account", ActivityType.TASK)
+ 18         gateway_6 = lane3.add_element("the waiter has another order?", GatewayType.EXCLUSIVE)
+ 19         gateway_6_end = lane3.add_element("", GatewayType.EXCLUSIVE)
+ 20         end = lane3.add_element("end", EventType.END)
+ 21         start.connect(activity_8)
+ 22         activity_8.connect(activity_9)
+ 23         activity_9.connect(gateway_1)
+ 24         gateway_1.connect(activity_2)
+ 25         activity_2.connect(gateway_1_end)
+ 26         gateway_1_end.connect(activity_3)
+ 27         activity_3.connect(gateway_1_end)
+ 28         gateway_1_end.connect(gateway_4)
+ 29         gateway_4.connect(activity_5)
+ 30         activity_5.connect(gateway_4_end)
+ 31         gateway_4_end.connect(activity_10)
+ 32         activity_10.connect(activity_11)
+ 33         activity_11.connect(gateway_6)
+ 34         gateway_6.connect(gateway_6_end, "yes")
+ 35         gateway_6.connect(gateway_6_end, "no")
+ 36         gateway_6_end.connect(end)
+ 37     my_process_map.draw()
+ 38     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text3_GPT4.png")
+2023-10-20 13:43:54 [INFO] : Took [216.76ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text3_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+Whenever a company makes the decision to go public, its first task is to select the underwriters. Underwriters act as financial midwives to a new issue. Usually they play a triple role: First they provide the company with procedural and financial advice, then they buy the issue, and finally they resell it to the public.   Established underwriters are careful of their reputation and will not handle a new issue unless they believe the facts have been presented fairly. Thus, in addition to handling the sale of a companyís issue, the underwriters in effect give their seal of approval to it.  They prepare a registration statement for the approval of the Securities and Exchange Commission (SEC). In addition to registering the issue with the SEC, they need to check that the issue complies with the so-called blue-sky laws of each state that regulate sales of securities within the state. While the registration statement is awaiting approval, underwriters begin to firm up the issue price. They arrange a road show to talk to potential investors. Immediately after they receive clearance from the SEC, underwriters fix the issue price. After that they enter into a firm commitment to buy the stock and then offer it to the public, when they haven’t still found any reason not to do it. 
+chat_response: 
+ 	 The company selects the underwriters. Underwriters provide the company with procedural and financial advice. They buy the new issue and then they resell it to the public. Established underwriters will not handle a new issue unless they believe the facts have been presented fairly. They prepare a registration statement for the approval of the Securities and Exchange Commission (SEC). The underwriters also check that the issue complies with the blue-sky laws of each state that regulate sales of securities within the state. While waiting for approval of the registration statement, underwriters begin to firm up the issue price. They arrange a road show to talk to potential investors. If the SEC approves the registration statement, underwriters fix the issue price. After fixing the price, underwriters enter into a firm commitment to buy the stock and offer it to the public.
+Document: The company selects the underwriters. Underwriters provide the company with procedural and financial advice. They buy the new issue and then they resell it to the public. Established underwriters will not handle a new issue unless they believe the facts have been presented fairly. They prepare a registration statement for the approval of the Securities and Exchange Commission . The underwriters also check that the issue complies with the blue-sky laws of each state that regulate sales of securities within the state. While waiting for approval of the registration statement, underwriters begin to firm up the issue price. They arrange a road show to talk to potential investors. If the SEC approves the registration statement, underwriters fix the issue price. After fixing the price, underwriters enter into a firm commitment to buy the stock and offer it to the public.
+
+Spacy standard Splitting:The company selects the underwriters.
+
+determine_actor_vh: actor: The company
+actor: company
+Spacy standard Splitting:Underwriters provide the company with procedural and financial advice.
+
+determine_actor_vh: actor: Underwriters
+actor: Underwriters
+Spacy standard Splitting:They buy the new issue and then they resell it to the public.
+
+determine_actor_vh: actor: They
+actor: They
+Spacy standard Splitting:Established underwriters will not handle a new issue unless they believe the facts have been presented fairly.
+
+determine_actor_vh: actor: Established underwriters
+actor: underwriters
+Spacy standard Splitting:They prepare a registration statement for the approval of the Securities and Exchange Commission .
+
+determine_actor_vh: actor: They
+actor: They
+Spacy standard Splitting:The underwriters also check that the issue complies with the blue-sky laws of each state that regulate sales of securities within the state.
+
+determine_actor_vh: actor: The underwriters
+actor: underwriters
+Spacy standard Splitting:While waiting for approval of the registration statement, underwriters begin to firm up the issue price.
+
+determine_actor_vh: actor: underwriters
+actor: underwriters
+Spacy standard Splitting:They arrange a road show to talk to potential investors.
+
+determine_actor_vh: actor: They
+actor: They
+Spacy standard Splitting:If the SEC approves the registration statement, underwriters fix the issue price.
+
+determine_actor_vh: actor: the SEC
+actor: SEC
+Spacy standard Splitting:After fixing the price, underwriters enter into a firm commitment to buy the stock and offer it to the public.
+
+determine_actor_vh: actor: underwriters
+actor: underwriters
+get_valid_actors_vh1
+Actor: company 
+Actor: Underwriters 
+Underwriters                                                company                                                     0.5                 0.0       False     
+Actor: They 
+Actor: They 
+Actor: Established underwriters 
+Established underwriters                                    company                                                     0.59                0.0       False     
+Established underwriters                                    Underwriters                                                0.78                0.6666666666666666True      
+Actor: They 
+Actor: underwriters 
+underwriters                                                company                                                     0.61                0.0       False     
+underwriters                                                Underwriters                                                0.87                1.0       True      
+Actor: underwriters 
+underwriters                                                company                                                     0.61                0.0       False     
+underwriters                                                Underwriters                                                0.87                1.0       True      
+Actor: They 
+Actor: SEC 
+Actor: underwriters 
+underwriters                                                company                                                     0.61                0.0       False     
+underwriters                                                Underwriters                                                0.87                1.0       True      
+the company selects the underwriters
+underwriters provide the company
+-----BEGIN_AND-----
+1:
+	Underwriters buy the new issue
+	Underwriters resell issue to the public
+-----END_AND-----
+established underwriters present the facts
+Underwriters prepare a registration statement for the approval of the securities and exchange commission
+the underwriters check
+underwriters begin
+underwriters arrange a road show
+-----BEGIN_IF-----
+if: the sec approves the registration statement
+else:
+
+-----END_IF-----
+underwriters enter into a firm commitment
+Valid Actors: ['company ', 'Underwriters ']
+
+title: Text4own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: company 
+	(start) as start
+	[selects the underwriters] as activity_17
+lane: Underwriters 
+	[provide the company] as activity_18
+	<@parallel> as gateway_12
+	[Underwriters buy the new issue] as activity_13
+	[Underwriters resell issue to the public] as activity_14
+	<@parallel> as gateway_12_end
+	[present the facts] as activity_19
+	[Underwriters prepare a registration statement for the approval of the securities and exchange commission] as activity_20
+	[check] as activity_21
+	[begin] as activity_22
+	[underwriters arrange a road show] as activity_23
+	<the sec approves the registration statement?> as gateway_15
+	<> as gateway_15_end
+	[enter into a firm commitment] as activity_24
+	(end) as end
+
+start->activity_17->activity_18->gateway_12
+gateway_12->activity_13->gateway_12_end
+gateway_12->activity_14->gateway_12_end
+gateway_12_end->activity_19->activity_20->activity_21->activity_22->activity_23->gateway_15
+gateway_15-"yes"->gateway_15_end
+gateway_15-"no"->gateway_15_end
+gateway_15_end->activity_24->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text4own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("company") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_17 = lane1.add_element("selects the underwriters", ActivityType.TASK)
+  6     with my_process_map.add_lane("Underwriters") as lane2:
+  7         activity_18 = lane2.add_element("provide the company", ActivityType.TASK)
+  8         gateway_12 = lane2.add_element("", GatewayType.PARALLEL)
+  9         activity_13 = lane2.add_element("Underwriters buy the new issue", ActivityType.TASK)
+ 10         activity_14 = lane2.add_element("Underwriters resell issue to the public", ActivityType.TASK)
+ 11         gateway_12_end = lane2.add_element("", GatewayType.PARALLEL)
+ 12         activity_19 = lane2.add_element("present the facts", ActivityType.TASK)
+ 13         activity_20 = lane2.add_element("Underwriters prepare a registration statement for the approval of the securities and exchange commission", ActivityType.TASK)
+ 14         activity_21 = lane2.add_element("check", ActivityType.TASK)
+ 15         activity_22 = lane2.add_element("begin", ActivityType.TASK)
+ 16         activity_23 = lane2.add_element("underwriters arrange a road show", ActivityType.TASK)
+ 17         gateway_15 = lane2.add_element("the sec approves the registration statement?", GatewayType.EXCLUSIVE)
+ 18         gateway_15_end = lane2.add_element("", GatewayType.EXCLUSIVE)
+ 19         activity_24 = lane2.add_element("enter into a firm commitment", ActivityType.TASK)
+ 20         end = lane2.add_element("end", EventType.END)
+ 21         start.connect(activity_17)
+ 22         activity_17.connect(activity_18)
+ 23         activity_18.connect(gateway_12)
+ 24         gateway_12.connect(activity_13)
+ 25         activity_13.connect(gateway_12_end)
+ 26         gateway_12.connect(activity_14)
+ 27         activity_14.connect(gateway_12_end)
+ 28         gateway_12_end.connect(activity_19)
+ 29         activity_19.connect(activity_20)
+ 30         activity_20.connect(activity_21)
+ 31         activity_21.connect(activity_22)
+ 32         activity_22.connect(activity_23)
+ 33         activity_23.connect(gateway_15)
+ 34         gateway_15.connect(gateway_15_end, "yes")
+ 35         gateway_15.connect(gateway_15_end, "no")
+ 36         gateway_15_end.connect(activity_24)
+ 37         activity_24.connect(end)
+ 38     my_process_map.draw()
+ 39     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text4_GPT4.png")
+2023-10-20 13:44:18 [INFO] : Took [266.76ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text4_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The organization shall determine: a) what needs to be monitored and measured, including information security processes and controls; b) the methods for monitoring, measurement, analysis and evaluation, as applicable, to ensure valid results. The methods selected should produce comparable and reproducible results to be considered valid; c) when the monitoring and measuring shall be performed; d) who shall monitor and measure; e) when the results from monitoring and measurement shall be analysed and evaluated; and f) who shall analyse and evaluate these results.  Documented information shall be available as evidence of the results. The organization shall evaluate the information security performance and the effectiveness of the information security management system. 
+chat_response: 
+ 	 The organization determines what needs to be monitored and measured, including information security processes and controls. The organization also determines the methods for monitoring, measurement, analysis, and evaluation to ensure valid results. The organization establishes when the monitoring and measuring will be performed, who will monitor and measure, when the results from monitoring and measurement will be analyzed and evaluated, and who will analyze and evaluate these results. The organization documents information as evidence of the results. The organization evaluates the information security performance and the effectiveness of the information security management system.
+Document: The organization determines what needs to be monitored and measured. The organization also determines the methods for monitoring, measurement, analysis, and evaluation to ensure valid results. The organization establishes when the monitoring and measuring will be performed, who will monitor and measure, when the results from monitoring and measurement will be analyzed and evaluated, and who will analyze and evaluate these results. The organization documents information as evidence of the results. The organization evaluates the information security performance and the effectiveness of the information security management system.
+
+Spacy standard Splitting:The organization determines what needs to be monitored and measured.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization also determines the methods for monitoring, measurement, analysis, and evaluation to ensure valid results.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization establishes when the monitoring and measuring will be performed, who will monitor and measure, when the results from monitoring and measurement will be analyzed and evaluated, and who will analyze and evaluate these results.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization documents information as evidence of the results.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization evaluates the information security performance and the effectiveness of the information security management system.
+
+determine_actor_vh: actor: The organization
+actor: organization
+get_valid_actors_vh1
+Actor: organization 
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+the organization determines the methods for monitoring measurement analysis and evaluation to ensure valid results
+the organization perform the monitoring and measuring
+the organization monitor the monitoring and measuring
+the organization measure the monitoring and measuring
+the organization analyze the results from monitoring and measurement
+the organization evaluate the monitoring and measuring
+the organization analyze the monitoring and measuring
+the organization evaluate the monitoring and measuring
+the organization documents information
+the organization evaluates the information security performance and the effectiveness of the information security management system
+Valid Actors: ['organization ']
+
+title: Text5own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: organization 
+	(start) as start
+	[the organization determines the methods for monitoring measurement analysis and evaluation to ensure valid results] as activity_25
+	[the organization perform the monitoring and measuring] as activity_26
+	[the organization monitor the monitoring and measuring] as activity_27
+	[the organization measure the monitoring and measuring] as activity_28
+	[the organization analyze the results from monitoring and measurement] as activity_29
+	[the organization evaluate the monitoring and measuring] as activity_30
+	[the organization analyze the monitoring and measuring] as activity_31
+	[the organization evaluate the monitoring and measuring] as activity_32
+	[the organization documents information] as activity_33
+	[the organization evaluates the information security performance and the effectiveness of the information security management system] as activity_34
+	(end) as end
+
+start->activity_25->activity_26->activity_27->activity_28->activity_29->activity_30->activity_31->activity_32->activity_33->activity_34->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text5own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("organization") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_25 = lane1.add_element("the organization determines the methods for monitoring measurement analysis and evaluation to ensure valid results", ActivityType.TASK)
+  6         activity_26 = lane1.add_element("the organization perform the monitoring and measuring", ActivityType.TASK)
+  7         activity_27 = lane1.add_element("the organization monitor the monitoring and measuring", ActivityType.TASK)
+  8         activity_28 = lane1.add_element("the organization measure the monitoring and measuring", ActivityType.TASK)
+  9         activity_29 = lane1.add_element("the organization analyze the results from monitoring and measurement", ActivityType.TASK)
+ 10         activity_30 = lane1.add_element("the organization evaluate the monitoring and measuring", ActivityType.TASK)
+ 11         activity_31 = lane1.add_element("the organization analyze the monitoring and measuring", ActivityType.TASK)
+ 12         activity_32 = lane1.add_element("the organization evaluate the monitoring and measuring", ActivityType.TASK)
+ 13         activity_33 = lane1.add_element("the organization documents information", ActivityType.TASK)
+ 14         activity_34 = lane1.add_element("the organization evaluates the information security performance and the effectiveness of the information security management system", ActivityType.TASK)
+ 15         end = lane1.add_element("end", EventType.END)
+ 16         start.connect(activity_25)
+ 17         activity_25.connect(activity_26)
+ 18         activity_26.connect(activity_27)
+ 19         activity_27.connect(activity_28)
+ 20         activity_28.connect(activity_29)
+ 21         activity_29.connect(activity_30)
+ 22         activity_30.connect(activity_31)
+ 23         activity_31.connect(activity_32)
+ 24         activity_32.connect(activity_33)
+ 25         activity_33.connect(activity_34)
+ 26         activity_34.connect(end)
+ 27     my_process_map.draw()
+ 28     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text5_GPT4.png")
+2023-10-20 13:44:37 [INFO] : Took [217.18ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text5_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The organization shall plan, establish, implement and maintain an audit programme(s), including the frequency, methods, responsibilities, planning requirements and reporting.   When establishing the internal audit programme(s), the organization shall consider the importance of the processes concerned and the results of previous audits.   The organization shall:  a) define the audit criteria and scope for each audit; b) select auditors and conduct audits that ensure objectivity and the impartiality of the audit process; c) ensure that the results of the audits are reported to relevant management;   Documented information shall be available as evidence of the implementation of the audit programme(s) and the audit results. 
+chat_response: 
+ 	 The organization plans, establishes, implements and maintains an audit programme. The organization considers the importance of the processes concerned and the results of previous audits while establishing the audit programme. The organization defines the audit criteria and scope for each audit. The organization selects auditors and conducts audits that ensure objectivity and impartiality of the audit process. The organization ensures that the results of the audits are reported to relevant management. The organization provides documented information as evidence of the implementation of the audit programme and the audit results.
+Document: The organization plans, establishes, implements and maintains an audit programme. The organization considers the importance of the processes concerned and the results of previous audits while establishing the audit programme. The organization defines the audit criteria and scope for each audit. The organization selects auditors and conducts audits that ensure objectivity and impartiality of the audit process. The organization ensures that the results of the audits are reported to relevant management. The organization provides documented information as evidence of the implementation of the audit programme and the audit results.
+
+Spacy standard Splitting:The organization plans, establishes, implements and maintains an audit programme.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization considers the importance of the processes concerned and the results of previous audits while establishing the audit programme.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization defines the audit criteria and scope for each audit.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization selects auditors and conducts audits that ensure objectivity and impartiality of the audit process.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization ensures that the results of the audits are reported to relevant management.
+
+determine_actor_vh: actor: The organization
+actor: organization
+Spacy standard Splitting:The organization provides documented information as evidence of the implementation of the audit programme and the audit results.
+
+determine_actor_vh: actor: The organization
+actor: organization
+get_valid_actors_vh1
+Actor: organization 
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+Actor: organization 
+organization                                                organization                                                1.0                 1.0       True      
+the organization plans an audit programme
+the organization establish
+the organization implement
+the organization maintain an audit programme
+the organization considers the importance of the processes and the results of previous audits
+the organization defines the audit criteria and scope for each audit
+-----BEGIN_AND-----
+1:
+	the organization selects auditors
+	the organization conduct audits
+-----END_AND-----
+the organization report the results of the audits to relevant management
+the organization provides documented information
+Valid Actors: ['organization ']
+
+title: Text6own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: organization 
+	(start) as start
+	[the organization plans an audit programme] as activity_38
+	[the organization establish] as activity_39
+	[the organization implement] as activity_40
+	[the organization maintain an audit programme] as activity_41
+	[the organization considers the importance of the processes and the results of previous audits] as activity_42
+	[the organization defines the audit criteria and scope for each audit] as activity_43
+	<@parallel> as gateway_35
+	[the organization selects auditors] as activity_36
+	[the organization conduct audits] as activity_37
+	<@parallel> as gateway_35_end
+	[the organization report the results of the audits to relevant management] as activity_44
+	[the organization provides documented information] as activity_45
+	(end) as end
+
+start->activity_38->activity_39->activity_40->activity_41->activity_42->activity_43->gateway_35
+gateway_35->activity_36->gateway_35_end
+gateway_35->activity_37->gateway_35_end
+gateway_35_end->activity_44->activity_45->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text6own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("organization") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_38 = lane1.add_element("the organization plans an audit programme", ActivityType.TASK)
+  6         activity_39 = lane1.add_element("the organization establish", ActivityType.TASK)
+  7         activity_40 = lane1.add_element("the organization implement", ActivityType.TASK)
+  8         activity_41 = lane1.add_element("the organization maintain an audit programme", ActivityType.TASK)
+  9         activity_42 = lane1.add_element("the organization considers the importance of the processes and the results of previous audits", ActivityType.TASK)
+ 10         activity_43 = lane1.add_element("the organization defines the audit criteria and scope for each audit", ActivityType.TASK)
+ 11         gateway_35 = lane1.add_element("", GatewayType.PARALLEL)
+ 12         activity_36 = lane1.add_element("the organization selects auditors", ActivityType.TASK)
+ 13         activity_37 = lane1.add_element("the organization conduct audits", ActivityType.TASK)
+ 14         gateway_35_end = lane1.add_element("", GatewayType.PARALLEL)
+ 15         activity_44 = lane1.add_element("the organization report the results of the audits to relevant management", ActivityType.TASK)
+ 16         activity_45 = lane1.add_element("the organization provides documented information", ActivityType.TASK)
+ 17         end = lane1.add_element("end", EventType.END)
+ 18         start.connect(activity_38)
+ 19         activity_38.connect(activity_39)
+ 20         activity_39.connect(activity_40)
+ 21         activity_40.connect(activity_41)
+ 22         activity_41.connect(activity_42)
+ 23         activity_42.connect(activity_43)
+ 24         activity_43.connect(gateway_35)
+ 25         gateway_35.connect(activity_36)
+ 26         activity_36.connect(gateway_35_end)
+ 27         gateway_35.connect(activity_37)
+ 28         activity_37.connect(gateway_35_end)
+ 29         gateway_35_end.connect(activity_44)
+ 30         activity_44.connect(activity_45)
+ 31         activity_45.connect(end)
+ 32     my_process_map.draw()
+ 33     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text6_GPT4.png")
+2023-10-20 13:44:55 [INFO] : Took [289.07ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text6_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+Top management shall review the organization's information security management system at planned intervals to ensure its continuing suitability, adequacy and effectiveness.  The management review shall include consideration of: a) the status of actions from previous management reviews; b) changes in external and internal issues that are relevant to the information security management system; c) changes in needs and expectations of interested parties that are relevant to the information security management system; d) feedback on the information security performance, including trends in: 1) nonconformities and corrective actions; 2) monitoring and measurement results; 3) audit results;  4) fulfilment of information security objectives; e) feedback from interested parties; f) results of risk assessment and status of risk treatment plan;  g) opportunities for continual improvement.  The results of the management review shall include decisions related to continual improvement opportunities and any needs for changes to the information security management system.  Documented information shall be available as evidence of the results of management reviews. 
+chat_response: 
+ 	 Top management reviews the organization's information security management system at planned intervals. This review includes consideration of various factors such as the status of actions from previous management reviews, changes in external and internal issues, changes in needs and expectations of interested parties, feedback on the information security performance, feedback from interested parties, results of risk assessment and status of risk treatment plan, and opportunities for continual improvement. The results of the management review include decisions related to continual improvement opportunities and any needs for changes to the information security management system. Top management must document the results of management reviews.
+Document: Top management reviews the organization's information security management system at planned intervals. This review includes consideration of various factors such as the status of actions from previous management reviews, changes in external and internal issues, changes in needs and expectations of interested parties, feedback on the information security performance, feedback from interested parties, results of risk assessment and status of risk treatment plan, and opportunities for continual improvement. The results of the management review include decisions related to continual improvement opportunities and any needs for changes to the information security management system. Top management must document the results of management reviews.
+
+Spacy standard Splitting:Top management reviews the organization's information security management system at planned intervals.
+
+determine_actor_vh: actor: Top management
+actor: management
+Spacy standard Splitting:This review includes consideration of various factors such as the status of actions from previous management reviews, changes in external and internal issues, changes in needs and expectations of interested parties, feedback on the information security performance, feedback from interested parties, results of risk assessment and status of risk treatment plan, and opportunities for continual improvement.
+
+determine_actor_vh: actor: This review
+actor: review
+Spacy standard Splitting:The results of the management review include decisions related to continual improvement opportunities and any needs for changes to the information security management system.
+
+determine_actor_vh: actor: The results of the management review
+actor: review
+Spacy standard Splitting:Top management must document the results of management reviews.
+
+determine_actor_vh: actor: Top management
+actor: management
+get_valid_actors_vh1
+Actor: Top management 
+Actor: Top management 
+top management reviews the organization 's information security management system
+top management document the results of management reviews
+Valid Actors: []
+
+title: Text7own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[top management reviews the organization 's information security management system] as activity_46
+	[top management document the results of management reviews] as activity_47
+	(end) as end
+
+start->activity_46->activity_47->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text7own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_46 = lane1.add_element("top management reviews the organization 's information security management system", ActivityType.TASK)
+  6         activity_47 = lane1.add_element("top management document the results of management reviews", ActivityType.TASK)
+  7         end = lane1.add_element("end", EventType.END)
+  8         start.connect(activity_46)
+  9         activity_46.connect(activity_47)
+ 10         activity_47.connect(end)
+ 11     my_process_map.draw()
+ 12     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text7_GPT4.png")
+2023-10-20 13:45:15 [INFO] : Took [115.50ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text7_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+In the case of a personal data breach, the controller shall without undue delay and, where feasible, not later than 72 hours after having become aware of it, notify the personal data breach to the supervisory authority competent in accordance with Article 55, unless the personal data breach is unlikely to result in a risk to the rights and freedoms of natural persons. Where the notification to the supervisory authority is not made within 72 hours, it shall be accompanied by reasons for the delay.  The processor shall notify the controller without undue delay after becoming aware of a personal data breach.  The notification referred to in paragraph 1 shall at least describe the nature of the personal data breach including where possible, the categories and approximate number of data subjects concerned and the categories and approximate number of personal data records concerned.  The notification referred to in paragraph 1 shall at least communicate the name and contact details of the data protection officer or other contact point where more information can be obtained.  The notification referred to in paragraph 1 shall at least describe the likely consequences of the personal data breach.  The notification referred to in paragraph 1 shall at least describe the measures taken or proposed to be taken by the controller to address the personal data breach, including, where appropriate, measures to mitigate its possible adverse effects.  Where, and in so far as, it is not possible to provide the information at the same time, the information may be provided in phases without undue further delay.  The controller shall document any personal data breaches, comprising the facts relating to the personal data breach, its effects and the remedial action taken. That documentation shall enable the supervisory authority to verify compliance with this Article. 
+chat_response: 
+ 	 If the controller becomes aware of a personal data breach, the controller shall notify the supervisory authority within 72 hours, else the controller shall provide reasons for the delay. The processor must notify the controller immediately after becoming aware of a personal data breach. The controller's notification must describe the nature of the personal data breach including the categories and approximate number of data subjects concerned and the categories and approximate number of personal data records concerned. The controller communicates the name and contact details of the data protection officer or other contact point as part of the notification. The controller should also describe the likely consequences of the personal data breach and the measures taken or proposed to address the personal data breach in the notification. Information can be provided in phases if it is not possible to provide everything at once. The controller must document the personal data breaches, the facts, effects, and remedial action taken. The documentation must enable the supervisory authority to verify compliance.
+Document: If the controller becomes aware of a personal data breach, the controller shall notify the supervisory authority within 72 hours, else the controller shall provide reasons for the delay. The processor must notify the controller immediately after becoming aware of a personal data breach. The controller's notification must describe the nature of the personal data breach including the categories and approximate number of data subjects concerned and the categories and approximate number of personal data records concerned. The controller communicates the name and contact details of the data protection officer or other contact point as part of the notification. The controller should also describe the likely consequences of the personal data breach and the measures taken or proposed to address the personal data breach in the notification. Information can be provided in phases if it is not possible to provide everything at once. The controller must document the personal data breaches, the facts, effects, and remedial action taken. The documentation must enable the supervisory authority to verify compliance.
+
+Spacy standard Splitting:If the controller becomes aware of a personal data breach, the controller shall notify the supervisory authority within 72 hours, else the controller shall provide reasons for the delay.
+
+determine_actor_vh: actor: the controller
+actor: controller
+Spacy standard Splitting:The processor must notify the controller immediately after becoming aware of a personal data breach.
+
+determine_actor_vh: actor: The processor
+actor: processor
+Spacy standard Splitting:The controller's notification must describe the nature of the personal data breach including the categories and approximate number of data subjects concerned and the categories and approximate number of personal data records concerned.
+
+determine_actor_vh: actor: The controller's notification
+actor: notification
+Spacy standard Splitting:The controller communicates the name and contact details of the data protection officer or other contact point as part of the notification.
+
+determine_actor_vh: actor: The controller
+actor: controller
+Spacy standard Splitting:The controller should also describe the likely consequences of the personal data breach and the measures taken or proposed to address the personal data breach in the notification.
+
+determine_actor_vh: actor: The controller
+actor: controller
+Spacy standard Splitting:Information can be provided in phases if it is not possible to provide everything at once.
+
+determine_actor_vh: actor: Information
+actor: Information
+Spacy standard Splitting:The controller must document the personal data breaches, the facts, effects, and remedial action taken.
+
+determine_actor_vh: actor: The controller
+actor: controller
+Spacy standard Splitting:The documentation must enable the supervisory authority to verify compliance.
+
+determine_actor_vh: actor: The documentation
+actor: documentation
+get_valid_actors_vh1
+Actor: controller 
+Actor: processor 
+processor                                                   controller                                                  0.69                0.0       False     
+Actor: notification 
+Actor: controller 
+controller                                                  controller                                                  1.0                 1.0       True      
+Actor: controller 
+controller                                                  controller                                                  1.0                 1.0       True      
+Actor: Information 
+Actor: controller 
+controller                                                  controller                                                  1.0                 1.0       True      
+Actor: documentation 
+-----BEGIN_IF-----
+if: the controller becomes aware
+else:
+
+-----END_IF-----
+the processor notify the controller
+the controller 's notification describe the nature of the personal data breach including the categories and approximate number of data subjects and the categories and approximate number of personal data records
+the controller communicates the name and contact details of the data protection officer or other contact point
+the controller describe the likely consequences of the personal data breach and the measures in the notification
+information provide information
+the controller document the personal data breaches the facts effects and remedial action
+the documentation enable the supervisory authority
+Valid Actors: ['controller ', 'processor ']
+
+title: Text8own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: controller 
+	<the controller becomes aware?> as gateway_48
+	<> as gateway_48_end
+	[communicates the name and contact details of the data protection officer or other contact point] as activity_52
+	[describe the likely consequences of the personal data breach and the measures in the notification] as activity_53
+	[information provide information] as activity_54
+	[document the personal data breaches the facts effects and remedial action] as activity_55
+	[the documentation enable the supervisory authority] as activity_56
+	(end) as end
+lane: processor 
+	(start) as start
+	[notify the controller] as activity_50
+	[the controller 's notification describe the nature of the personal data breach including the categories and approximate number of data subjects and the categories and approximate number of personal data records] as activity_51
+
+start->gateway_48
+gateway_48-"yes"->gateway_48_end
+gateway_48-"no"->gateway_48_end
+gateway_48_end->activity_50->activity_51->activity_52->activity_53->activity_54->activity_55->activity_56->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text8own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("controller") as lane1:
+  4         gateway_48 = lane1.add_element("the controller becomes aware?", GatewayType.EXCLUSIVE)
+  5         gateway_48_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+  6         activity_52 = lane1.add_element("communicates the name and contact details of the data protection officer or other contact point", ActivityType.TASK)
+  7         activity_53 = lane1.add_element("describe the likely consequences of the personal data breach and the measures in the notification", ActivityType.TASK)
+  8         activity_54 = lane1.add_element("information provide information", ActivityType.TASK)
+  9         activity_55 = lane1.add_element("document the personal data breaches the facts effects and remedial action", ActivityType.TASK)
+ 10         activity_56 = lane1.add_element("the documentation enable the supervisory authority", ActivityType.TASK)
+ 11         end = lane1.add_element("end", EventType.END)
+ 12     with my_process_map.add_lane("processor") as lane2:
+ 13         start = lane2.add_element("start", EventType.START)
+ 14         activity_50 = lane2.add_element("notify the controller", ActivityType.TASK)
+ 15         activity_51 = lane2.add_element("the controller 's notification describe the nature of the personal data breach including the categories and approximate number of data subjects and the categories and approximate number of personal data records", ActivityType.TASK)
+ 16         start.connect(gateway_48)
+ 17         gateway_48.connect(gateway_48_end, "yes")
+ 18         gateway_48.connect(gateway_48_end, "no")
+ 19         gateway_48_end.connect(activity_50)
+ 20         activity_50.connect(activity_51)
+ 21         activity_51.connect(activity_52)
+ 22         activity_52.connect(activity_53)
+ 23         activity_53.connect(activity_54)
+ 24         activity_54.connect(activity_55)
+ 25         activity_55.connect(activity_56)
+ 26         activity_56.connect(end)
+ 27     my_process_map.draw()
+ 28     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text8_GPT4.png")
+2023-10-20 13:45:44 [INFO] : Took [371.89ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text8_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+Processing shall be lawful only if and to the extent that the data subject has given consent to the processing of his or her personal data for one or more specific purposes.  Processing shall be lawful only if and to the extent that processing is necessary for the performance of a contract to which the data subject is party or in order to take steps at the request of the data subject prior to entering into a contract;  Processing shall be lawful only if and to the extent that processing is necessary for compliance with a legal obligation to which the controller is subject;  Processing shall be lawful only if and to the extent that processing is necessary in order to protect the vital interests of the data subject or of another natural person;  Processing shall be lawful only if and to the extent that processing is necessary for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller;   Processing shall be lawful only if and to the extent that processing is necessary for the purposes of the legitimate interests pursued by the controller or by a third party, except where such interests are overridden by the interests or fundamental rights and freedoms of the data subject which require protection of personal data, in particular where the data subject is a child.  Point (f) of the first subparagraph shall not apply to processing carried out by public authorities in the performance of their tasks.  Member States may maintain or introduce more specific provisions to adapt the application of the rules of this Regulation with regard to processing for compliance with points (c) and (e) of paragraph 1 by determining more precisely specific requirements for the processing and other measures to ensure lawful and fair processing including for other specific processing situations as provided for in Chapter IX.  The basis for the processing referred to in point (c) and (e) of paragraph 1 shall be laid down by Union law or Member State law to which the controller is subject.  The purpose of the processing shall be determined in that legal basis or, as regards the processing referred to in point (e) of paragraph 1, shall be necessary for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller. That legal basis may contain specific provisions to adapt the application of rules of this Regulation, inter alia: the general conditions governing the lawfulness of processing by the controller; the types of data which are subject to the processing; the data subjects concerned; the entities to, and the purposes for which, the personal data may be disclosed; the purpose limitation; storage periods; and processing operations and processing procedures, including measures to ensure lawful and fair processing such as those for other specific processing situations as provided for in Chapter IX. The Union or the Member State law shall meet an objective of public interest and be proportionate to the legitimate aim pursued.  Where the processing for a purpose other than that for which the personal data have been collected is not based on the data subject's consent or on a Union or Member State law which constitutes a necessary and proportionate measure in a democratic society to safeguard the objectives referred to in Article 23(1), the controller shall, in order to ascertain whether processing for another purpose is compatible with the purpose for which the personal data are initially collected, take into account, inter alia:  Any link between the purposes for which the personal data have been collected and the purposes of the intended further processing;  The context in which the personal data have been collected, in particular regarding the relationship between data subjects and the controller;  The nature of the personal data, in particular whether special categories of personal data are processed, pursuant to Article 9, or whether personal data related to criminal convictions and offences are processed, pursuant to Article 10;  The possible consequences of the intended further processing for data subjects;  The existence of appropriate safeguards, which may include encryption or pseudonymisation. 
+chat_response: 
+ 	 Processing of personal data is lawful only if the data subject has given consent for one or more specific purposes. Processing is also lawful if it is necessary for the performance of a contract to which the data subject is party. If requested by the data subject prior to entering into a contract, processing is lawful. The controller processes lawful if they must comply with a legal obligation. If necessary to protect the vital interests of the data subject or another person, the processing is lawful. Processing is lawful for tasks carried out in the public interest or in the exercise of official authority given by the controller. It is lawful if it's necessary for the legitimate interests pursued by the controller or a third party, unless overridden by the interests or rights and freedoms of the data subject. Public authorities do not apply this if they perform their tasks. Member States, for compliance with specific rules, may introduce specific provisions. Union law or Member State law prescribes the basis for the processing. The purpose of the processing gets determined in that legal basis or for tasks carried out in public interest or in the exercise of official authority by the controller. The Union or the Member State law meets an objective of public interest and corresponds with the legitimate aim. If processing for another purpose is not based on the data subject's consent or on the Union's or Member State law, in order to ascertain compatibility, the controller should consider factors such as: link between collection purposes and the purposes of the further processing, context of collection, relationship between data subjects and the controller, nature of personal data, possible consequences of the further processing for data subjects, and the existence of safeguards.
+Document: Processing of personal data is lawful only if the data subject has given consent for one or more specific purposes. Processing is also lawful if it is necessary for the performance of a contract to which the data subject is party. If requested by the data subject prior to entering into a contract, processing is lawful. The controller processes lawful if they must comply with a legal obligation. If necessary to protect the vital interests of the data subject or another person, the processing is lawful. Processing is lawful for tasks carried out in the public interest or in the exercise of official authority given by the controller. It is lawful if it's necessary for the legitimate interests pursued by the controller or a third party, unless overridden by the interests or rights and freedoms of the data subject. Public authorities do not apply this if they perform their tasks. Member States, for compliance with specific rules, may introduce specific provisions. Union law or Member State law prescribes the basis for the processing. The purpose of the processing gets determined in that legal basis or for tasks carried out in public interest or in the exercise of official authority by the controller. The Union or the Member State law meets an objective of public interest and corresponds with the legitimate aim. If processing for another purpose is not based on the data subject's consent or on the Union's or Member State law, in order to ascertain compatibility, the controller should consider factors such as: link between collection purposes and the purposes of the further processing, context of collection, relationship between data subjects and the controller, nature of personal data, possible consequences of the further processing for data subjects, and the existence of safeguards.
+
+Spacy standard Splitting:Processing of personal data is lawful only if the data subject has given consent for one or more specific purposes.
+
+determine_actor_vh: actor: Processing of personal data
+actor: data
+Spacy standard Splitting:Processing is also lawful if it is necessary for the performance of a contract to which the data subject is party.
+
+determine_actor_vh: actor: Processing
+actor: Processing
+Spacy standard Splitting:If requested by the data subject prior to entering into a contract, processing is lawful.
+
+determine_actor_vh: actor: processing
+actor: processing
+Spacy standard Splitting:The controller processes lawful if they must comply with a legal obligation.
+
+determine_actor_vh: actor: The controller
+actor: controller
+Spacy standard Splitting:If necessary to protect the vital interests of the data subject or another person, the processing is lawful.
+
+determine_actor_vh: actor: the processing
+actor: processing
+Spacy standard Splitting:Processing is lawful for tasks carried out in the public interest or in the exercise of official authority given by the controller.
+
+determine_actor_vh: actor: Processing
+actor: Processing
+Spacy standard Splitting:It is lawful if it's necessary for the legitimate interests pursued by the controller or a third party, unless overridden by the interests or rights and freedoms of the data subject.
+
+determine_actor_vh: actor: It
+actor: It
+Spacy standard Splitting:Public authorities do not apply this if they perform their tasks.
+
+determine_actor_vh: actor: Public authorities
+actor: authorities
+Spacy standard Splitting:Member States, for compliance with specific rules, may introduce specific provisions.
+
+determine_actor_vh: actor: Member States
+actor: States
+Spacy standard Splitting:Union law or Member State law prescribes the basis for the processing.
+
+determine_actor_vh: actor: Union law or Member State law
+actor: law
+Spacy standard Splitting:The purpose of the processing gets determined in that legal basis or for tasks carried out in public interest or in the exercise of official authority by the controller.
+
+determine_actor_vh: actor: The purpose of the processing
+actor: processing
+Spacy standard Splitting:The Union or the Member State law meets an objective of public interest and corresponds with the legitimate aim.
+
+determine_actor_vh: actor: The Union or the Member State law
+actor: law
+Spacy standard Splitting:If processing for another purpose is not based on the data subject's consent or on the Union's or Member State law, in order to ascertain compatibility, the controller should consider factors such as: link between collection purposes and the purposes of the further processing, context of collection, relationship between data subjects and the controller, nature of personal data, possible consequences of the further processing for data subjects, and the existence of safeguards.
+
+determine_actor_vh: actor: processing for another purpose
+actor: purpose
+get_valid_actors_vh1
+Actor: controller 
+Actor: Public authorities 
+Public authorities                                          controller                                                  0.36                0.0       False     
+Actor: Member States 
+Actor: Member State law 
+Actor: processing 
+Actor: Member State law 
+Actor: Member State law 
+Actor: purpose 
+the controller processes lawful
+public authorities not apply this
+member states for compliance with specific rules introduce specific provisions
+member state law prescribes the basis for the processing
+the processing determine the purpose of the processing
+-----BEGIN_AND-----
+1:
+	the member state law meets an objective of public interest
+	the member state law correspond the legitimate aim
+-----END_AND-----
+-----BEGIN_IF-----
+if: another purpose not base processing for another purpose
+else:
+
+-----END_IF-----
+Valid Actors: ['controller ', 'Public authorities ']
+
+title: Text9own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: controller 
+	(start) as start
+	[processes lawful] as activity_62
+lane: Public authorities 
+	[not apply this] as activity_63
+	[member states for compliance with specific rules introduce specific provisions] as activity_64
+	[member state law prescribes the basis for the processing] as activity_65
+	[the processing determine the purpose of the processing] as activity_66
+	<@parallel> as gateway_57
+	[the member state law meets an objective of public interest] as activity_58
+	[the member state law correspond the legitimate aim] as activity_59
+	<@parallel> as gateway_57_end
+	<another purpose not base processing for another purpose?> as gateway_60
+	<> as gateway_60_end
+	(end) as end
+
+start->activity_62->activity_63->activity_64->activity_65->activity_66->gateway_57
+gateway_57->activity_58->gateway_57_end
+gateway_57->activity_59->gateway_57_end
+gateway_57_end->gateway_60
+gateway_60-"yes"->gateway_60_end
+gateway_60-"no"->gateway_60_end
+gateway_60_end->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text9own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("controller") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_62 = lane1.add_element("processes lawful", ActivityType.TASK)
+  6     with my_process_map.add_lane("Public authorities") as lane2:
+  7         activity_63 = lane2.add_element("not apply this", ActivityType.TASK)
+  8         activity_64 = lane2.add_element("member states for compliance with specific rules introduce specific provisions", ActivityType.TASK)
+  9         activity_65 = lane2.add_element("member state law prescribes the basis for the processing", ActivityType.TASK)
+ 10         activity_66 = lane2.add_element("the processing determine the purpose of the processing", ActivityType.TASK)
+ 11         gateway_57 = lane2.add_element("", GatewayType.PARALLEL)
+ 12         activity_58 = lane2.add_element("the member state law meets an objective of public interest", ActivityType.TASK)
+ 13         activity_59 = lane2.add_element("the member state law correspond the legitimate aim", ActivityType.TASK)
+ 14         gateway_57_end = lane2.add_element("", GatewayType.PARALLEL)
+ 15         gateway_60 = lane2.add_element("another purpose not base processing for another purpose?", GatewayType.EXCLUSIVE)
+ 16         gateway_60_end = lane2.add_element("", GatewayType.EXCLUSIVE)
+ 17         end = lane2.add_element("end", EventType.END)
+ 18         start.connect(activity_62)
+ 19         activity_62.connect(activity_63)
+ 20         activity_63.connect(activity_64)
+ 21         activity_64.connect(activity_65)
+ 22         activity_65.connect(activity_66)
+ 23         activity_66.connect(gateway_57)
+ 24         gateway_57.connect(activity_58)
+ 25         activity_58.connect(gateway_57_end)
+ 26         gateway_57.connect(activity_59)
+ 27         activity_59.connect(gateway_57_end)
+ 28         gateway_57_end.connect(gateway_60)
+ 29         gateway_60.connect(gateway_60_end, "yes")
+ 30         gateway_60.connect(gateway_60_end, "no")
+ 31         gateway_60_end.connect(end)
+ 32     my_process_map.draw()
+ 33     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text9_GPT4.png")
+2023-10-20 13:46:27 [INFO] : Took [237.63ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text9_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the following information the purposes of the processing.  The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the categories of personal data concerned.   The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the recipients or categories of recipient to whom the personal data have been or will be disclosed, in particular recipients in third countries or international organisations.   The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and where possible, the envisaged period for which the personal data will be stored, or, if not possible, the criteria used to determine that period.   The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the existence of the right to request from the controller rectification or erasure of personal data or restriction of processing of personal data concerning the data subject or to object to such processing.   The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the right to lodge a complaint with a supervisory authority.   The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and where the personal data are not collected from the data subject, any available information as to their source.   The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the existence of automated decision-making, including profiling, referred to in Article 22(1) and (4) and, at least in those cases, meaningful information about the logic involved, as well as the significance and the envisaged consequences of such processing for the data subject.  Where personal data are transferred to a third country or to an international organisation, the data subject shall have the right to be informed of the appropriate safeguards pursuant to Article 46 relating to the transfer.  The controller shall provide a copy of the personal data undergoing processing. For any further copies requested by the data subject, the controller may charge a reasonable fee based on administrative costs. Where the data subject makes the request by electronic means, and unless otherwise requested by the data subject, the information shall be provided in a commonly used electronic form.  The right to obtain a copy referred to in paragraph 3 shall not adversely affect the rights and freedoms of others. 
+chat_response: 
+ 	 The data subject has the right to ask the controller to confirm whether or not their personal data is being processed. If personal data is being processed, the data subject can access their personal data and certain information. This information includes the reasons for processing, the categories of personal data involved, the recipients or categories of recipients to whom the data has been or will be disclosed. The data subject can also access the length of time for which the data will be stored, the rights to request rectification or erasure of their data, the right to lodge a complaint with a supervisory authority, and information regarding the source of the data if it was not collected from the data subject. The processing information includes any existence of automated decision-making, including profiling. If the personal data is transferred to a third country or an international organization, the data subject can be informed of the appropriate safeguard measures. The controller can provide a copy of the personal data being processed to the data subject. If the data subject requests additional copies, the controller may charge a reasonable fee. If the request is made electronically, the data is provided in a commonly used electronic form.
+
+Document: The data subject has the right to ask the controller to confirm whether or not their personal data is being processed. If personal data is being processed, the data subject can access their personal data and certain information. This information includes the reasons for processing, the categories of personal data involved, the recipients or categories of recipients to whom the data has been or will be disclosed. The data subject can also access the length of time for which the data will be stored, the rights to request rectification or erasure of their data, the right to lodge a complaint with a supervisory authority, and information regarding the source of the data if it was not collected from the data subject. The processing information includes any existence of automated decision-making. If the personal data is transferred to a third country or an international organization, the data subject can be informed of the appropriate safeguard measures. The controller can provide a copy of the personal data being processed to the data subject. If the data subject requests additional copies, the controller may charge a reasonable fee. If the request is made electronically, the data is provided in a commonly used electronic form.
+
+
+Spacy standard Splitting:The data subject has the right to ask the controller to confirm whether or not their personal data is being processed.
+
+determine_actor_vh: actor: The data subject
+actor: subject
+Spacy standard Splitting:If personal data is being processed, the data subject can access their personal data and certain information.
+
+determine_actor_vh: actor: personal data
+actor: data
+Spacy standard Splitting:This information includes the reasons for processing, the categories of personal data involved, the recipients or categories of recipients to whom the data has been or will be disclosed.
+
+determine_actor_vh: actor: This information
+actor: information
+Spacy standard Splitting:The data subject can also access the length of time for which the data will be stored, the rights to request rectification or erasure of their data, the right to lodge a complaint with a supervisory authority, and information regarding the source of the data if it was not collected from the data subject.
+
+determine_actor_vh: actor: The data subject
+actor: subject
+Spacy standard Splitting:The processing information includes any existence of automated decision-making.
+
+determine_actor_vh: actor: The processing information
+actor: information
+Spacy standard Splitting:If the personal data is transferred to a third country or an international organization, the data subject can be informed of the appropriate safeguard measures.
+
+determine_actor_vh: actor: the personal data
+actor: data
+Spacy standard Splitting:The controller can provide a copy of the personal data being processed to the data subject.
+
+determine_actor_vh: actor: The controller
+actor: controller
+Spacy standard Splitting:If the data subject requests additional copies, the controller may charge a reasonable fee.
+
+determine_actor_vh: actor: the data subject
+actor: subject
+Spacy standard Splitting:If the request is made electronically, the data is provided in a commonly used electronic form.
+
+determine_actor_vh: actor: the request
+actor: request
+Spacy standard Splitting:
+
+
+possible_actor: 
+
+is_object_dependency: False
+is_passive_voice: False
+not (is_object_dependency and is_passive_voice)
+determine_actor_vh: actor: None
+actor: None
+get_valid_actors_vh1
+Actor: data subject 
+Actor: personal data 
+Actor: data subject 
+Actor: personal data 
+Actor: data subject 
+Actor: request 
+-----BEGIN_IF-----
+if: the data subject not process their personal data
+if: personal data process personal data
+
+-----END_IF-----
+the data subject store the data for which
+-----BEGIN_IF-----
+if: the personal data transfer the personal data to a third country or an international organization
+else:
+
+-----END_IF-----
+-----BEGIN_IF-----
+if: the data subject requests additional copies
+else:
+
+-----END_IF-----
+-----BEGIN_IF-----
+if: the request make the request
+else:
+
+-----END_IF-----
+Valid Actors: []
+
+title: Text10own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	<> as gateway_67
+	<> as gateway_67_end
+	[the data subject store the data for which] as activity_76
+	<the personal data transfer the personal data to a third country or an international organization?> as gateway_70
+	<> as gateway_70_end
+	<the data subject requests additional copies?> as gateway_72
+	<> as gateway_72_end
+	<the request make the request?> as gateway_74
+	<> as gateway_74_end
+	(end) as end
+
+start->gateway_67
+gateway_67-"the data subject\nnot process their\npersonal data"->gateway_67_end
+gateway_67-"personal data process\npersonal data"->gateway_67_end
+gateway_67_end->activity_76->gateway_70
+gateway_70-"yes"->gateway_70_end
+gateway_70-"no"->gateway_70_end
+gateway_70_end->gateway_72
+gateway_72-"yes"->gateway_72_end
+gateway_72-"no"->gateway_72_end
+gateway_72_end->gateway_74
+gateway_74-"yes"->gateway_74_end
+gateway_74-"no"->gateway_74_end
+gateway_74_end->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text10own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         gateway_67 = lane1.add_element("", GatewayType.EXCLUSIVE)
+  6         gateway_67_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+  7         activity_76 = lane1.add_element("the data subject store the data for which", ActivityType.TASK)
+  8         gateway_70 = lane1.add_element("the personal data transfer the personal data to a third country or an international organization?", GatewayType.EXCLUSIVE)
+  9         gateway_70_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+ 10         gateway_72 = lane1.add_element("the data subject requests additional copies?", GatewayType.EXCLUSIVE)
+ 11         gateway_72_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+ 12         gateway_74 = lane1.add_element("the request make the request?", GatewayType.EXCLUSIVE)
+ 13         gateway_74_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+ 14         end = lane1.add_element("end", EventType.END)
+ 15         start.connect(gateway_67)
+ 16         gateway_67.connect(gateway_67_end, "the data subject\nnot process their\npersonal data")
+ 17         gateway_67.connect(gateway_67_end, "personal data process\npersonal data")
+ 18         gateway_67_end.connect(activity_76)
+ 19         activity_76.connect(gateway_70)
+ 20         gateway_70.connect(gateway_70_end, "yes")
+ 21         gateway_70.connect(gateway_70_end, "no")
+ 22         gateway_70_end.connect(gateway_72)
+ 23         gateway_72.connect(gateway_72_end, "yes")
+ 24         gateway_72.connect(gateway_72_end, "no")
+ 25         gateway_72_end.connect(gateway_74)
+ 26         gateway_74.connect(gateway_74_end, "yes")
+ 27         gateway_74.connect(gateway_74_end, "no")
+ 28         gateway_74_end.connect(end)
+ 29     my_process_map.draw()
+ 30     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text10_GPT4.png")
+2023-10-20 13:47:00 [INFO] : Took [134.70ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text10_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The data subject shall have the right to receive the personal data concerning him or her, which he or she has provided to a controller, in a structured, commonly used and machine-readable format and have the right to transmit those data to another controller without hindrance from the controller to which the personal data have been provided, where the processing is based on consent pursuant to point (a) of Article 6(1) or point (a) of Article 9(2) or on a contract pursuant to point (b) of Article 6(1); and the processing is carried out by automated means.  In exercising his or her right to data portability pursuant to paragraph 1, the data subject shall have the right to have the personal data transmitted directly from one controller to another, where technically feasible.  The exercise of the right referred to in paragraph 1 of this Article shall be without prejudice to Article 17. That right shall not apply to processing necessary for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller.  The right referred to in paragraph 1 shall not adversely affect the rights and freedoms of others. 
+chat_response: 
+ 	 The data subject has the right to receive their personal data, which they provided to a controller, in a clear, commonly used and machine-readable format. They also have the right to transmit this data to another controller without obstruction from the first controller. This occurs when the processing is based on consent or on a contract and when the processing is carried out by automated means. If technically feasible, the data subject has the right to have their personal data transmitted directly from one controller to another. This right does not apply to processing necessary for a task carried out in the public interest or the exercise of official authority by the controller. The exercise of this right should not adversely affect the rights and freedoms of others.
+Document: The data subject has the right to receive their personal data, which they provided to a controller, in a clear, commonly used and machine-readable format. They also have the right to transmit this data to another controller without obstruction from the first controller. This occurs when the processing is based on consent or on a contract and when the processing is carried out by automated means. If technically feasible, the data subject has the right to have their personal data transmitted directly from one controller to another. This right does not apply to processing necessary for a task carried out in the public interest or the exercise of official authority by the controller. The exercise of this right should not adversely affect the rights and freedoms of others.
+
+Spacy standard Splitting:The data subject has the right to receive their personal data, which they provided to a controller, in a clear, commonly used and machine-readable format.
+
+determine_actor_vh: actor: The data subject
+actor: subject
+Spacy standard Splitting:They also have the right to transmit this data to another controller without obstruction from the first controller.
+
+determine_actor_vh: actor: They
+actor: They
+Spacy standard Splitting:This occurs when the processing is based on consent or on a contract and when the processing is carried out by automated means.
+
+determine_actor_vh: actor: This
+actor: This
+Spacy standard Splitting:If technically feasible, the data subject has the right to have their personal data transmitted directly from one controller to another.
+
+determine_actor_vh: actor: the data subject
+actor: subject
+Spacy standard Splitting:This right does not apply to processing necessary for a task carried out in the public interest or the exercise of official authority by the controller.
+
+determine_actor_vh: actor: This right
+actor: right
+Spacy standard Splitting:The exercise of this right should not adversely affect the rights and freedoms of others.
+
+determine_actor_vh: actor: The exercise of this right
+actor: right
+get_valid_actors_vh1
+Actor: data subject 
+Actor: They 
+Actor: This 
+Actor: This 
+Actor: data subject 
+Actor: right 
+Actor: right 
+the data subject has the right
+subject have the right
+this base the processing
+this carry the processing out
+the data subject has the right
+this right not apply to processing necessary for a task
+this right not affect the rights and freedoms of others
+Valid Actors: []
+
+title: Text11own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[the data subject has the right] as activity_77
+	[subject have the right] as activity_78
+	[this base the processing] as activity_79
+	[this carry the processing out] as activity_80
+	[the data subject has the right] as activity_81
+	[this right not apply to processing necessary for a task] as activity_82
+	[this right not affect the rights and freedoms of others] as activity_83
+	(end) as end
+
+start->activity_77->activity_78->activity_79->activity_80->activity_81->activity_82->activity_83->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text11own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_77 = lane1.add_element("the data subject has the right", ActivityType.TASK)
+  6         activity_78 = lane1.add_element("subject have the right", ActivityType.TASK)
+  7         activity_79 = lane1.add_element("this base the processing", ActivityType.TASK)
+  8         activity_80 = lane1.add_element("this carry the processing out", ActivityType.TASK)
+  9         activity_81 = lane1.add_element("the data subject has the right", ActivityType.TASK)
+ 10         activity_82 = lane1.add_element("this right not apply to processing necessary for a task", ActivityType.TASK)
+ 11         activity_83 = lane1.add_element("this right not affect the rights and freedoms of others", ActivityType.TASK)
+ 12         end = lane1.add_element("end", EventType.END)
+ 13         start.connect(activity_77)
+ 14         activity_77.connect(activity_78)
+ 15         activity_78.connect(activity_79)
+ 16         activity_79.connect(activity_80)
+ 17         activity_80.connect(activity_81)
+ 18         activity_81.connect(activity_82)
+ 19         activity_82.connect(activity_83)
+ 20         activity_83.connect(end)
+ 21     my_process_map.draw()
+ 22     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text11_GPT4.png")
+2023-10-20 13:47:20 [INFO] : Took [111.11ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text11_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+Where processing is based on consent, the controller shall be able to demonstrate that the data subject has consented to processing of his or her personal data.  If the data subject's consent is given in the context of a written declaration which also concerns other matters, the request for consent shall be presented in a manner which is clearly distinguishable from the other matters, in an intelligible and easily accessible form, using clear and plain language. Any part of such a declaration which constitutes an infringement of this Regulation shall not be binding.  The data subject shall have the right to withdraw his or her consent at any time. The withdrawal of consent shall not affect the lawfulness of processing based on consent before its withdrawal. Prior to giving consent, the data subject shall be informed thereof. It shall be as easy to withdraw as to give consent.  When assessing whether consent is freely given, utmost account shall be taken of whether, inter alia, the performance of a contract, including the provision of a service, is conditional on consent to the processing of personal data that is not necessary for the performance of that contract. 
+chat_response: 
+ 	 The controller must demonstrate that the data subject has consented to processing of his or her personal data. If the data subject's consent is given in the context of a written declaration which also concerns other matters, the controller shall present the request for consent in a manner which is clearly distinguishable from the other matters. The data subject has the right to withdraw his or her consent at any time. The data subject must be informed prior to giving consent. When assessing whether consent is freely given, the controller must consider whether the performance of a contract is conditional on consent to the processing of personal data that is not necessary for the performance of that contract.
+2023-10-20 13:47:40 [INFO] : Took [123.65ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text12_GPT4.png' diagram
+Document: The controller must demonstrate that the data subject has consented to processing of his or her personal data. If the data subject's consent is given in the context of a written declaration which also concerns other matters, the controller shall present the request for consent in a manner which is clearly distinguishable from the other matters. The data subject has the right to withdraw his or her consent at any time. The data subject must be informed prior to giving consent. When assessing whether consent is freely given, the controller must consider whether the performance of a contract is conditional on consent to the processing of personal data that is not necessary for the performance of that contract.
+
+Spacy standard Splitting:The controller must demonstrate that the data subject has consented to processing of his or her personal data.
+
+determine_actor_vh: actor: The controller
+actor: controller
+Spacy standard Splitting:If the data subject's consent is given in the context of a written declaration which also concerns other matters, the controller shall present the request for consent in a manner which is clearly distinguishable from the other matters.
+
+determine_actor_vh: actor: the data subject's consent
+actor: consent
+Spacy standard Splitting:The data subject has the right to withdraw his or her consent at any time.
+
+determine_actor_vh: actor: The data subject
+actor: subject
+Spacy standard Splitting:The data subject must be informed prior to giving consent.
+
+determine_actor_vh: actor: The data subject
+actor: subject
+Spacy standard Splitting:When assessing whether consent is freely given, the controller must consider whether the performance of a contract is conditional on consent to the processing of personal data that is not necessary for the performance of that contract.
+
+determine_actor_vh: actor: consent
+actor: consent
+get_valid_actors_vh1
+Actor: controller 
+Actor: consent 
+Actor: data subject 
+Actor: data subject 
+Actor: consent 
+the controller demonstrate
+-----BEGIN_IF-----
+if: the data subject 's consent give the data subject 's consent
+else:
+
+-----END_IF-----
+the data subject has the right
+the data subject inform the data subject
+-----BEGIN_IF-----
+if: consent give consent
+else:
+
+-----END_IF-----
+Valid Actors: ['controller ']
+
+title: Text12own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: controller 
+	(start) as start
+	[the controller demonstrate] as activity_88
+	<the data subject 's consent give the data subject 's consent?> as gateway_84
+	<> as gateway_84_end
+	[the data subject has the right] as activity_89
+	[the data subject inform the data subject] as activity_90
+	<consent give consent?> as gateway_86
+	<> as gateway_86_end
+	(end) as end
+
+start->activity_88->gateway_84
+gateway_84-"yes"->gateway_84_end
+gateway_84-"no"->gateway_84_end
+gateway_84_end->activity_89->activity_90->gateway_86
+gateway_86-"yes"->gateway_86_end
+gateway_86-"no"->gateway_86_end
+gateway_86_end->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text12own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("controller") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_88 = lane1.add_element("the controller demonstrate", ActivityType.TASK)
+  6         gateway_84 = lane1.add_element("the data subject 's consent give the data subject 's consent?", GatewayType.EXCLUSIVE)
+  7         gateway_84_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+  8         activity_89 = lane1.add_element("the data subject has the right", ActivityType.TASK)
+  9         activity_90 = lane1.add_element("the data subject inform the data subject", ActivityType.TASK)
+ 10         gateway_86 = lane1.add_element("consent give consent?", GatewayType.EXCLUSIVE)
+ 11         gateway_86_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+ 12         end = lane1.add_element("end", EventType.END)
+ 13         start.connect(activity_88)
+ 14         activity_88.connect(gateway_84)
+ 15         gateway_84.connect(gateway_84_end, "yes")
+ 16         gateway_84.connect(gateway_84_end, "no")
+ 17         gateway_84_end.connect(activity_89)
+ 18         activity_89.connect(activity_90)
+ 19         activity_90.connect(gateway_86)
+ 20         gateway_86.connect(gateway_86_end, "yes")
+ 21         gateway_86.connect(gateway_86_end, "no")
+ 22         gateway_86_end.connect(end)
+ 23     my_process_map.draw()
+ 24     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text12_GPT4.png")
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The data subject shall have the right to obtain from the controller without undue delay the rectification of inaccurate personal data concerning him or her. Taking into account the purposes of the processing, the data subject shall have the right to have incomplete personal data completed, including by means of providing a supplementary statement.  The controller shall communicate any rectification or erasure of personal data or restriction of processing carried out in accordance with Article 16.
+chat_response: 
+ 	 The data subject has the right to obtain from the controller the correction of inaccurate personal data relating to him or her without unnecessary delay. Considering the purposes of the processing, the data subject has the right to complete incomplete personal data, this includes the providing of a supplementary statement. The controller must communicate any correction or erasure of personal data or restriction of processing carried out.
+Document: The data subject has the right to obtain from the controller the correction of inaccurate personal data relating to him or her without unnecessary delay. Considering the purposes of the processing, the data subject has the right to complete incomplete personal data, this includes the providing of a supplementary statement. The controller must communicate any correction or erasure of personal data or restriction of processing carried out.
+
+Spacy standard Splitting:The data subject has the right to obtain from the controller the correction of inaccurate personal data relating to him or her without unnecessary delay.
+
+determine_actor_vh: actor: The data subject
+actor: subject
+Spacy standard Splitting:Considering the purposes of the processing, the data subject has the right to complete incomplete personal data, this includes the providing of a supplementary statement.
+
+determine_actor_vh: actor: the data subject
+actor: subject
+Spacy standard Splitting:The controller must communicate any correction or erasure of personal data or restriction of processing carried out.
+
+determine_actor_vh: actor: The controller
+actor: controller
+get_valid_actors_vh1
+Actor: data subject 
+Actor: data subject 
+Actor: controller 
+the data subject has the right
+the data subject has the right
+the controller communicate any correction or erasure of personal data or restriction of processing
+Valid Actors: ['controller ']
+
+title: Text13own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: controller 
+	(start) as start
+	[the data subject has the right] as activity_91
+	[the data subject has the right] as activity_92
+	[the controller communicate any correction or erasure of personal data or restriction of processing] as activity_93
+	(end) as end
+
+start->activity_91->activity_92->activity_93->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text13own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("controller") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_91 = lane1.add_element("the data subject has the right", ActivityType.TASK)
+  6         activity_92 = lane1.add_element("the data subject has the right", ActivityType.TASK)
+  7         activity_93 = lane1.add_element("the controller communicate any correction or erasure of personal data or restriction of processing", ActivityType.TASK)
+  8         end = lane1.add_element("end", EventType.END)
+  9         start.connect(activity_91)
+ 10         activity_91.connect(activity_92)
+ 11         activity_92.connect(activity_93)
+ 12         activity_93.connect(end)
+ 13     my_process_map.draw()
+ 14     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text13_GPT4.png")
+2023-10-20 13:47:56 [INFO] : Took [98.05ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text13_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The data subject shall have the right to obtain from the controller the erasure of personal data concerning him or her without undue delay and the controller shall have the obligation to erase personal data without undue delay where one of the following grounds applies.   The personal data are no longer necessary in relation to the purposes for which they were collected or otherwise processed.   The data subject withdraws consent on which the processing is based according to point (a) of Article 6(1), or point (a) of Article 9(2), and where there is no other legal ground for the processing.   The data subject objects to the processing pursuant to Article 21(1) and there are no overriding legitimate grounds for the processing, or the data subject objects to the processing pursuant to Article 21(2).   The personal data have been unlawfully processed.   The personal data have to be erased for compliance with a legal obligation in Union or Member State law to which the controller is subject.   The personal data have been collected in relation to the offer of information society services referred to in Article 8(1).  Where the controller has made the personal data public and is obliged pursuant to paragraph 1 to erase the personal data, the controller, taking account of available technology and the cost of implementation, shall take reasonable steps, including technical measures, to inform controllers which are processing the personal data that the data subject has requested the erasure by such controllers of any links to, or copy or replication of, those personal data.  Paragraphs 1 and 2 shall not apply to the extent that processing is necessary for exercising the right of freedom of expression and information.   Paragraphs 1 and 2 shall not apply to the extent that processing is necessary for compliance with a legal obligation which requires processing by Union or Member State law to which the controller is subject or for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller.   Paragraphs 1 and 2 shall not apply to the extent that processing is necessary for reasons of public interest in the area of public health in accordance with points (h) and (i) of Article 9(2) as well as Article 9(3).   Paragraphs 1 and 2 shall not apply to the extent that processing is necessary for archiving purposes in the public interest, scientific or historical research purposes or statistical purposes in accordance with Article 89(1) in so far as the right referred to in paragraph 1 is likely to render impossible or seriously impair the achievement of the objectives of that processing.   Paragraphs 1 and 2 shall not apply to the extent that processing is necessary for the establishment, exercise or defence of legal claims. 
+chat_response: 
+ 	 The data subject has the right to request from the controller the erasure of personal data related to him or her.
+The controller has the duty to erase the personal data without delay if one of several conditions apply.
+These conditions include when the personal data are not needed for the purposes they were collected for.
+Another condition is when the data subject withdraws consent, as long as there's no other legal reason for processing.
+Also, if the data subject objects to the processing under Article 21(1) without any superior legitimate reasons for processing, or if he or she objects under Article 21(2).
+Other conditions include if the personal data have been unlawfully processed or if they need to be erased due to a legal obligation that applies to the controller.
+The last condition is if the personal data were collected in association with the offer of information society services according to Article 8(1).
+If the controller has publicized the personal data and is obliged to erase them, then he or she must take reasonable steps, considering the available technology and cost of application, to inform other controllers which are processing the data about the data subject's request for erasure of any links to those personal data, or copies or replications of them.
+The cases when the controller's obligation to erase data doesn't apply include when processing is needed for practicing the right of freedom of expression and information, when it's necessary for compliance with a legal requirement which needs processing under Union or Member State law, when processing is done in the public's interest or as an exercise of official authority vested in the controller.
+The obligation to erase data also doesn't apply if processing is necessary for reasons of public interest in the sphere of public health or for archiving purposes in the public interest, scientific or historical research purposes or statistical purposes.
+It also doesn't apply if processing is necessary for the establishment, exercise or defense of legal claims.
+Document: The data subject has the right to request from the controller the erasure of personal data related to him or her.
+The controller has the duty to erase the personal data without delay if one of several conditions apply.
+These conditions include when the personal data are not needed for the purposes they were collected for.
+Another condition is when the data subject withdraws consent, as long as there's no other legal reason for processing.
+Also, if the data subject objects to the processing under Article 21 without any superior legitimate reasons for processing, or if he or she objects under Article 21.
+Other conditions include if the personal data have been unlawfully processed or if they need to be erased due to a legal obligation that applies to the controller.
+The last condition is if the personal data were collected in association with the offer of information society services according to Article 8.
+If the controller has publicized the personal data and is obliged to erase them, then he or she must take reasonable steps, considering the available technology and cost of application, to inform other controllers which are processing the data about the data subject's request for erasure of any links to those personal data, or copies or replications of them.
+The cases when the controller's obligation to erase data doesn't apply include when processing is needed for practicing the right of freedom of expression and information, when it's necessary for compliance with a legal requirement which needs processing under Union or Member State law, when processing is done in the public's interest or as an exercise of official authority vested in the controller.
+The obligation to erase data also doesn't apply if processing is necessary for reasons of public interest in the sphere of public health or for archiving purposes in the public interest, scientific or historical research purposes or statistical purposes.
+It also doesn't apply if processing is necessary for the establishment, exercise or defense of legal claims.
+
+Spacy standard Splitting:The data subject has the right to request from the controller the erasure of personal data related to him or her.
+
+determine_actor_vh: actor: The data subject
+actor: subject
+Spacy standard Splitting:
+The controller has the duty to erase the personal data without delay if one of several conditions apply.
+
+determine_actor_vh: actor: 
+The controller
+actor: controller
+Spacy standard Splitting:
+
+
+possible_actor: 
+
+is_object_dependency: False
+is_passive_voice: False
+not (is_object_dependency and is_passive_voice)
+determine_actor_vh: actor: None
+actor: None
+Spacy standard Splitting:These conditions include when the personal data are not needed for the purposes they were collected for.
+
+determine_actor_vh: actor: These conditions
+actor: conditions
+Spacy standard Splitting:
+
+
+possible_actor: 
+
+is_object_dependency: False
+is_passive_voice: False
+not (is_object_dependency and is_passive_voice)
+determine_actor_vh: actor: None
+actor: None
+Spacy standard Splitting:Another condition is when the data subject withdraws consent, as long as there's no other legal reason for processing.
+
+determine_actor_vh: actor: Another condition
+actor: condition
+Spacy standard Splitting:
+Also, if the data subject objects to the processing under Article 21 without any superior legitimate reasons for processing, or if he or she objects under Article 21.
+
+determine_actor_vh: actor: the data subject
+actor: subject
+Spacy standard Splitting:
+
+
+possible_actor: 
+
+is_object_dependency: False
+is_passive_voice: False
+not (is_object_dependency and is_passive_voice)
+determine_actor_vh: actor: None
+actor: None
+Spacy standard Splitting:Other conditions include if the personal data have been unlawfully processed or if they need to be erased due to a legal obligation that applies to the controller.
+
+
+determine_actor_vh: actor: Other conditions
+actor: conditions
+Spacy standard Splitting:The last condition is if the personal data were collected in association with the offer of information society services according to Article 8.
+
+determine_actor_vh: actor: The last condition
+actor: condition
+Spacy standard Splitting:
+If the controller has publicized the personal data and is obliged to erase them, then he or she must take reasonable steps, considering the available technology and cost of application, to inform other controllers which are processing the data about the data subject's request for erasure of any links to those personal data, or copies or replications of them.
+
+determine_actor_vh: actor: the controller
+actor: controller
+Spacy standard Splitting:
+The cases when the controller's obligation to erase data doesn't apply include when processing is needed for practicing the right of freedom of expression and information, when it's necessary for compliance with a legal requirement which needs processing under Union or Member State law, when processing is done in the public's interest or as an exercise of official authority vested in the controller.
+
+determine_actor_vh: actor: 
+The cases when the controller's obligation to erase data doesn't apply
+actor: apply
+Spacy standard Splitting:
+The obligation to erase data also doesn't apply if processing is necessary for reasons of public interest in the sphere of public health or for archiving purposes in the public interest, scientific or historical research purposes or statistical purposes.
+
+determine_actor_vh: actor: 
+The obligation to erase data
+actor: data
+Spacy standard Splitting:
+It also doesn't apply if processing is necessary for the establishment, exercise or defense of legal claims.
+
+determine_actor_vh: actor: 
+It
+actor: It
+get_valid_actors_vh1
+Actor: data subject 
+Actor: controller 
+Actor: conditions 
+Actor: data subject 
+Actor: data subject 
+Actor: Other conditions 
+Actor: Other conditions 
+Actor: last condition 
+Actor: apply 
+Actor: data 
+Actor: It 
+the data subject has the right
+the controller has the duty
+these conditions not need the personal data for the purposes
+-----BEGIN_IF-----
+if: the data subject object article 21
+if: the data subject objects the processing under article 21 without
+
+-----END_IF-----
+-----BEGIN_IF-----
+if: other conditions need the personal data
+if: other conditions process the personal data
+if: the last condition collect the personal data
+
+-----END_IF-----
+when the controller 's obligation does n't apply need processing
+data not apply
+obligation not apply
+Valid Actors: ['controller ']
+
+title: Text14own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: controller 
+	(start) as start
+	[the data subject has the right] as activity_101
+	[the controller has the duty] as activity_102
+	[these conditions not need the personal data for the purposes] as activity_103
+	<> as gateway_94
+	<> as gateway_94_end
+	<> as gateway_97
+	<> as gateway_97_end
+	[when the controller 's obligation does n't apply need processing] as activity_104
+	[data not apply] as activity_105
+	[obligation not apply] as activity_106
+	(end) as end
+
+start->activity_101->activity_102->activity_103->gateway_94
+gateway_94-"the data subject\nobject article\n21"->gateway_94_end
+gateway_94-"the data subject\nobjects the processing\nunder article 21\nwithout"->gateway_94_end
+gateway_94_end->gateway_97
+gateway_97-"other conditions\nneed the personal\ndata"->gateway_97_end
+gateway_97-"other conditions\nprocess the personal\ndata"->gateway_97_end
+gateway_97-"the last condition\ncollect the personal\ndata"->gateway_97_end
+gateway_97_end->activity_104->activity_105->activity_106->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text14own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("controller") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_101 = lane1.add_element("the data subject has the right", ActivityType.TASK)
+  6         activity_102 = lane1.add_element("the controller has the duty", ActivityType.TASK)
+  7         activity_103 = lane1.add_element("these conditions not need the personal data for the purposes", ActivityType.TASK)
+  8         gateway_94 = lane1.add_element("", GatewayType.EXCLUSIVE)
+  9         gateway_94_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+ 10         gateway_97 = lane1.add_element("", GatewayType.EXCLUSIVE)
+ 11         gateway_97_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+ 12         activity_104 = lane1.add_element("when the controller 's obligation does n't apply need processing", ActivityType.TASK)
+ 13         activity_105 = lane1.add_element("data not apply", ActivityType.TASK)
+ 14         activity_106 = lane1.add_element("obligation not apply", ActivityType.TASK)
+ 15         end = lane1.add_element("end", EventType.END)
+ 16         start.connect(activity_101)
+ 17         activity_101.connect(activity_102)
+ 18         activity_102.connect(activity_103)
+ 19         activity_103.connect(gateway_94)
+ 20         gateway_94.connect(gateway_94_end, "the data subject\nobject article\n21")
+ 21         gateway_94.connect(gateway_94_end, "the data subject\nobjects the processing\nunder article 21\nwithout")
+ 22         gateway_94_end.connect(gateway_97)
+ 23         gateway_97.connect(gateway_97_end, "other conditions\nneed the personal\ndata")
+ 24         gateway_97.connect(gateway_97_end, "other conditions\nprocess the personal\ndata")
+ 25         gateway_97.connect(gateway_97_end, "the last condition\ncollect the personal\ndata")
+ 26         gateway_97_end.connect(activity_104)
+ 27         activity_104.connect(activity_105)
+ 28         activity_105.connect(activity_106)
+ 29         activity_106.connect(end)
+ 30     my_process_map.draw()
+ 31     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text14_GPT4.png")
+2023-10-20 13:48:41 [INFO] : Took [160.87ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text14_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The aim is to remotely interrupt the supply of electrical energy for an object, as a result of a customer change or due to open collection claims, via the central system. The shutdown takes place by opening the breaker present in the terminal. From the central system, a shutdown command is transmitted to the affected terminal. The terminal executes the received command, i.e., the internal breaker interrupts the power supply of the customer system, returns the status of the shutdown to the central system and creates an entry in the logbook. This status must be visible on the terminal. With collection there is no possibility of an immediate on-site reconnection by the customer after the blocking. Input is either deregistration of current customer, customer moves out without new tenant or customer does not pay after admonition process. The supply of electrical energy is interrupted, the status "interrupted" is displayed at the terminal and in the central system. An entry in the logbook of the terminal has been created. 
+chat_response: 
+ 	 The central system transmits a shutdown command to the terminal when the supply of electrical energy for an object needs to be interrupted due to a customer change or open collection claims. The terminal executes the received command and the internal breaker interrupts the power supply of the customer system. The terminal then returns the status of the shutdown to the central system and creates an entry in the logbook. This status is displayed on the terminal. After the blocking, the customer will not have the possibility for an immediate on-site reconnection. The triggering events could be the deregistration of current customer, a customer moving out without a new tenant or a customer failing to pay after the admonition process. The interruption of the electrical energy supply is displayed as "interrupted" at the terminal and in the central system, and an entry in the terminal's logbook is created.
+Document: The central system transmits a shutdown command to the terminal when the supply of electrical energy for an object needs to be interrupted due to a customer change or open collection claims. The terminal executes the received command and the internal breaker interrupts the power supply of the customer system. The terminal then returns the status of the shutdown to the central system and creates an entry in the logbook. This status is displayed on the terminal. After the blocking, the customer will not have the possibility for an immediate on-site reconnection. The triggering events could be the deregistration of current customer, a customer moving out without a new tenant or a customer failing to pay after the admonition process. The interruption of the electrical energy supply is displayed as "interrupted" at the terminal and in the central system, and an entry in the terminal's logbook is created.
+
+Spacy standard Splitting:The central system transmits a shutdown command to the terminal when the supply of electrical energy for an object needs to be interrupted due to a customer change or open collection claims.
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:The terminal executes the received command and the internal breaker interrupts the power supply of the customer system.
+
+determine_actor_vh: actor: The terminal
+actor: terminal
+Spacy standard Splitting:The terminal then returns the status of the shutdown to the central system and creates an entry in the logbook.
+
+determine_actor_vh: actor: The terminal
+actor: terminal
+Spacy standard Splitting:This status is displayed on the terminal.
+
+determine_actor_vh: actor: This status
+actor: status
+Spacy standard Splitting:After the blocking, the customer will not have the possibility for an immediate on-site reconnection.
+
+determine_actor_vh: actor: the customer
+actor: customer
+Spacy standard Splitting:The triggering events could be the deregistration of current customer, a customer moving out without a new tenant or a customer failing to pay after the admonition process.
+
+determine_actor_vh: actor: The triggering events
+actor: events
+Spacy standard Splitting:The interruption of the electrical energy supply is displayed as "interrupted" at the terminal and in the central system, and an entry in the terminal's logbook is created.
+
+determine_actor_vh: actor: The interruption of the electrical energy supply
+actor: supply
+get_valid_actors_vh1
+Actor: terminal 
+Actor: terminal 
+Actor: terminal 
+Actor: terminal 
+Actor: status 
+Actor: customer 
+Actor: electrical energy supply 
+Actor: electrical energy supply 
+-----BEGIN_AND-----
+1:
+	the terminal executes the received command
+	the terminal interrupt the power supply of the customer system
+-----END_AND-----
+-----BEGIN_AND-----
+1:
+	the terminal returns the status of the shutdown to the central system
+	the terminal create an entry in the logbook
+-----END_AND-----
+this status display this status
+the customer have not the possibility for an immediate on site reconnection
+-----BEGIN_AND-----
+1:
+	the electrical energy supply display the interruption of the electrical energy supply
+	the electrical energy supply create an entry in the terminal 's logbook
+-----END_AND-----
+Valid Actors: ['customer ']
+
+title: Text15own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: customer 
+	(start) as start
+	<@parallel> as gateway_107
+	[the terminal executes the received command] as activity_108
+	[the terminal interrupt the power supply of the customer system] as activity_109
+	<@parallel> as gateway_107_end
+	<@parallel> as gateway_110
+	[the terminal returns the status of the shutdown to the central system] as activity_111
+	[the terminal create an entry in the logbook] as activity_112
+	<@parallel> as gateway_110_end
+	[this status display this status] as activity_116
+	[the customer have not the possibility for an immediate on site reconnection] as activity_117
+	<@parallel> as gateway_113
+	[the electrical energy supply display the interruption of the electrical energy supply] as activity_114
+	[the electrical energy supply create an entry in the terminal 's logbook] as activity_115
+	<@parallel> as gateway_113_end
+	(end) as end
+
+start->gateway_107
+gateway_107->activity_108->gateway_107_end
+gateway_107->activity_109->gateway_107_end
+gateway_107_end->gateway_110
+gateway_110->activity_111->gateway_110_end
+gateway_110->activity_112->gateway_110_end
+gateway_110_end->activity_116->activity_117->gateway_113
+gateway_113->activity_114->gateway_113_end
+gateway_113->activity_115->gateway_113_end
+gateway_113_end->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text15own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("customer") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         gateway_107 = lane1.add_element("", GatewayType.PARALLEL)
+  6         activity_108 = lane1.add_element("the terminal executes the received command", ActivityType.TASK)
+  7         activity_109 = lane1.add_element("the terminal interrupt the power supply of the customer system", ActivityType.TASK)
+  8         gateway_107_end = lane1.add_element("", GatewayType.PARALLEL)
+  9         gateway_110 = lane1.add_element("", GatewayType.PARALLEL)
+ 10         activity_111 = lane1.add_element("the terminal returns the status of the shutdown to the central system", ActivityType.TASK)
+ 11         activity_112 = lane1.add_element("the terminal create an entry in the logbook", ActivityType.TASK)
+ 12         gateway_110_end = lane1.add_element("", GatewayType.PARALLEL)
+ 13         activity_116 = lane1.add_element("this status display this status", ActivityType.TASK)
+ 14         activity_117 = lane1.add_element("the customer have not the possibility for an immediate on site reconnection", ActivityType.TASK)
+ 15         gateway_113 = lane1.add_element("", GatewayType.PARALLEL)
+ 16         activity_114 = lane1.add_element("the electrical energy supply display the interruption of the electrical energy supply", ActivityType.TASK)
+ 17         activity_115 = lane1.add_element("the electrical energy supply create an entry in the terminal 's logbook", ActivityType.TASK)
+ 18         gateway_113_end = lane1.add_element("", GatewayType.PARALLEL)
+ 19         end = lane1.add_element("end", EventType.END)
+ 20         start.connect(gateway_107)
+ 21         gateway_107.connect(activity_108)
+ 22         activity_108.connect(gateway_107_end)
+ 23         gateway_107.connect(activity_109)
+ 24         activity_109.connect(gateway_107_end)
+ 25         gateway_107_end.connect(gateway_110)
+ 26         gateway_110.connect(activity_111)
+ 27         activity_111.connect(gateway_110_end)
+ 28         gateway_110.connect(activity_112)
+ 29         activity_112.connect(gateway_110_end)
+ 30         gateway_110_end.connect(activity_116)
+ 31         activity_116.connect(activity_117)
+ 32         activity_117.connect(gateway_113)
+ 33         gateway_113.connect(activity_114)
+ 34         activity_114.connect(gateway_113_end)
+ 35         gateway_113.connect(activity_115)
+ 36         activity_115.connect(gateway_113_end)
+ 37         gateway_113_end.connect(end)
+ 38     my_process_map.draw()
+ 39     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text15_GPT4.png")
+2023-10-20 13:49:06 [INFO] : Took [189.35ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text15_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The prepayment function is realized via the central system. The terminal only acts as a switching device. The central system generates the shutdown command by comparing credits with consumption. The comparison of credits with actual consumption value should be made periodically. The basis is the daily readings. A "real-time monitoring" is therefore not necessary. Shutdown may only be carried out in compliance with legal conditions. Each status change of the terminal must be displayed on the device and also create an entry in the logbook. There may be a corresponding customer information about the current balance from the central system to the customer.  Credit or credit limit is consumed and shutdown time is within the legally allowed time window.  The supply of electrical energy is interrupted and the status of the breaker is displayed on the terminal, an entry in the logbook of the terminal is generated and the status is transmitted to the central system. 
+chat_response: 
+ 	 The central system realizes the prepayment function with the terminal acting as a switching device. The central system generates the shutdown command by comparing credits with consumption. This comparison should be made periodically with daily readings forming the basis. Legal conditions must be complied with for a shutdown to occur. Any status change of the terminal must be displayed on the device and an entry created in the logbook. The central system may provide customer information about the current balance. If the credit or credit limit is consumed and shutdown time is within the legally allowed window, the supply of electrical energy is interrupted. The status of the breaker is displayed on the terminal, an entry in the logbook of the terminal is generated, and the status is transmitted to the central system.
+Document: The central system realizes the prepayment function with the terminal acting as a switching device. The central system generates the shutdown command by comparing credits with consumption. This comparison should be made periodically with daily readings forming the basis. Legal conditions must be complied with for a shutdown to occur. Any status change of the terminal must be displayed on the device and an entry created in the logbook. The central system may provide customer information about the current balance. If the credit or credit limit is consumed and shutdown time is within the legally allowed window, the supply of electrical energy is interrupted. The status of the breaker is displayed on the terminal, an entry in the logbook of the terminal is generated, and the status is transmitted to the central system.
+
+Spacy standard Splitting:The central system realizes the prepayment function with the terminal acting as a switching device.
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:The central system generates the shutdown command by comparing credits with consumption.
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:This comparison should be made periodically with daily readings forming the basis.
+
+determine_actor_vh: actor: This comparison
+actor: comparison
+Spacy standard Splitting:Legal conditions must be complied with for a shutdown to occur.
+
+determine_actor_vh: actor: Legal conditions
+actor: conditions
+Spacy standard Splitting:Any status change of the terminal must be displayed on the device and an entry created in the logbook.
+
+determine_actor_vh: actor: Any status change of the terminal
+actor: terminal
+Spacy standard Splitting:The central system may provide customer information about the current balance.
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:If the credit or credit limit is consumed and shutdown time is within the legally allowed window, the supply of electrical energy is interrupted.
+
+determine_actor_vh: actor: the credit or credit limit
+actor: limit
+Spacy standard Splitting:The status of the breaker is displayed on the terminal, an entry in the logbook of the terminal is generated, and the status is transmitted to the central system.
+
+determine_actor_vh: actor: The status of the breaker
+actor: breaker
+get_valid_actors_vh1
+Actor: central system 
+Actor: central system 
+Actor: comparison 
+Actor: Legal conditions 
+Actor: terminal 
+Actor: terminal 
+Actor: central system 
+Actor: limit 
+Actor: breaker 
+Actor: breaker 
+breaker                                                     breaker                                                     1.0                 1.0       True      
+Actor: breaker 
+breaker                                                     breaker                                                     1.0                 1.0       True      
+the central system realizes the prepayment function
+the central system generates the shutdown command
+this comparison make this comparison
+legal conditions comply legal conditions
+-----BEGIN_AND-----
+1:
+	the terminal display any status change of the terminal
+	the terminal entry any status change of the terminal
+-----END_AND-----
+the central system provide customer information about the current balance
+-----BEGIN_IF-----
+if: the credit or credit limit consume the credit or credit limit
+else:
+
+-----END_IF-----
+the breaker display the status of the breaker
+the breaker generate an entry in the logbook of the terminal
+the breaker transmit the status to the central system
+Valid Actors: ['breaker ']
+
+title: Text16own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: breaker 
+	(start) as start
+	[the central system realizes the prepayment function] as activity_123
+	[the central system generates the shutdown command] as activity_124
+	[this comparison make this comparison] as activity_125
+	[legal conditions comply legal conditions] as activity_126
+	<@parallel> as gateway_118
+	[the terminal display any status change of the terminal] as activity_119
+	[the terminal entry any status change of the terminal] as activity_120
+	<@parallel> as gateway_118_end
+	[the central system provide customer information about the current balance] as activity_127
+	<the credit or credit limit consume the credit or credit limit?> as gateway_121
+	<> as gateway_121_end
+	[the breaker display the status of the breaker] as activity_128
+	[the breaker generate an entry in the logbook of the terminal] as activity_129
+	[the breaker transmit the status to the central system] as activity_130
+	(end) as end
+
+start->activity_123->activity_124->activity_125->activity_126->gateway_118
+gateway_118->activity_119->gateway_118_end
+gateway_118->activity_120->gateway_118_end
+gateway_118_end->activity_127->gateway_121
+gateway_121-"yes"->gateway_121_end
+gateway_121-"no"->gateway_121_end
+gateway_121_end->activity_128->activity_129->activity_130->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text16own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("breaker") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_123 = lane1.add_element("the central system realizes the prepayment function", ActivityType.TASK)
+  6         activity_124 = lane1.add_element("the central system generates the shutdown command", ActivityType.TASK)
+  7         activity_125 = lane1.add_element("this comparison make this comparison", ActivityType.TASK)
+  8         activity_126 = lane1.add_element("legal conditions comply legal conditions", ActivityType.TASK)
+  9         gateway_118 = lane1.add_element("", GatewayType.PARALLEL)
+ 10         activity_119 = lane1.add_element("the terminal display any status change of the terminal", ActivityType.TASK)
+ 11         activity_120 = lane1.add_element("the terminal entry any status change of the terminal", ActivityType.TASK)
+ 12         gateway_118_end = lane1.add_element("", GatewayType.PARALLEL)
+ 13         activity_127 = lane1.add_element("the central system provide customer information about the current balance", ActivityType.TASK)
+ 14         gateway_121 = lane1.add_element("the credit or credit limit consume the credit or credit limit?", GatewayType.EXCLUSIVE)
+ 15         gateway_121_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+ 16         activity_128 = lane1.add_element("the breaker display the status of the breaker", ActivityType.TASK)
+ 17         activity_129 = lane1.add_element("the breaker generate an entry in the logbook of the terminal", ActivityType.TASK)
+ 18         activity_130 = lane1.add_element("the breaker transmit the status to the central system", ActivityType.TASK)
+ 19         end = lane1.add_element("end", EventType.END)
+ 20         start.connect(activity_123)
+ 21         activity_123.connect(activity_124)
+ 22         activity_124.connect(activity_125)
+ 23         activity_125.connect(activity_126)
+ 24         activity_126.connect(gateway_118)
+ 25         gateway_118.connect(activity_119)
+ 26         activity_119.connect(gateway_118_end)
+ 27         gateway_118.connect(activity_120)
+ 28         activity_120.connect(gateway_118_end)
+ 29         gateway_118_end.connect(activity_127)
+ 30         activity_127.connect(gateway_121)
+ 31         gateway_121.connect(gateway_121_end, "yes")
+ 32         gateway_121.connect(gateway_121_end, "no")
+ 33         gateway_121_end.connect(activity_128)
+ 34         activity_128.connect(activity_129)
+ 35         activity_129.connect(activity_130)
+ 36         activity_130.connect(end)
+ 37     my_process_map.draw()
+ 38     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text16_GPT4.png")
+2023-10-20 13:49:29 [INFO] : Took [209.12ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text16_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+Exceeding an active power limit set in the meter and activated shuts down the customer system. For the customer, immediate reclosing on site, ie directly at the meter, must be possible. The shutdown, the message of the reclosing and the exceeding of the power threshold must be able to be transmitted to the central system as ALARM or EVENT and also visualized on the meter. Breaker status is, e.g., OFF and READY. An entry is also created in the logbook. In the logbook, in addition to changing the breaker status, the reason for the shutdown, e.g. "Power limit exceeded by xxx watts" can be logged.  Exceeding the power threshold, for example in the context of the basic supply.  Exceeding the power threshold was entered in the logbook of the meter and transmitted to the central system as an ALARM or EVENT. 
+chat_response: 
+ 	 If the customer system exceeds an active power limit set in the meter, the system shuts down. It must be possible for the customer to immediately reclose on site, directly at the meter. The shutdown, the message of the reclosing, and the exceeding of the power threshold can be transmitted to the central system as ALARM or EVENT and also visualized on the meter. The breaker status is updated, with possible statuses such as OFF and READY. A logbook entry is created, recording changes to the breaker status and the reason for the shutdown. The reason for the shutdown can include details, such as the power limit exceeded by a certain number of watts. The exceeding of the power threshold is logged in the meter's logbook and transmitted to the central system as an ALARM or EVENT.
+Document: If the customer system exceeds an active power limit set in the meter, the system shuts down. It must be possible for the customer to immediately reclose on site, directly at the meter. The shutdown, the message of the reclosing, and the exceeding of the power threshold can be transmitted to the central system as ALARM or EVENT and also visualized on the meter. The breaker status is updated, with possible statuses such as OFF and READY. A logbook entry is created, recording changes to the breaker status and the reason for the shutdown. The reason for the shutdown can include details, such as the power limit exceeded by a certain number of watts. The exceeding of the power threshold is logged in the meter's logbook and transmitted to the central system as an ALARM or EVENT.
+
+Spacy standard Splitting:If the customer system exceeds an active power limit set in the meter, the system shuts down.
+
+determine_actor_vh: actor: the customer system
+actor: system
+Spacy standard Splitting:It must be possible for the customer to immediately reclose on site, directly at the meter.
+
+determine_actor_vh: actor: It
+actor: It
+Spacy standard Splitting:The shutdown, the message of the reclosing, and the exceeding of the power threshold can be transmitted to the central system as ALARM or EVENT and also visualized on the meter.
+
+determine_actor_vh: actor: The shutdown, the message of the reclosing, and the exceeding of the power threshold
+actor: threshold
+Spacy standard Splitting:The breaker status is updated, with possible statuses such as OFF and READY.
+
+determine_actor_vh: actor: The breaker status
+actor: status
+Spacy standard Splitting:A logbook entry is created, recording changes to the breaker status and the reason for the shutdown.
+
+determine_actor_vh: actor: A logbook entry
+actor: entry
+Spacy standard Splitting:The reason for the shutdown can include details, such as the power limit exceeded by a certain number of watts.
+
+determine_actor_vh: actor: The reason for the shutdown
+actor: shutdown
+Spacy standard Splitting:The exceeding of the power threshold is logged in the meter's logbook and transmitted to the central system as an ALARM or EVENT.
+
+determine_actor_vh: actor: The exceeding of the power threshold
+actor: threshold
+get_valid_actors_vh1
+Actor: customer system 
+Actor: power threshold 
+Actor: power threshold 
+Actor: breaker status 
+Actor: logbook entry 
+Actor: power threshold 
+Actor: power threshold 
+-----BEGIN_IF-----
+if: the customer system exceeds an active power limit
+else:
+
+-----END_IF-----
+-----BEGIN_AND-----
+1:
+	the power threshold transmit the shutdown the message of the reclosing and the exceeding of the power threshold the central system as
+	the power threshold visualize the shutdown the message of the reclosing and the exceeding of the power threshold
+-----END_AND-----
+the breaker status update the breaker status
+a logbook entry create a logbook entry
+-----BEGIN_AND-----
+1:
+	the power threshold log the exceeding of the power threshold
+	the power threshold transmit the exceeding of the power threshold the central system as
+-----END_AND-----
+Valid Actors: []
+
+title: Text17own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	<the customer system exceeds an active power limit?> as gateway_131
+	<> as gateway_131_end
+	<@parallel> as gateway_133
+	[the power threshold transmit the shutdown the message of the reclosing and the exceeding of the power threshold the central system as] as activity_134
+	[the power threshold visualize the shutdown the message of the reclosing and the exceeding of the power threshold] as activity_135
+	<@parallel> as gateway_133_end
+	[the breaker status update the breaker status] as activity_139
+	[a logbook entry create a logbook entry] as activity_140
+	<@parallel> as gateway_136
+	[the power threshold log the exceeding of the power threshold] as activity_137
+	[the power threshold transmit the exceeding of the power threshold the central system as] as activity_138
+	<@parallel> as gateway_136_end
+	(end) as end
+
+start->gateway_131
+gateway_131-"yes"->gateway_131_end
+gateway_131-"no"->gateway_131_end
+gateway_131_end->gateway_133
+gateway_133->activity_134->gateway_133_end
+gateway_133->activity_135->gateway_133_end
+gateway_133_end->activity_139->activity_140->gateway_136
+gateway_136->activity_137->gateway_136_end
+gateway_136->activity_138->gateway_136_end
+gateway_136_end->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text17own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         gateway_131 = lane1.add_element("the customer system exceeds an active power limit?", GatewayType.EXCLUSIVE)
+  6         gateway_131_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+  7         gateway_133 = lane1.add_element("", GatewayType.PARALLEL)
+  8         activity_134 = lane1.add_element("the power threshold transmit the shutdown the message of the reclosing and the exceeding of the power threshold the central system as", ActivityType.TASK)
+  9         activity_135 = lane1.add_element("the power threshold visualize the shutdown the message of the reclosing and the exceeding of the power threshold", ActivityType.TASK)
+ 10         gateway_133_end = lane1.add_element("", GatewayType.PARALLEL)
+ 11         activity_139 = lane1.add_element("the breaker status update the breaker status", ActivityType.TASK)
+ 12         activity_140 = lane1.add_element("a logbook entry create a logbook entry", ActivityType.TASK)
+ 13         gateway_136 = lane1.add_element("", GatewayType.PARALLEL)
+ 14         activity_137 = lane1.add_element("the power threshold log the exceeding of the power threshold", ActivityType.TASK)
+ 15         activity_138 = lane1.add_element("the power threshold transmit the exceeding of the power threshold the central system as", ActivityType.TASK)
+ 16         gateway_136_end = lane1.add_element("", GatewayType.PARALLEL)
+ 17         end = lane1.add_element("end", EventType.END)
+ 18         start.connect(gateway_131)
+ 19         gateway_131.connect(gateway_131_end, "yes")
+ 20         gateway_131.connect(gateway_131_end, "no")
+ 21         gateway_131_end.connect(gateway_133)
+ 22         gateway_133.connect(activity_134)
+ 23         activity_134.connect(gateway_133_end)
+ 24         gateway_133.connect(activity_135)
+ 25         activity_135.connect(gateway_133_end)
+ 26         gateway_133_end.connect(activity_139)
+ 27         activity_139.connect(activity_140)
+ 28         activity_140.connect(gateway_136)
+ 29         gateway_136.connect(activity_137)
+ 30         activity_137.connect(gateway_136_end)
+ 31         gateway_136.connect(activity_138)
+ 32         activity_138.connect(gateway_136_end)
+ 33         gateway_136_end.connect(end)
+ 34     my_process_map.draw()
+ 35     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text17_GPT4.png")
+2023-10-20 13:49:51 [INFO] : Took [189.65ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text17_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+There is an elimination of the terminal on-site by means of a mobile device via the service interface (WZ). In order to meet the strict data protection regulations, the cryptographic parameters that authorize the device to be switched off must be stored on the mobile device. It must therefore not be possible with these cryptographic parameters to turn off several or all terminals of the terminal equipment. The cryptographic parameters must comply with the security concept from "OE Requirements Catalog End-to-End Security Smart Metering".  Input is either deregistration of current customer or customer moves out without new tenant.  The breaker of the terminal has switched off the system, indicating this on the device. An entry in the logbook of the terminal has been created. 
+chat_response: 
+ 	 The cryptographic parameters must be stored on the mobile device to authorize the terminal's shutdown, adhering to strict data protection regulations. These parameters must not enable the shutdown of several or all terminals of the terminal equipment. The cryptographic parameters must comply with the security concept from the "OE Requirements Catalog End-to-End Security Smart Metering". The input can either be the deregistration of the current customer or the customer moving out without a new tenant. The breaker of the terminal switches off the system and indicates this on the device. Additionally, an entry in the logbook of the terminal is created.
+Document: The cryptographic parameters must be stored on the mobile device to authorize the terminal's shutdown, adhering to strict data protection regulations. These parameters must not enable the shutdown of several or all terminals of the terminal equipment. The cryptographic parameters must comply with the security concept from the "OE Requirements Catalog End-to-End Security Smart Metering". The input can either be the deregistration of the current customer or the customer moving out without a new tenant. The breaker of the terminal switches off the system and indicates this on the device. Additionally, an entry in the logbook of the terminal is created.
+
+Spacy standard Splitting:The cryptographic parameters must be stored on the mobile device to authorize the terminal's shutdown, adhering to strict data protection regulations.
+
+determine_actor_vh: actor: The cryptographic parameters
+actor: parameters
+Spacy standard Splitting:These parameters must not enable the shutdown of several or all terminals of the terminal equipment.
+
+determine_actor_vh: actor: These parameters
+actor: parameters
+Spacy standard Splitting:The cryptographic parameters must comply with the security concept from the "OE Requirements Catalog End-to-End Security Smart Metering".
+
+determine_actor_vh: actor: The cryptographic parameters
+actor: parameters
+Spacy standard Splitting:The input can either be the deregistration of the current customer or the customer moving out without a new tenant.
+
+determine_actor_vh: actor: The input
+actor: input
+Spacy standard Splitting:The breaker of the terminal switches off the system and indicates this on the device.
+
+determine_actor_vh: actor: The breaker of the terminal
+actor: terminal
+Spacy standard Splitting:Additionally, an entry in the logbook of the terminal is created.
+
+determine_actor_vh: actor: an entry in the logbook of the terminal
+actor: terminal
+get_valid_actors_vh1
+Actor: cryptographic parameters 
+Actor: parameters 
+Actor: cryptographic parameters 
+Actor: terminal 
+Actor: terminal 
+Actor: terminal 
+the cryptographic parameters store the cryptographic parameters
+these parameters not enable the shutdown of several or all terminals of the terminal equipment
+the cryptographic parameters comply the security concept from the oe requirements catalog end to end security smart metering
+-----BEGIN_AND-----
+1:
+	the terminal switches off the system
+	the terminal indicate this
+-----END_AND-----
+the terminal create an entry in the logbook of the terminal
+Valid Actors: []
+
+title: Text18own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[the cryptographic parameters store the cryptographic parameters] as activity_144
+	[these parameters not enable the shutdown of several or all terminals of the terminal equipment] as activity_145
+	[the cryptographic parameters comply the security concept from the oe requirements catalog end to end security smart metering] as activity_146
+	<@parallel> as gateway_141
+	[the terminal switches off the system] as activity_142
+	[the terminal indicate this] as activity_143
+	<@parallel> as gateway_141_end
+	[the terminal create an entry in the logbook of the terminal] as activity_147
+	(end) as end
+
+start->activity_144->activity_145->activity_146->gateway_141
+gateway_141->activity_142->gateway_141_end
+gateway_141->activity_143->gateway_141_end
+gateway_141_end->activity_147->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text18own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_144 = lane1.add_element("the cryptographic parameters store the cryptographic parameters", ActivityType.TASK)
+  6         activity_145 = lane1.add_element("these parameters not enable the shutdown of several or all terminals of the terminal equipment", ActivityType.TASK)
+  7         activity_146 = lane1.add_element("the cryptographic parameters comply the security concept from the oe requirements catalog end to end security smart metering", ActivityType.TASK)
+  8         gateway_141 = lane1.add_element("", GatewayType.PARALLEL)
+  9         activity_142 = lane1.add_element("the terminal switches off the system", ActivityType.TASK)
+ 10         activity_143 = lane1.add_element("the terminal indicate this", ActivityType.TASK)
+ 11         gateway_141_end = lane1.add_element("", GatewayType.PARALLEL)
+ 12         activity_147 = lane1.add_element("the terminal create an entry in the logbook of the terminal", ActivityType.TASK)
+ 13         end = lane1.add_element("end", EventType.END)
+ 14         start.connect(activity_144)
+ 15         activity_144.connect(activity_145)
+ 16         activity_145.connect(activity_146)
+ 17         activity_146.connect(gateway_141)
+ 18         gateway_141.connect(activity_142)
+ 19         activity_142.connect(gateway_141_end)
+ 20         gateway_141.connect(activity_143)
+ 21         activity_143.connect(gateway_141_end)
+ 22         gateway_141_end.connect(activity_147)
+ 23         activity_147.connect(end)
+ 24     my_process_map.draw()
+ 25     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text18_GPT4.png")
+2023-10-20 13:50:10 [INFO] : Took [151.66ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text18_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The operating limit of the meter is set by the control panel. Optionally this is possible for both energy directions.  Change requirement threshold of the power limitation, for example due to contract adjustments.  New threshold set, EVENT sent to the central system and logbook entry made on the meter.  The active power limit value of the meter must be able to be set locally via the service interface (WZ) of the meter. Optionally this is possible for both energy directions.   A logbook entry is generated. This state is transmitted to the central system as an ALARM or EVENT when the transmission link (WAN) is available. 
+chat_response: 
+ 	 The control panel sets the operating limit of the meter for both energy directions. If there is a change in the power limitation threshold, the new threshold is set, an event is sent to the central system and a logbook entry is made on the meter. The active power limit value of the meter can be set locally via the service interface of the meter for both energy directions. A logbook entry is generated. If the transmission link is available, this state is transmitted to the central system as an alarm or event.
+Document: The control panel sets the operating limit of the meter for both energy directions. If there is a change in the power limitation threshold, the new threshold is set, an event is sent to the central system and a logbook entry is made on the meter. The active power limit value of the meter can be set locally via the service interface of the meter for both energy directions. A logbook entry is generated. If the transmission link is available, this state is transmitted to the central system as an alarm or event.
+
+Spacy standard Splitting:The control panel sets the operating limit of the meter for both energy directions.
+
+determine_actor_vh: actor: The control panel
+actor: panel
+Spacy standard Splitting:If there is a change in the power limitation threshold, the new threshold is set, an event is sent to the central system and a logbook entry is made on the meter.
+
+determine_actor_vh: actor: there
+actor: there
+Spacy standard Splitting:The active power limit value of the meter can be set locally via the service interface of the meter for both energy directions.
+
+determine_actor_vh: actor: The active power limit value of the meter
+actor: meter
+Spacy standard Splitting:A logbook entry is generated.
+
+determine_actor_vh: actor: A logbook entry
+actor: entry
+Spacy standard Splitting:If the transmission link is available, this state is transmitted to the central system as an alarm or event.
+
+determine_actor_vh: actor: the transmission link
+actor: link
+get_valid_actors_vh1
+Actor: control panel 
+Actor: there 
+Actor: there 
+Actor: there 
+Actor: meter 
+Actor: logbook entry 
+Actor: transmission link 
+the control panel sets the operating limit of the meter for both energy directions
+there set the new threshold
+there send an event to the central system
+there make a logbook entry
+the meter set the active power limit value of the meter for both energy directions
+a logbook entry generate a logbook entry
+the transmission link transmit this state the central system as
+Valid Actors: []
+
+title: Text19own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[the control panel sets the operating limit of the meter for both energy directions] as activity_148
+	[there set the new threshold] as activity_149
+	[there send an event to the central system] as activity_150
+	[there make a logbook entry] as activity_151
+	[the meter set the active power limit value of the meter for both energy directions] as activity_152
+	[a logbook entry generate a logbook entry] as activity_153
+	[the transmission link transmit this state the central system as] as activity_154
+	(end) as end
+
+start->activity_148->activity_149->activity_150->activity_151->activity_152->activity_153->activity_154->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text19own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_148 = lane1.add_element("the control panel sets the operating limit of the meter for both energy directions", ActivityType.TASK)
+  6         activity_149 = lane1.add_element("there set the new threshold", ActivityType.TASK)
+  7         activity_150 = lane1.add_element("there send an event to the central system", ActivityType.TASK)
+  8         activity_151 = lane1.add_element("there make a logbook entry", ActivityType.TASK)
+  9         activity_152 = lane1.add_element("the meter set the active power limit value of the meter for both energy directions", ActivityType.TASK)
+ 10         activity_153 = lane1.add_element("a logbook entry generate a logbook entry", ActivityType.TASK)
+ 11         activity_154 = lane1.add_element("the transmission link transmit this state the central system as", ActivityType.TASK)
+ 12         end = lane1.add_element("end", EventType.END)
+ 13         start.connect(activity_148)
+ 14         activity_148.connect(activity_149)
+ 15         activity_149.connect(activity_150)
+ 16         activity_150.connect(activity_151)
+ 17         activity_151.connect(activity_152)
+ 18         activity_152.connect(activity_153)
+ 19         activity_153.connect(activity_154)
+ 20         activity_154.connect(end)
+ 21     my_process_map.draw()
+ 22     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text19_GPT4.png")
+2023-10-20 13:50:29 [INFO] : Took [130.51ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text19_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The customer interface (H1) on the meter is to be activated or deactivated from the central system, whereby it is deactivated by adefault. The control center receives an information status as ALARM or EVENT.  Customer wants to use or not use customer interface (H1) anymore.  Customer interface (H1) on the meter is activated / deactivated and there is an entry in the logbook. meter reports its status to the control panel as ALARM or EVENT. 
+chat_response: 
+ 	 The central system activates or deactivates the customer interface (H1) on the meter, which is deactivated by default. If the customer wants to use or not use the customer interface (H1), the meter activates or deactivates the customer interface (H1) and creates an entry in the logbook. In the meantime, the meter reports its status to the control center as ALARM or EVENT.
+Document: The central system activates or deactivates the customer interface on the meter, which is deactivated by default. If the customer wants to use or not use the customer interface , the meter activates or deactivates the customer interface and creates an entry in the logbook. In the meantime, the meter reports its status to the control center as ALARM or EVENT.
+
+Spacy standard Splitting:The central system activates or deactivates the customer interface on the meter, which is deactivated by default.
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:If the customer wants to use or not use the customer interface , the meter activates or deactivates the customer interface and creates an entry in the logbook.
+
+determine_actor_vh: actor: the customer
+actor: customer
+Spacy standard Splitting:In the meantime, the meter reports its status to the control center as ALARM or EVENT.
+
+determine_actor_vh: actor: the meter
+actor: meter
+get_valid_actors_vh1
+Actor: central system 
+Actor: customer 
+Actor: meter 
+the central system deactivate the customer interface on the meter
+-----BEGIN_IF-----
+if: the customer wants
+else:
+
+-----END_IF-----
+Valid Actors: ['customer ']
+
+title: Text20own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: customer 
+	(start) as start
+	[the central system deactivate the customer interface on the meter] as activity_157
+	<the customer wants?> as gateway_155
+	<> as gateway_155_end
+	(end) as end
+
+start->activity_157->gateway_155
+gateway_155-"yes"->gateway_155_end
+gateway_155-"no"->gateway_155_end
+gateway_155_end->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text20own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("customer") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_157 = lane1.add_element("the central system deactivate the customer interface on the meter", ActivityType.TASK)
+  6         gateway_155 = lane1.add_element("the customer wants?", GatewayType.EXCLUSIVE)
+  7         gateway_155_end = lane1.add_element("", GatewayType.EXCLUSIVE)
+  8         end = lane1.add_element("end", EventType.END)
+  9         start.connect(activity_157)
+ 10         activity_157.connect(gateway_155)
+ 11         gateway_155.connect(gateway_155_end, "yes")
+ 12         gateway_155.connect(gateway_155_end, "no")
+ 13         gateway_155_end.connect(end)
+ 14     my_process_map.draw()
+ 15     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text20_GPT4.png")
+2023-10-20 13:50:45 [INFO] : Took [76.78ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text20_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+In the course of the so-called opt-out regulation, it must be possible for customers who refuse to install an intelligent electricity meter to deactivate the load profile recording in the meter. Activation / deactivation of load profile recording must be possible remotely (WAN interface). Each of these changes must be logged in the relevant legal logbook of the meter. If the customer is opt-out, it must be displayed on the meter accordingly (for example, display, LED).  Opt-out request of the customer to implement at the NL.  Load profile recording is activated / deactivated and the information has been transmitted to the central system as ALARM or EVENT. A logbook entry has been made in the meter and the current status OPT-OUT is displayed on the meter. 
+chat_response: 
+ 	 The customer refuses to install an intelligent electricity meter. The activation or deactivation of load profile recording must be available remotely. Changes must be logged in the meter's legal logbook. If the customer opts out, it is displayed on the meter. The customer's opt-out request should be implemented at the NL. The activation or deactivation of the load profile recording must be transmitted to the central system as an ALARM or EVENT. Furthermore, an entry in the meter's logbook must be made and the status OPT-OUT must be displayed on the meter.
+Document: The customer refuses to install an intelligent electricity meter. The activation or deactivation of load profile recording must be available remotely. Changes must be logged in the meter's legal logbook. If the customer opts out, it is displayed on the meter. The customer's opt-out request should be implemented at the NL. The activation or deactivation of the load profile recording must be transmitted to the central system as an ALARM or EVENT. Furthermore, an entry in the meter's logbook must be made and the status OPT-OUT must be displayed on the meter.
+
+Spacy standard Splitting:The customer refuses to install an intelligent electricity meter.
+
+determine_actor_vh: actor: The customer
+actor: customer
+Spacy standard Splitting:The activation or deactivation of load profile recording must be available remotely.
+
+determine_actor_vh: actor: The activation or deactivation of load profile recording
+actor: recording
+Spacy standard Splitting:Changes must be logged in the meter's legal logbook.
+
+determine_actor_vh: actor: Changes
+actor: Changes
+Spacy standard Splitting:If the customer opts out, it is displayed on the meter.
+
+determine_actor_vh: actor: the customer
+actor: customer
+Spacy standard Splitting:The customer's opt-out request should be implemented at the NL.
+
+determine_actor_vh: actor: The customer's opt-out request
+actor: request
+Spacy standard Splitting:The activation or deactivation of the load profile recording must be transmitted to the central system as an ALARM or EVENT.
+
+determine_actor_vh: actor: The activation or deactivation of the load profile recording
+actor: recording
+Spacy standard Splitting:Furthermore, an entry in the meter's logbook must be made and the status OPT-OUT must be displayed on the meter.
+
+determine_actor_vh: actor: an entry in the meter's logbook
+actor: logbook
+get_valid_actors_vh1
+Actor: customer 
+Actor: Changes 
+Actor: customer 
+customer                                                    customer                                                    1.0                 1.0       True      
+Actor: opt request 
+Actor: load profile recording 
+Actor: logbook 
+Actor: logbook 
+the customer refuses
+changes log changes
+the customer display it
+the customer 's opt out request implement the customer 's opt out request
+the load profile recording transmit the activation or deactivation of the load profile recording the central system as
+-----BEGIN_AND-----
+1:
+	the meter 's logbook make an entry in the meter 's logbook
+	the meter 's logbook display the status opt out
+-----END_AND-----
+Valid Actors: ['customer ']
+
+title: Text21own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: customer 
+	(start) as start
+	[the customer refuses] as activity_161
+	[changes log changes] as activity_162
+	[the customer display it] as activity_163
+	[the customer 's opt out request implement the customer 's opt out request] as activity_164
+	[the load profile recording transmit the activation or deactivation of the load profile recording the central system as] as activity_165
+	<@parallel> as gateway_158
+	[the meter 's logbook make an entry in the meter 's logbook] as activity_159
+	[the meter 's logbook display the status opt out] as activity_160
+	<@parallel> as gateway_158_end
+	(end) as end
+
+start->activity_161->activity_162->activity_163->activity_164->activity_165->gateway_158
+gateway_158->activity_159->gateway_158_end
+gateway_158->activity_160->gateway_158_end
+gateway_158_end->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text21own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("customer") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_161 = lane1.add_element("the customer refuses", ActivityType.TASK)
+  6         activity_162 = lane1.add_element("changes log changes", ActivityType.TASK)
+  7         activity_163 = lane1.add_element("the customer display it", ActivityType.TASK)
+  8         activity_164 = lane1.add_element("the customer 's opt out request implement the customer 's opt out request", ActivityType.TASK)
+  9         activity_165 = lane1.add_element("the load profile recording transmit the activation or deactivation of the load profile recording the central system as", ActivityType.TASK)
+ 10         gateway_158 = lane1.add_element("", GatewayType.PARALLEL)
+ 11         activity_159 = lane1.add_element("the meter 's logbook make an entry in the meter 's logbook", ActivityType.TASK)
+ 12         activity_160 = lane1.add_element("the meter 's logbook display the status opt out", ActivityType.TASK)
+ 13         gateway_158_end = lane1.add_element("", GatewayType.PARALLEL)
+ 14         end = lane1.add_element("end", EventType.END)
+ 15         start.connect(activity_161)
+ 16         activity_161.connect(activity_162)
+ 17         activity_162.connect(activity_163)
+ 18         activity_163.connect(activity_164)
+ 19         activity_164.connect(activity_165)
+ 20         activity_165.connect(gateway_158)
+ 21         gateway_158.connect(activity_159)
+ 22         activity_159.connect(gateway_158_end)
+ 23         gateway_158.connect(activity_160)
+ 24         activity_160.connect(gateway_158_end)
+ 25         gateway_158_end.connect(end)
+ 26     my_process_map.draw()
+ 27     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text21_GPT4.png")
+2023-10-20 13:51:06 [INFO] : Took [189.78ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text21_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+The load switching device is a completely independent of the meter device and serves as a possible replacement for a ripple control device or a timer. The load switching device has its own communication interface and can thus make contact with the control panel. In principle, the relays follow a switching program specified by the central system and stored in the load switching device. However, it must be possible from the central system to override the circuit program with a spontaneous command (eg relay XY "OFF" or "ON"). The next opposite command (either from the switching table or from an external source) changes the state of the switching device. The position of each relay or each switching cycle specified by the switching program must be reported back to the central system. The relay settings must also be visually displayed on site.  The central system sends a command to override a relay ("off" or "on"). The service interface is used to override a relay ("Off" or "On").  The corresponding relay in the load switching device switches to the desired status, reports this back to the central system and the position of the relay on the load switching device is also visible and a logbook entry is made. 
+chat_response: 
+ 	 The load switching device, as a replacement for a ripple control device or timer, possesses its own communication interface, allowing it to connect with the control panel. Primarily, relays follow a switching program outlined and stored by the central system in the load switching device. The central system has the capability of overriding this circuit program with a spontaneous command (such as relay XY "OFF" or "ON"). The state of the switching device can be altered by the next opposite command, originating from either the switching table or an external source. The central system must be notified about the position of each relay or each switching cycle that the switching program specifies. This position must also be displayed on site. The central system can send a command to override a relay ("off" or "on") and the service interface can be used for the same purpose. Upon receiving a command, the corresponding relay in the load switching device achieves the desired status, reports its status to the central system, and makes its position visible on the load switching device. This is followed by the creation of a logbook entry.
+Document: The load switching device, as a replacement for a ripple control device or timer, possesses its own communication interface, allowing it to connect with the control panel. Primarily, relays follow a switching program outlined and stored by the central system in the load switching device. The central system has the capability of overriding this circuit program with a spontaneous command . The state of the switching device can be altered by the next opposite command, originating from either the switching table or an external source. The central system must be notified about the position of each relay or each switching cycle that the switching program specifies. This position must also be displayed on site. The central system can send a command to override a relay and the service interface can be used for the same purpose. Upon receiving a command, the corresponding relay in the load switching device achieves the desired status, reports its status to the central system, and makes its position visible on the load switching device. This is followed by the creation of a logbook entry.
+
+Spacy standard Splitting:The load switching device, as a replacement for a ripple control device or timer, possesses its own communication interface, allowing it to connect with the control panel.
+
+determine_actor_vh: actor: The load switching device, as a replacement for a ripple control device or timer,
+actor: ,
+Spacy standard Splitting:Primarily, relays follow a switching program outlined and stored by the central system in the load switching device.
+
+determine_actor_vh: actor: relays
+actor: relays
+Spacy standard Splitting:The central system has the capability of overriding this circuit program with a spontaneous command .
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:The state of the switching device can be altered by the next opposite command, originating from either the switching table or an external source.
+
+determine_actor_vh: actor: The state of the switching device
+actor: device
+Spacy standard Splitting:The central system must be notified about the position of each relay or each switching cycle that the switching program specifies.
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:This position must also be displayed on site.
+
+determine_actor_vh: actor: This position
+actor: position
+Spacy standard Splitting:The central system can send a command to override a relay and the service interface can be used for the same purpose.
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:Upon receiving a command, the corresponding relay in the load switching device achieves the desired status, reports its status to the central system, and makes its position visible on the load switching device.
+
+determine_actor_vh: actor: the corresponding relay in the load switching device
+actor: device
+Spacy standard Splitting:This is followed by the creation of a logbook entry.
+
+determine_actor_vh: actor: This
+actor: This
+get_valid_actors_vh1
+Actor: , 
+Actor: relays 
+Actor: central system 
+Actor: switching device 
+Actor: central system 
+Actor: position 
+Actor: central system 
+Actor: central system 
+Actor: switching device 
+Actor: switching device 
+Actor: switching device 
+Actor: This 
+, possesses its own communication interface
+relays follow a switching program
+the central system has the capability of overriding this circuit program with a spontaneous command
+the switching device alter the state of the switching device
+the central system notify the central system
+this position display this position
+-----BEGIN_AND-----
+1:
+	the central system send the service interface
+	the central system use the service interface for the same purpose
+-----END_AND-----
+the load switching device achieves the desired status
+the load switching device report its status to the central system
+the load switching device make the desired status
+this follow this
+Valid Actors: []
+
+title: Text22own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[, possesses its own communication interface] as activity_169
+	[relays follow a switching program] as activity_170
+	[the central system has the capability of overriding this circuit program with a spontaneous command] as activity_171
+	[the switching device alter the state of the switching device] as activity_172
+	[the central system notify the central system] as activity_173
+	[this position display this position] as activity_174
+	<@parallel> as gateway_166
+	[the central system send the service interface] as activity_167
+	[the central system use the service interface for the same purpose] as activity_168
+	<@parallel> as gateway_166_end
+	[the load switching device achieves the desired status] as activity_175
+	[the load switching device report its status to the central system] as activity_176
+	[the load switching device make the desired status] as activity_177
+	[this follow this] as activity_178
+	(end) as end
+
+start->activity_169->activity_170->activity_171->activity_172->activity_173->activity_174->gateway_166
+gateway_166->activity_167->gateway_166_end
+gateway_166->activity_168->gateway_166_end
+gateway_166_end->activity_175->activity_176->activity_177->activity_178->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text22own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_169 = lane1.add_element(", possesses its own communication interface", ActivityType.TASK)
+  6         activity_170 = lane1.add_element("relays follow a switching program", ActivityType.TASK)
+  7         activity_171 = lane1.add_element("the central system has the capability of overriding this circuit program with a spontaneous command", ActivityType.TASK)
+  8         activity_172 = lane1.add_element("the switching device alter the state of the switching device", ActivityType.TASK)
+  9         activity_173 = lane1.add_element("the central system notify the central system", ActivityType.TASK)
+ 10         activity_174 = lane1.add_element("this position display this position", ActivityType.TASK)
+ 11         gateway_166 = lane1.add_element("", GatewayType.PARALLEL)
+ 12         activity_167 = lane1.add_element("the central system send the service interface", ActivityType.TASK)
+ 13         activity_168 = lane1.add_element("the central system use the service interface for the same purpose", ActivityType.TASK)
+ 14         gateway_166_end = lane1.add_element("", GatewayType.PARALLEL)
+ 15         activity_175 = lane1.add_element("the load switching device achieves the desired status", ActivityType.TASK)
+ 16         activity_176 = lane1.add_element("the load switching device report its status to the central system", ActivityType.TASK)
+ 17         activity_177 = lane1.add_element("the load switching device make the desired status", ActivityType.TASK)
+ 18         activity_178 = lane1.add_element("this follow this", ActivityType.TASK)
+ 19         end = lane1.add_element("end", EventType.END)
+ 20         start.connect(activity_169)
+ 21         activity_169.connect(activity_170)
+ 22         activity_170.connect(activity_171)
+ 23         activity_171.connect(activity_172)
+ 24         activity_172.connect(activity_173)
+ 25         activity_173.connect(activity_174)
+ 26         activity_174.connect(gateway_166)
+ 27         gateway_166.connect(activity_167)
+ 28         activity_167.connect(gateway_166_end)
+ 29         gateway_166.connect(activity_168)
+ 30         activity_168.connect(gateway_166_end)
+ 31         gateway_166_end.connect(activity_175)
+ 32         activity_175.connect(activity_176)
+ 33         activity_176.connect(activity_177)
+ 34         activity_177.connect(activity_178)
+ 35         activity_178.connect(end)
+ 36     my_process_map.draw()
+ 37     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text22_GPT4.png")
+2023-10-20 13:51:35 [INFO] : Took [219.27ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text22_GPT4.png' diagram
+[nltk_data] Downloading package benepar_en3 to
+[nltk_data]     /Users/vincentderekheld/nltk_data...
+[nltk_data]   Package benepar_en3 is already up-to-date!
+
+
+For each relay in the load switching device, an independent, independent of the other relay switching program should be configurable. It should be possible to subdivide the circuit program into daily, weekly, seasonal and annual programs taking into account weekly, holiday and special days. The switching program is managed centrally and transmitted to the load switching device via the communication paths. For control purposes, the circuit program must also be read-back. Any change to the circuit program, regardless of whether it is remotely executed, must be logged in a logbook.  The central system sends changed switching programs to the load switching device.   The load switching device receives the changed switching programs (feedback to the central system) and records this in the logbook. 
+chat_response: 
+ 	 The relay in the load switching device should have an independent switching program. This switching program should be able to be divided into daily, weekly, seasonal and annual programs. The central system manages and sends the switching program to the load switching device. The circuit program should be read-back for control purposes. Any changes to the circuit program, whether remote or not, are recorded in a logbook. The load switching device records receipt of changed switching programs in the logbook.
+Document: The relay in the load switching device should have an independent switching program. This switching program should be able to be divided into daily, weekly, seasonal and annual programs. The central system manages and sends the switching program to the load switching device. The circuit program should be read-back for control purposes. Any changes to the circuit program, whether remote or not, are recorded in a logbook. The load switching device records receipt of changed switching programs in the logbook.
+
+Spacy standard Splitting:The relay in the load switching device should have an independent switching program.
+
+determine_actor_vh: actor: The relay in the load switching device
+actor: device
+Spacy standard Splitting:This switching program should be able to be divided into daily, weekly, seasonal and annual programs.
+
+determine_actor_vh: actor: This switching program
+actor: program
+Spacy standard Splitting:The central system manages and sends the switching program to the load switching device.
+
+determine_actor_vh: actor: The central system
+actor: system
+Spacy standard Splitting:The circuit program should be read-back for control purposes.
+
+determine_actor_vh: actor: The circuit program
+actor: program
+Spacy standard Splitting:Any changes to the circuit program, whether remote or not, are recorded in a logbook.
+
+determine_actor_vh: actor: Any changes to the circuit program, whether remote or not,
+actor: ,
+Spacy standard Splitting:The load switching device records receipt of changed switching programs in the logbook.
+
+determine_actor_vh: actor: The load switching device
+actor: device
+get_valid_actors_vh1
+Actor: switching device 
+Actor: central system 
+Actor: central system 
+Actor: circuit program 
+Actor: , 
+Actor: switching device 
+the load switching device have an independent switching program
+-----BEGIN_AND-----
+1:
+	the central system manages the switching program
+	the central system send the switching program to the load switching device
+-----END_AND-----
+the circuit program read the circuit program back for control purposes
+, record any changes to the circuit program whether remote or not
+the load switching device records receipt of changed switching programs in the logbook
+Valid Actors: []
+
+title: Text23own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[the load switching device have an independent switching program] as activity_182
+	<@parallel> as gateway_179
+	[the central system manages the switching program] as activity_180
+	[the central system send the switching program to the load switching device] as activity_181
+	<@parallel> as gateway_179_end
+	[the circuit program read the circuit program back for control purposes] as activity_183
+	[, record any changes to the circuit program whether remote or not] as activity_184
+	[the load switching device records receipt of changed switching programs in the logbook] as activity_185
+	(end) as end
+
+start->activity_182->gateway_179
+gateway_179->activity_180->gateway_179_end
+gateway_179->activity_181->gateway_179_end
+gateway_179_end->activity_183->activity_184->activity_185->end
+
+Generated code: 
+  1 from processpiper import ProcessMap, EventType, ActivityType, GatewayType
+  2 with ProcessMap("Text23own approach", colour_theme="BLUEMOUNTAIN", width=10000) as my_process_map:
+  3     with my_process_map.add_lane("") as lane1:
+  4         start = lane1.add_element("start", EventType.START)
+  5         activity_182 = lane1.add_element("the load switching device have an independent switching program", ActivityType.TASK)
+  6         gateway_179 = lane1.add_element("", GatewayType.PARALLEL)
+  7         activity_180 = lane1.add_element("the central system manages the switching program", ActivityType.TASK)
+  8         activity_181 = lane1.add_element("the central system send the switching program to the load switching device", ActivityType.TASK)
+  9         gateway_179_end = lane1.add_element("", GatewayType.PARALLEL)
+ 10         activity_183 = lane1.add_element("the circuit program read the circuit program back for control purposes", ActivityType.TASK)
+ 11         activity_184 = lane1.add_element(", record any changes to the circuit program whether remote or not", ActivityType.TASK)
+ 12         activity_185 = lane1.add_element("the load switching device records receipt of changed switching programs in the logbook", ActivityType.TASK)
+ 13         end = lane1.add_element("end", EventType.END)
+ 14         start.connect(activity_182)
+ 15         activity_182.connect(gateway_179)
+ 16         gateway_179.connect(activity_180)
+ 17         activity_180.connect(gateway_179_end)
+ 18         gateway_179.connect(activity_181)
+ 19         activity_181.connect(gateway_179_end)
+ 20         gateway_179_end.connect(activity_183)
+ 21         activity_183.connect(activity_184)
+ 22         activity_184.connect(activity_185)
+ 23         activity_185.connect(end)
+ 24     my_process_map.draw()
+ 25     my_process_map.save("/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text23_GPT4.png")
+2023-10-20 13:51:53 [INFO] : Took [154.93ms] to generate '/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text23_GPT4.png' diagram
+
+Process finished with exit code 0

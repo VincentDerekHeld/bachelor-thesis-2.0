@@ -1,0 +1,151 @@
+
+    ###### TEXT: ######
+
+A small company manufactures customized bicycles. Whenever the sales department receives an order, a new process instance is created. A member of the sales department can then reject or accept the order for a customized bike. In the former case, the process instance is finished. In the latter case, the storehouse and the engineering department are informed. The storehouse immediately processes the part list of the order and checks the required quantity of each part. If the part is available in-house, it is reserved. If it is not available, it is back-ordered. This procedure is repeated for each item on the part list. In the meantime, the engineering department prepares everything for the assembling of the ordered bicycle. If the storehouse has successfully reserved or back-ordered every item of the part list and the preparation activity has finished, the engineering department assembles the bicycle. Afterwards, the sales department ships the bicycle to the customer and finishes the process instance.
+chat_response:
+ 	 The sales department receives an order and a member can either reject or accept the order for a customized bike. If the sales department rejects the order, the process instance is finished, but if accepted, the storehouse and the engineering department are informed. The storehouse then processes the part list of the order and checks the required quantity of each part. If a part is available in-house, it is reserved, if not, it is back-ordered, a process repeated for each item on the part list. Meanwhile, the engineering department prepares the assembling of the ordered bicycle. Once every item of the part list is either reserved or back-ordered and the preparation is complete, the engineering department assembles the bicycle. Finally, the sales department ships the bicycle to the customer.
+
+-----BEGIN_AND-----
+1:
+	the sales department receives an order
+	the sales department reject an order
+	the sales department accept the order for a customized bike
+-----END_AND-----
+the sales department finish the process instance
+the sales department inform the storehouse and the engineering department
+-----BEGIN_AND-----
+1:
+	the storehouse processes the part list of the order
+	the storehouse check the required quantity of each part
+-----END_AND-----
+-----BEGIN_AND-----
+1:
+	a part reserve it
+2:
+	the engineering department prepares the assembling of the ordered bicycle
+-----END_AND-----
+-----BEGIN_IF-----
+else:
+	the part list order every item of the part list
+else:
+	the part list reserve every item of the part list
+-----END_IF-----
+the sales department ships the bicycle to the customer
+Valid Actors: ['sales department ', 'storehouse ', 'engineering department ']
+
+title: Text1own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: sales department
+	(start) as start
+	<@parallel> as gateway_1
+	[receives an order] as activity_2
+	[reject an order] as activity_3
+	[accept the order for a customized bike] as activity_4
+	<@parallel> as gateway_1_end
+	[finish the process instance] as activity_14
+	[inform the storehouse and the engineering department] as activity_15
+	<@parallel> as gateway_5
+	[ships the bicycle to the customer] as activity_16
+	(end) as end
+lane: storehouse
+	[processes the part list of the order] as activity_6
+	[check the required quantity of each part] as activity_7
+	<@parallel> as gateway_5_end
+	<@parallel> as gateway_8
+	[a part reserve it] as activity_9
+lane: engineering department
+	[prepares the assembling of the ordered bicycle] as activity_10
+	<@parallel> as gateway_8_end
+	<> as gateway_11
+	[the part list order every item of the part list] as activity_12
+	[the part list reserve every item of the part list] as activity_13
+	<> as gateway_11_end
+
+start->gateway_1
+gateway_1->activity_2->gateway_1_end
+gateway_1->activity_3->gateway_1_end
+gateway_1->activity_4->gateway_1_end
+gateway_1_end->activity_14->activity_15->gateway_5
+gateway_5->activity_6->gateway_5_end
+gateway_5->activity_7->gateway_5_end
+gateway_5_end->gateway_8
+gateway_8->activity_9->gateway_8_end
+gateway_8
+gateway_8_end->activity_10->gateway_8_end
+gateway_8_end->gateway_11
+gateway_11-""->activity_12->gateway_11_end
+gateway_11-""->activity_13->gateway_11_end
+gateway_11_end->activity_16->end
+
+
+A customer brings in a defective computer and the CRS checks the defect and hands out a repair cost calculation back. If the customer decides that the costs are acceptable, the process continues, otherwise she takes her computer home unrepaired. The ongoing repair consists of two activities, which are executed, in an arbitrary order. The first activity is to check and repair the hardware, whereas the second activity checks and configures the software. After each of these activities, the proper system functionality is tested. If an error is detected another arbitrary repair activity is executed, otherwise the repair is finished.
+chat_response:
+ 	 The CRS checks the defect of a computer brought in by a customer and gives a repair cost calculation. If the customer finds the costs acceptable, the process continues, else the customer takes the computer home unrepaired. The CRS checks and repairs the hardware of the computer. Meanwhile, the CRS also checks and configures the software of the computer. After each activity, the CRS tests the system functionality. If an error is detected, the CRS undertakes repair activity, else the repair is finished.
+Document: The CRS checks the defect of a computer brought in by a customer and gives a repair cost calculation. If the customer finds the costs acceptable, the process continues, else the customer takes the computer home unrepaired. The CRS checks and repairs the hardware of the computer. Meanwhile, the CRS also checks and configures the software of the computer. After each activity, the CRS tests the system functionality. If an error is detected, the CRS undertakes repair activity, else the repair is finished.
+
+-----BEGIN_AND-----
+1:
+	the crs checks the defect of a computer
+	the crs give a repair cost calculation
+-----END_AND-----
+-----BEGIN_IF-----
+if: the customer finds
+else:
+
+-----END_IF-----
+-----BEGIN_AND-----
+1:
+	the crs checks the hardware of the computer
+	the crs repair the hardware of the computer
+2:
+	the crs checks the software of the computer
+	the crs configure the software of the computer
+-----END_AND-----
+the crs tests the system functionality
+-----BEGIN_IF-----
+if: an error detect an error
+else:
+
+-----END_IF-----
+Valid Actors: ['CRS ', 'customer ']
+
+title: Text2own approach
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: CRS
+	(start) as start
+	<@parallel> as gateway_17
+	[checks the defect of a computer] as activity_18
+	[give a repair cost calculation] as activity_19
+	<@parallel> as gateway_17_end
+	[checks the hardware of the computer] as activity_23
+	[repair the hardware of the computer] as activity_24
+	[checks the software of the computer] as activity_25
+	[configure the software of the computer] as activity_26
+	<@parallel> as gateway_22_end
+	[tests the system functionality] as activity_29
+	<an error detect an error?> as gateway_27
+	<> as gateway_27_end
+	(end) as end
+lane: customer
+	<the customer finds?> as gateway_20
+	<> as gateway_20_end
+	<@parallel> as gateway_22
+
+start->gateway_17
+gateway_17->activity_18->gateway_17_end
+gateway_17->activity_19->gateway_17_end
+gateway_17_end->gateway_20
+gateway_20-"yes"->gateway_20_end
+gateway_20-"no"->gateway_20_end
+gateway_20_end->gateway_22
+gateway_22->activity_23->gateway_22_end
+gateway_22->activity_24->gateway_22_end
+gateway_22
+gateway_22_end->activity_25->gateway_22_end
+gateway_22->activity_26->gateway_22_end
+gateway_22_end->activity_29->gateway_27
+gateway_27-"yes"->gateway_27_end
+gateway_27-"no"->gateway_27_end
+gateway_27_end->end

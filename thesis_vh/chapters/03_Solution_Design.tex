@@ -1,0 +1,149 @@
+\chapter{Solution Design}
+\label{sec:solution}
+\begin{itemize}
+\item Business Process Model and Notation
+
+
+TODO: More detail: elements and also references
+
+\item Spacy
+
+
+
+\item Problems addressed by Freidrichs
+
+
+\item Filtering of "proccess irrelevant information according to the PET dataset -> not directly relevent to the business process -> increases undestanbaility to the human ready but increases difficulty wehen processing the text -> which sentences are filtered Scores
+\item 
+\item 
+\end{itemize}
+
+\section{Business Process Model and Notation}
+For the automatically generation of process diagrams it is important to use a in industry and research common standardized notation. Business Process Model and Notation 2.0 (BPMN) is an industry-standard notation specifically designed for business process modeling \cite{aagesenBPMNModelingBusiness2015}. BPMN was developed by the Object Management Group to support business process management, for both technical users and business users, by providing a notation that is intuitive to business users yet able to represent complex process semantics. It provides businesses with the capability of understanding their internal business procedures in a graphical notation and gives organizations the ability to communicate these procedures in a standard manner. 
+
+\cite{BusinessProcessModel}
+The BPMN offers a variety of process elements. In the following the most important elements are listed and explained:
+
+
+
+
+\section{Spacy}
+\section{Process Piper}
+
+
+\section{Categorization of Issues}
+\subsection{Identification of Introduction Sentences}
+\subsection{Identification of Actors}
+
+To identify actors, we leverage the dependency labels of tokens. Specifically, for active voice sentences, the nominal subject dependency label, \(token.dep_ == "nsubj"\), is utilized. For passive constructions, the agent dependency, denoted as "agent", is considered. Through this approach, the baseline method yields precise outcomes. Given the multifaceted nature of natural language an entity might be referenced using multiple terminologies.
+
+As illustrated in Figure [TODO: Reference to Picture of Text 01 by Shuawei], several actors have been accurately identified. Due to linguistic complexities, two distinct terms reference a singular actor in the example:
+\begin{itemize}
+    \item Member of the sales department
+    \item Sales department
+\end{itemize}
+
+In the field of process diagrams, a department is always represented by a representative member. Consequently, the two expressions above refer to a single unit: the sales department.
+
+\textbf{Implementation: } To address the challenge of synonymous terms representing the same actor (as elucidated in Chapter 03), we devised an algorithm. This procedure assesses the similarity between actors prior to appending a new entity to the list of valid actors. This list is subsequently employed for generating both the syntactical structure for the process diagram and the diagram itself.
+
+\begin{algorithm}
+\caption{Determine Actor Similarity Utilizing SpaCy's Functionality}
+\begin{algorithmic}[1]
+\REQUIRE $Actor1: \text{string},  Actor2: \text{string}, nlp:  \text{any}$
+\ENSURE $similarity\_score: \text{float}$
+\FUNCTION{compare\_actors\_with\_similarity}{$Actor1, Actor2, nlp$}
+    \STATE $doc1 \gets nlp(Actor1)$
+    \STATE $doc2 \gets nlp(Actor2)$
+    \STATE $similarity\_score \gets \text{ROUND}(doc1.\text{similarity}(doc2), 2)$
+    \RETURN $similarity\_score$
+\ENDFUNCTION
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm 1 necessitates two actor strings as inputs. For the calculation of similarity we use the inherent functions of SpaCy. Therefore the use of the \("en\_core\_web\_lg"\) pipeline is required and disqualifies the use of the previously used pipeline \("en\_core\_web\_trf"\). This is primarily due to the lack of pre-trained word vectors in the transformer pipeline, which are essential for the similarity estimation process. Each vocabulary term possesses a linked vector, a multi-dimensional construct encapsulating semantic nuances determined by contextual associations in extensive corpora. Derived from the input strings, two SpaCy document objects (Doc) are instantiated. Subsequently, SpaCy's in-built `similarity()` function evaluates the semantic proximity of these documents, contingent on their respective vectors. This operation computes the cosine similarity, interpreting the cosine of the angle delineating two vectors. Cosine similarity values oscillate between -1 and 1. Notably, SpaCy normalizes this value, ensuring the resultant similarity scores range between 0 (indicative of orthogonal vectors, implying dissimilarity) and 1 (identical vectors).
+
+\begin{table}[h!]
+\begin{center}
+\caption{\centering Similarity between Actors}
+\label{table:table1}
+\begin{tabular}{c|c|c|c}
+    & member of sales department & sales department & member of legal department\\ \hline
+member of sales department 		  	&   1      &    0.67    &   0.92 \\
+sales department	 				&   0.67   &    1       &   0.46  \\
+member of legal department 			&   0.92   &    0.46    &   1 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+As the cosine similarity, is for "member of legal sales" and "member of legal department" pretty close, but as they refer to different entities, we implemented additionally approach that is token based (TODO: Alg 2). This function is designed to compute a similarity ratio between two actor names by comparing the lemmas (base forms) of their tokens, with an emphasis on significant content words.
+
+Again, given two strings representing actors as input parameters, the function processes them through a predefined natural language processing pipeline, denoted as "nlp", to generate respective Doc objects. Prior to any comparison, the function systematically excludes tokens that are characterized as "stop words". Stop words, refer in linguistics and natural language processing to frequently occurring words in a language that, in analytical contexts, are considered to offer limited semantic value. Subsequently, the function undertakes a pairwise comparison of the lemmas of the tokens derived from the two actors. The objective of this phase is to enumerate the quantity of matching lemmas between the two sets. Acknowledging the potential variance in token counts between different actor strings, the function uses a normalization procedure to ensure a balanced evaluation of similarity without distortion.
+
+\begin{algorithm}
+    \caption{Compare Actor Tokens Using SpaCy}
+    \begin{algorithmic}[1]
+        \REQUIRE $Actor1: \text{string},  Actor2: \text{string}, nlp: \text{any}$
+        \ENSURE $similarity\_ratio: \text{float}$
+        \FUNCTION{compare\_actors\_with\_token}{$Actor1, Actor2, nlp$}
+            \STATE $doc1 \gets nlp(Actor1)$
+            \STATE $doc2 \gets nlp(Actor2)$
+            \STATE $tokens1 \gets \text{FILTER\_OUT\_STOP\_WORDS}(doc1)$
+            \STATE $tokens2 \gets \text{FILTER\_OUT\_STOP\_WORDS}(doc2)$
+            \STATE $num\_tokens1 \gets \text{length}(tokens1)$
+            \STATE $num\_tokens2 \gets \text{length}(tokens2)$
+            \STATE $matching\_tokens \gets 0$
+            \IF{$num\_tokens1 \leq num\_tokens2$}
+                \FOR{each $token1$ in $tokens1$}
+                    \FOR{each $token2$ in $tokens2$}
+                        \IF{$token1.lemma\_ == token2.lemma\_$}
+                            \STATE $matching\_tokens \gets matching\_tokens + 1$
+                            \STATE \textbf{break}
+                        \ENDIF
+                    \ENDFOR
+                \ENDFOR
+            \ELSE
+                \FOR{each $token2$ in $tokens2$}
+                    \FOR{each $token1$ in $tokens1$}
+                        \IF{$token2.lemma\_ == token1.lemma\_$}
+                            \STATE $matching\_tokens \gets matching\_tokens + 1$
+                            \STATE \textbf{break}
+                        \ENDIF
+                    \ENDFOR
+                \ENDFOR
+            \ENDIF
+            \STATE $avg\_tokens \gets (num\_tokens1 + num\_tokens2) / 2.0$
+            \IF{$avg\_tokens > 0$}
+                \STATE $similarity\_ratio \gets matching\_tokens / avg\_tokens$
+            \ELSE
+                \STATE $similarity\_ratio \gets 0.0$
+            \ENDIF
+            \RETURN $similarity\_ratio$
+        \ENDFUNCTION
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+
+
+
+member of legal department
+member of sales department
+sales department
+
+
+
+\subsection{Custom Sentencizer wit LS}
+
+\subsection{Including Sentences}
+\section{}
+\subsection{}
+
+\subsection{More Actors}
+
+
+\textbf{Regulatory Documents}
+NLP is for unstructured texts
