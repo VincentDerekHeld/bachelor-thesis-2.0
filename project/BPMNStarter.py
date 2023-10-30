@@ -8,7 +8,7 @@ from spacy_wordnet.wordnet_annotator import WordnetAnnotator
 
 from Playgrounds.Playground_Filtering import filter_including_sentences
 from Playgrounds.Playground_Introduction_sentence import remove_introduction_sentence
-from Playgrounds.Playground_LLMs import LLMs, LLMs_da_vinci
+# from Playgrounds.Playground_LLMs import LLMs, LLMs_da_vinci
 from project.AnalyzeSentence import analyze_document, analyze_document_vh, analyze_document_vh1
 from project.AnalyzeText import determine_marker, correct_order, build_flows, get_valid_actors, \
     remove_redundant_processes, determine_end_activities, adjust_actor_list
@@ -63,16 +63,17 @@ def start_task(input_path, title, output_path, debug=False):
     # Register the custom sentencizer and add it to the pipeline before the parser
     nlp.add_pipe("custom_sentencizer", before="parser")  # TODO: me
     text_input = open(input_path, 'r').read().replace('\n', ' ')
-    text_input = LLMs_da_vinci(text_input)
+    from Playgrounds.Playground_LLMs3 import preprocess_text_with_LLM
+    text_input = preprocess_text_with_LLM(text_input)
     text_input = text_pre_processing(text_input)
     text_input = filter_including_sentences(text_input)  # TODO: me
     document = nlp(
         text_input)  # TODO: Text Input could be a paramter of remove_introduction_sentence, so we do not need
-    #document = remove_introduction_sentence(document, nlp_similarity, nlp)  # TODO: me
+    # document = remove_introduction_sentence(document, nlp_similarity, nlp)  # TODO: me
     print("Document: " + document.text + "\n")
 
     containerList = analyze_document_vh1(document)
-    #containerList = analyze_document(document)
+    # containerList = analyze_document(document)
     for container in containerList:
         determine_marker(container, nlp)
     correct_order(containerList)
@@ -80,12 +81,12 @@ def start_task(input_path, title, output_path, debug=False):
 
     from Playgrounds.Playgorund_Coreference import get_valid_actors_vh1
     valid_actors = get_valid_actors_vh1(containerList, nlp_similarity)
-    #valid_actors = get_valid_actors(containerList)
+    # valid_actors = get_valid_actors(containerList)
     valid_actors = adjust_actor_list(valid_actors)
     flows = build_flows(containerList)
     for flow in flows:
         print(flow)
     print("Valid Actors: " + valid_actors.__str__() + "\n")
     determine_end_activities(flows)
-    #create_bpmn_model(flows, valid_actors, title, output_path)
+    # create_bpmn_model(flows, valid_actors, title, output_path)
     create_bpmn_model_vh(flows, valid_actors, title, output_path)

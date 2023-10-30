@@ -47,7 +47,7 @@ def LLMs1(textual_descrption: str):
     TEXT:
 
     """
-    # list_of_promts.append(promt3)
+    list_of_promts.append(promt3)
 
     chat_response = textual_descrption
     messages = [{"role": "system",
