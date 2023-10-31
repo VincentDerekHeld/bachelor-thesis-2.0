@@ -47,9 +47,13 @@ def preprocess_text_with_LLM(text_input):
     prompts.append("""
     Restructure every sentence to achieve the following format:
         "[ACTOR] [MODAL VERB] [VERB in active] [OBJECT]."
-    -> Actors execute the VERB.
+    ->  Actors are the subject of a sentence, or the person or thing that performs the action of the verb
         For the identification of the ACTOR, keep in mind, a actor can  for e.g. be a natural person, a organization, such as a company or a department, but sometimes also a place, a device or a system can be an valide Actor.
                 -> Example: The "Kitchen" represents the "kitchen staff", and so the "Kitchen" is an actor.
+        Make sure not to use Objects as Actors:
+            Example: "select auditors"
+                -> "auditors" are the object, not the actor
+        
     
     Modal verbs have to stay with the original format  in the sentence.
     -> Modal verbs, are verbs that express the strength of an expression. 
@@ -124,8 +128,6 @@ def preprocess_text_with_LLM(text_input):
         # add current input to the prompt
         prompt += "Human: " + input + "\n"
         prompt += "AI: "
-        prompt = prompt[:4000]  # truncate prompt
-
         prompt = intro + prompt
         if debug_mode: print("Prompt: \n" + prompt)
         response = generate_response(prompt)
@@ -142,6 +144,6 @@ def preprocess_text_with_LLM(text_input):
     return response
 
 
-input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/project/Text/text_input_vh/Text7.txt"
+input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/project/Text/text_input_vh/Text6.txt"
 text_input = open(input_path, 'r').read().replace('\n', ' ')
 print(preprocess_text_with_LLM(text_input))
