@@ -35,7 +35,7 @@ def download_all_dependencies():
 def start_task(input_path, title, output_path, debug=False):
     os.environ['TRANSFORMERS_NO_ADVISORY_WARNINGS'] = 'true'
     warnings.filterwarnings('ignore')
-    # download_all_dependencies()
+    download_all_dependencies()
 
     nlp = spacy.load('en_core_web_trf')
     nlp_similarity = spacy.load("en_core_web_lg")
@@ -64,7 +64,7 @@ def start_task(input_path, title, output_path, debug=False):
     nlp.add_pipe("custom_sentencizer", before="parser")  # TODO: me
     text_input = open(input_path, 'r').read().replace('\n', ' ')
     from Playgrounds.Playground_LLMs3 import preprocess_text_with_LLM
-    text_input = preprocess_text_with_LLM(text_input)
+    #text_input = preprocess_text_with_LLM(text_input)
     text_input = text_pre_processing(text_input)
     text_input = filter_including_sentences(text_input)  # TODO: me
     document = nlp(
