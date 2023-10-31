@@ -1,5 +1,12 @@
-# bachelor-thesis
-This is the bachelor thesis of Vincent Derek Held, written at the Technical University of Munich.
+# An enhanced automated approach for transforming natural language process descriptions to BPMN2.0 process diagrams – with an evaluation of the application to ISO-Norm process descriptions
+
+This is the code of the bachelor thesis of [Vincent Derek Held](mailto:vincent.held@tum.de), written at the chair of [Information Systems and Business Process Management at the Technical University of Munich (TUM)](https://www.cs.cit.tum.de/bpm/chair/).
+The Thesis was written under the supervision of [Catherine Sai](mailto:catherine.sai@tum.de) and under [Prof. Dr. Stefanie Rinderle-Ma](mailto:stefanie.rinderle-ma@tum.de).
+
+Since this work is based on the approach of [Shuaiwei YU](https://github.com/ShuaiweiYu/text2BPMN), in this repository is also published code from him.
+
+
+
 
 
 
