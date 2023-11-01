@@ -1,21 +1,28 @@
 import os
 import openai
+import spacy
 
 
 def preprocess_text_with_LLM(text_input):
     # generate a response of an llm (open-ai) given a prompt
     debug_mode = True
-
     os.environ["OPENAI_API_KEY"] = "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"
     openai.api_key = "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"
     openai.organization = "org-cGUe4rwtHg1jEuK4T5Ya9rU3"
     intro = """You are a system analyst, that strictly and carefully follows the instructions. 
-           You return the output text in full sentences without adding any extra information, interpretation, explanation, numberations or listings. 
+           You return only the current sentence as an full sentences without adding any extra information, interpretation, explanation, numberations or listings. 
            Make sure that the previously given instructions are still followed.
            Keep as much words from the original text as possible.
            You handle every task sentence for sentence. \n"""
 
     prompts = []
+    inital_prompt = ("""
+     ### Instuction: #### \n
+     First, you will see the full text and read it carefully. Afterwards you will see parts of the text and you will follow the instructions.
+     On this message you return an empty message as answer.
+     ### Full Text ### \n
+     
+    """)
     # Relevance of Sentence
     prompts.append("""
         ### Instuction: #### \n
@@ -53,14 +60,14 @@ def preprocess_text_with_LLM(text_input):
         Make sure not to use Objects as Actors:
             Example: "select auditors"
                 -> "auditors" are the object, not the actor
-        
-    
+
+
     Modal verbs have to stay with the original format  in the sentence.
     -> Modal verbs, are verbs that express the strength of an expression. 
         Example modal verbs are: "must", "shall", "should", "can".
          "Example 1: "The organization shall determine..." -> "The organization shall determine..." 
             Reason: "shall" must stay in the same format, as it is an "modal verb"
-    
+
     If there is an condition, strucutre the sentence like this:
         „If [CONDITION], [ACTOR and ACTION], ELSE [other ACTION, if possible]“.
             Example 1:
@@ -72,7 +79,7 @@ def preprocess_text_with_LLM(text_input):
                 -> If a guest calls room service, the room-service manager at takes down the order.
                     Reasons:
                     - „The Evanstonian“ is the company and is not relevant for the activity. It represents meta information.
-    
+
     If process steps can be done in parallel start the sentence with „Meanwhile, ….“.
             Example:
             "The ongoing repair consists of two activities, which are executed, in an arbitrary order. The first activity is to check and repair the hardware, whereas the second activity checks and configures the software."
@@ -87,7 +94,7 @@ def preprocess_text_with_LLM(text_input):
                 „Documented information shall be available as evidence of the implementation of the audit programme(s) and the audit results.“
                     ->  „Documented information shall be available as evidence of the implementation of the audit programme(s) and the audit results.“
                 -> implies the ACTION „document the results“.
-                
+
             Example 2:
                 "The Room Service Manager then submits an order ticket to the kitchen to begin preparing the food."
                 -> „The Room Service Manager submits an order ticket to the kitchen. The kitchen prepares the food.“
@@ -110,15 +117,17 @@ def preprocess_text_with_LLM(text_input):
     def generate_response(prompt):
         # Get the response from GPT-3
         model_engine = "text-davinci-003"
+        if debug_mode: print(f"*** Prompt:  ****  len: {len(prompt).__str__()} \n" + prompt)
         response = openai.Completion.create(
             engine=model_engine, prompt=prompt, max_tokens=1024, n=1, stop=None, temperature=0.0)
         # Extract the response from the response object
         response_text = response["choices"][0]["text"]
         text_response = response_text.strip()
+        if debug_mode: print("*** Response:  **** \n" + text_response)
         return text_response
 
     # definition of the main function
-    def my_chatbot(input, history=None):
+    def my_chatbot(input: doc, history=None):
         if not history:
             history = []
         prompt = ""
@@ -129,22 +138,23 @@ def preprocess_text_with_LLM(text_input):
         prompt += "Human: " + input + "\n"
         prompt += "AI: "
         prompt = intro + prompt
-        if debug_mode: print("Prompt: \n" + prompt)
         response = generate_response(prompt)
         history.append({"human": input, "ai": response})
         return response, history
 
     history = []
-    response = text_input
-    for promt in prompts:
-        query = promt + response
-        print("Number of characters:" + len(query).__str__())
-        response, history = my_chatbot(query, history)
-        if debug_mode:
-            print("Response: \n" + response)
+    query = inital_prompt + doc.text
+    response, history = my_chatbot(query, history)
+    for sent in doc.sents:
+        response = sent.text
+        for prompt in prompts:
+            query = prompt + response
+            # print("Number of characters:" + len(query).__str__())
+            response, history = my_chatbot(query, history)
     return response
-
 
 input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/project/Text/text_input_vh/Text7.txt"
 text_input = open(input_path, 'r').read().replace('\n', ' ')
-print(preprocess_text_with_LLM(text_input))
+nlp = spacy.load('en_core_web_trf')
+doc = nlp(text_input)
+print(preprocess_text_with_LLM(doc))
