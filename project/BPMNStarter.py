@@ -5,16 +5,10 @@ import coreferee
 import benepar
 from spacy import Language
 from spacy_wordnet.wordnet_annotator import WordnetAnnotator
-
-from Playgrounds.Playground_Filtering import filter_including_sentences
-from Playgrounds.Playground_Introduction_sentence import remove_introduction_sentence
-# from Playgrounds.Playground_LLMs import LLMs, LLMs_da_vinci
 from project.AnalyzeSentence import analyze_document, analyze_document_vh, analyze_document_vh1
 from project.AnalyzeText import determine_marker, correct_order, build_flows, get_valid_actors, \
     remove_redundant_processes, determine_end_activities, adjust_actor_list
 from project.BPMNCreator import create_bpmn_model, create_bpmn_model_vh
-from Playgrounds.Playground_Actors_Similarity import get_valid_actors_vh
-from project.Utilities import text_pre_processing
 
 
 def download_all_dependencies():
@@ -35,7 +29,7 @@ def download_all_dependencies():
 def start_task(input_path, title, output_path, debug=False):
     os.environ['TRANSFORMERS_NO_ADVISORY_WARNINGS'] = 'true'
     warnings.filterwarnings('ignore')
-    download_all_dependencies()
+    # download_all_dependencies()
 
     nlp = spacy.load('en_core_web_trf')
     nlp_similarity = spacy.load("en_core_web_lg")
@@ -63,10 +57,9 @@ def start_task(input_path, title, output_path, debug=False):
     # Register the custom sentencizer and add it to the pipeline before the parser
     nlp.add_pipe("custom_sentencizer", before="parser")  # TODO: me
     text_input = open(input_path, 'r').read().replace('\n', ' ')
-    from Playgrounds.Playground_LLMs3 import preprocess_text_with_LLM
-    #text_input = preprocess_text_with_LLM(text_input)
-    text_input = text_pre_processing(text_input)
-    text_input = filter_including_sentences(text_input)  # TODO: me
+    # text_input = preprocess_text_with_LLM(text_input)
+    # text_input = text_pre_processing(text_input)
+    # text_input = filter_including_sentences(text_input)  # TODO: me
     document = nlp(
         text_input)  # TODO: Text Input could be a paramter of remove_introduction_sentence, so we do not need
     # document = remove_introduction_sentence(document, nlp_similarity, nlp)  # TODO: me

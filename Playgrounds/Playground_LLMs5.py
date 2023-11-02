@@ -17,7 +17,7 @@ def preprocess_text_with_LLM(doc):
             Make sure that the previously given instructions are still followed.
             Keep as much words from the original text as possible and never add information from the examples to the output.
             You handle every task sentence for sentence. \n"""
-    outro = "Answer / Response:"
+    outro = "\n #### Answer / Response: #### \n"
 
     prompts = []
     inital_prompt = ("""
@@ -27,7 +27,7 @@ def preprocess_text_with_LLM(doc):
             ### Full Text ### \n
     """)
     # Relevance of Sentence
-    if use_all_prompts: prompts.append("""
+    prompts.append("""
             ### 2. Instruction: #### \n
             Filter information from the text (initial query), that is not relevant for the process. The only information we are interested in are real process steps.
             ## Examples: ##
@@ -71,10 +71,10 @@ def preprocess_text_with_LLM(doc):
         Examples:
         -> "she, he, it, they" refer to an actor. Replace the reference in the sentence with the name of the actor(s).
         -> "this, that" refer to an object. Replace the reference in the sentence with the name of the object.
-        -> "these, those" refer to multiple objects. TReplace the reference in the sentence with the name of the objets.
+        -> "these, those" refer to multiple objects. Replace the reference in the sentence with the name of the objets.
         ###### TEXT ###### \n """)
 
-    prompts.append("""
+    if use_all_prompts: prompts.append("""
             ### 4. Instruction: #### \n
             1. Restructure every sentence to achieve the following format: "[ACTOR] [MODAL VERB] [VERB in active] [OBJECT]."
                 Actors are the subject of a sentence, or the person or thing that performs the action of the verb
@@ -86,9 +86,7 @@ def preprocess_text_with_LLM(doc):
             2. Modal verbs have to stay with the original format  in the sentence.
             -> Modal verbs, are verbs that express the strength of an expression. 
                 Example modal verbs are: "must", "shall", "should", "can".
-                 "Example 1: "The organization shall determine..." -> "The organization shall determine..." 
-                    Reason: "shall" must stay in the same format, as it is an "modal verb"
-                    
+                 "Example 1: In the sentence "The organization shall determine..." the modal verb "shall" has to stay in the sentence.
             3. Transform listings based on the structure of the text into a continuous text.
             
             4. Ensure that after each end of sentence (. ! ?) a space follows.
@@ -97,7 +95,7 @@ def preprocess_text_with_LLM(doc):
     def generate_response(prompt) -> str:
         # Get the response from GPT-3
         model_engine = "text-davinci-003"
-        # if debug_mode: print(f"*** Prompt:  ****  len: {len(prompt).__str__()} \n {prompt} \n \n")
+        if debug_mode: print(f"*** Prompt:  ****  len: {len(prompt).__str__()} \n {prompt} \n \n")
         response = openai.Completion.create(
             engine=model_engine, prompt=prompt, max_tokens=1024, n=1, stop=None, temperature=0.0)
         # Extract the response from the response object
@@ -118,7 +116,7 @@ def preprocess_text_with_LLM(doc):
         for prompt in prompts:
             query = intro + prompt + current_sent + outro
             current_sent = generate_response(query)
-            result = result + "" + current_sent
+        result = result + "" + current_sent
 
     print("**** Full desciption: **** \n" + result.strip().replace("\n", " ").replace(".", ". ").replace("!",
                                                                                                          "! ").replace(
@@ -142,4 +140,4 @@ def write_to_file(number: int, nlp):
 nlp = spacy.load('en_core_web_trf')
 # doc = nlp(text_input)
 # preprocess_text_with_LLM(doc)
-write_to_file(7, nlp)
+write_to_file(9, nlp)

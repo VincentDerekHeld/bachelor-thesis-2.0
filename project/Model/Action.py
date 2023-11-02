@@ -13,6 +13,7 @@ class LinkType(Enum):
     TO_PREV = 1
     TO_NEXT = 2
 
+
 class Action(ExtractedObject):
     def __init__(self, verb):
         super().__init__(verb)
@@ -52,7 +53,10 @@ class Action(ExtractedObject):
         result = []
         if self.token is None:
             return ""
-
+        # TODO: maybe filter self.aux to modal verbs only:
+        if self.aux:
+            print(f"Action: Aux: {self.aux.text}")
+            str_utility(self.aux, result)
         if self.active:
             str_utility(self.token, result)
         else:

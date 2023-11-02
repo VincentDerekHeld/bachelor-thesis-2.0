@@ -250,8 +250,13 @@ def extract_elements_vh(sentence, process):
 
     from project.AnalyzeSentence import determine_predicate
     verb = determine_predicate(sentence, sentence_is_active)
+    ##TODO: find modal verb as well
+
     obj = determine_object_vh(verb, sentence_is_active)
     process.action = create_action(verb, obj)
+    for child in verb.children:
+        if child.dep_ == "aux": print(f"Extraction: modal verb:{child.text}")
+    # print(f"Extraction: verb: {verb}, verb.subtree: {' '.join(x.text for x in verb.children)}")
 
     if process.action is not None:
         process.action.active = sentence_is_active
@@ -261,6 +266,7 @@ def extract_elements_vh(sentence, process):
             if sentence.start < conjunct.i < sentence.end:
                 conjunct_obj = determine_object_vh(conjunct, sentence_is_active)
                 conjunct_action = create_action(conjunct, conjunct_obj)
+                ##TODO: find modal verb as well
                 process.action.conjunction.append(conjunct_action)
 
 

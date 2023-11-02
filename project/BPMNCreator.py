@@ -10,7 +10,7 @@ from Structure.Structure import Structure
 
 
 def create_bpmn_model_vh(structure_list: [Structure], actor_list: list, title: str, save_path: str,
-                      theme: str = "BLUEMOUNTAIN"):
+                         theme: str = "BLUEMOUNTAIN"):
     """
     Create a BPMN model from a list of structures and actors.
     Args:
@@ -21,11 +21,12 @@ def create_bpmn_model_vh(structure_list: [Structure], actor_list: list, title: s
         theme: the theme of the BPMN model, default is BLUEMOUNTAIN
     """
     input_syntax = create_bpmn_description_VH(structure_list, actor_list, title, theme=theme)
-    input_syntax = input_syntax.replace("as applicable", "") #TODO: done by me
+    input_syntax = input_syntax.replace("as applicable", "")  # TODO: done by me
     input_syntax = input_syntax.replace("[\" ", "[")  # TODO: done by me: Text
 
     print(input_syntax)
     render_bpmn_model(input_syntax, save_path)
+
 
 def create_bpmn_model(structure_list: [Structure], actor_list: list, title: str, save_path: str,
                       theme: str = "BLUEMOUNTAIN"):
@@ -308,6 +309,10 @@ def create_bpmn_description(structure_list: [Structure], actor_list: list, title
     return result
 
 
+def create_activity_text(structure: Structure) -> str:
+    return "[" + str(structure.process.action) + "] as activity_" + str(structure.id)
+
+
 def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, structure: Structure,
                    last_gateway: Optional[str]):
     """
@@ -324,14 +329,14 @@ def append_to_lane(key: str, lanes: {}, connection_id: int, connections: list, s
     if isinstance(structure, Activity):
         if structure.process.actor is not None:
             if structure.process.actor.full_name in lanes.keys():
-                lanes[key].append("[" + str(structure.process.action) + "] as activity_" + str(structure.id))
-            else:
+                lanes[key].append(create_activity_text(structure))
+                print(f"Extraction: Activity {create_activity_text(structure)}")
+            else: #TODO check this code: reason for actor in action in diagram
                 lanes[key].append(
                     "[" + str(structure.process.actor) + " " + str(structure.process.action) + "] as activity_" +
                     str(structure.id))
         else:
-            lanes[key].append(
-                "[" + str(structure.process.action) + "] as activity_" + str(structure.id))
+            lanes[key].append(create_activity_text(structure))
     elif isinstance(structure, ConditionBlock):
         if structure.is_simple():
             condition = structure.branches[0]["condition"][0]
@@ -371,7 +376,7 @@ def belongs_to_lane(activity_list: [Structure], lanes: {}, structure: Structure,
     Returns:
         the name of the lane, if the lane has length 1, then it returns "dummy"
     """
-    if len(lanes) < 2: #TODO: changed this from "if len(lanes) == 1":
+    if len(lanes) < 2:  # TODO: changed this from "if len(lanes) == 1":
         return "dummy"
 
     if previous_actor is None:
