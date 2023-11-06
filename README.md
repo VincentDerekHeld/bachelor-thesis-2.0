@@ -15,10 +15,17 @@ Keywords: Natural Language Processing, Business Process Compliance, Natural Lang
 
 
 
-## How to use the code:
+## Installation:
 1. Download the gitHub repository
-2. Install the requirements: pip install -r requirements.txt
-3. Execute the "main" methode
+2. Install the required packages with the right version: 
+```      
+pip install -r requirements.txt
+```
+
+## Execution:
+1. Enter the input path to the textual description  (.txt), to use it as an input file
+2. Enter the output path, where the generated diagram should be stored (.png)
+3. Execute the "main" methode in the "main.py" file
 
 
 ## FAQs or Common Issues
