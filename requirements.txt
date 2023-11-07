@@ -1,0 +1,19 @@
+benepar==0.2.0
+coreferee==1.4.1
+coreferee-model-en @ https://github.com/richardpaulhudson/coreferee/raw/master/models/coreferee_model_en.zip#sha256=aec5662b4af38fbf4b8c67e4aada8b828c51d4a224b5e08f7b2b176c02d8780f
+en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.5.0/en_core_web_lg-3.5.0-py3-none-any.whl#sha256=c8ac64840c1eb3e3ca7bd38bd1e1c48fb0faeb2449d54d01d5ce629af4595775
+en-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.5.0/en_core_web_trf-3.5.0-py3-none-any.whl#sha256=8902305d2ced83d98a8e88efd93ea8970a70dda9bb24b0024a8b798d1cc913d5
+nltk==3.5
+openai==0.28.1
+processpiper==0.4.3
+protobuf==3.20.1
+spacy==3.5.4
+spacy-alignments==0.9.1
+spacy-curated-transformers==0.2.0
+spacy-legacy==3.0.12
+spacy-loggers==1.0.5
+spacy-transformers==1.2.5
+spacy-wordnet==0.1.0
+tokenizers==0.13.3
+transformers==4.30.2
+spacy_wordnet==0.1.0
