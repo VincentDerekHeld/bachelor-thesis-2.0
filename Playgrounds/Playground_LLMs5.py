@@ -8,10 +8,7 @@ def preprocess_text_with_LLM(doc):
     debug_mode = True
     use_all_prompts = True
     Filtering = True
-    os.environ["OPENAI_API_KEY"] = "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"
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
-    openai.api_key = "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"
-    openai.organization = "org-cGUe4rwtHg1jEuK4T5Ya9rU3"
+
 
     intro = """#### Intro: ### \n 
     You are a system analyst who strictly and carefully follows the instructions. 
