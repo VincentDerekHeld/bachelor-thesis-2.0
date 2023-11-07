@@ -56,7 +56,11 @@ def start_task(input_path, title, output_path, debug=False):
 
     # Register the custom sentencizer and add it to the pipeline before the parser
     nlp.add_pipe("custom_sentencizer", before="parser")  # TODO: me
-    text_input = open(input_path, 'r').read().replace('\n', ' ')
+    try:
+        text_input = open(input_path, 'r').read().replace('\n', ' ')
+    except FileNotFoundError:
+        print("Wrong file or file path to dir.")
+
     # text_input = preprocess_text_with_LLM(text_input)
     # text_input = text_pre_processing(text_input)
     # text_input = filter_including_sentences(text_input)  # TODO: me

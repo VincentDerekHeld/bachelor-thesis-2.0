@@ -254,8 +254,9 @@ def extract_elements_vh(sentence, process):
 
     obj = determine_object_vh(verb, sentence_is_active)
     process.action = create_action(verb, obj)
-    for child in verb.children:
-        if child.dep_ == "aux": print(f"Extraction: modal verb:{child.text}")
+    if verb:
+        for child in verb.children:
+            if child.dep_ == "aux": print(f"Extraction: modal verb:{child.text}")
     # print(f"Extraction: verb: {verb}, verb.subtree: {' '.join(x.text for x in verb.children)}")
 
     if process.action is not None:

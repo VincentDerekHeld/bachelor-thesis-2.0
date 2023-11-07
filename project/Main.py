@@ -25,9 +25,9 @@ def run__setof_texts():
 def run__set_of_texts_GPT():
     itaration = 1
     while itaration < 24:
-        if itaration in [9]:
-            input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/GPT-Text/Text" + itaration.__str__() + ".txt"
-            output_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text" + itaration.__str__() + "_GPT.png"
+        if itaration in [6]:
+            input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/GPT-Text/Text" + itaration.__str__() + "-2.txt"
+            output_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Text" + itaration.__str__() + "_GPT-2.png"
             title = "Text" + itaration.__str__() + "own approach"
             BPMNStarter.start_task(input_path, title, output_path, debug=True)
         itaration += 1
