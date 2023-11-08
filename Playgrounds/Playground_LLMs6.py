@@ -2,13 +2,13 @@ import os
 import openai
 import spacy
 
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 def preprocess_text_with_LLM(doc):
     # generate a response of a llm (open-ai) given a prompt
     debug_mode = True
     use_all_prompts = True
     Filtering = True
-
 
     intro = """#### Intro: ###
     You are a system analyst who strictly and carefully follows the instructions. 
@@ -83,7 +83,6 @@ def preprocess_text_with_LLM(doc):
             Remember the whole text from the first request and resolve references (if given) in the sentence.
             """)
 
-
     if use_all_prompts: prompts.append("""
                 ### Background Information ###
                 1. Actors are the subject of a sentence, or the person or thing that performs the action of the verb
@@ -136,7 +135,7 @@ def preprocess_text_with_LLM(doc):
         text_response = response_text.strip()
         if debug_mode:
             print(f"*** Response:  **** \n {text_response} \n")
-            print("*"*20)
+            print("*" * 20)
         return text_response
 
     # Initital Instructions and
@@ -175,4 +174,4 @@ def write_to_file(number: int, nlp):
 nlp = spacy.load('en_core_web_trf')
 # doc = nlp(text_input)
 # preprocess_text_with_LLM(doc)
-write_to_file(9, nlp)
+write_to_file(11, nlp)

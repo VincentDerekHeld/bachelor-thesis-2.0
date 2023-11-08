@@ -2,13 +2,13 @@ import os
 import openai
 import spacy
 
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 def preprocess_text_with_LLM(doc):
     # generate a response of a llm (open-ai) given a prompt
     debug_mode = True
     use_all_prompts = True
     Filtering = True
-
 
     intro = """#### Intro: ### \n 
     You are a system analyst who strictly and carefully follows the instructions. 
