@@ -1,12 +1,22 @@
 import os
-import openai
+
+from openai import OpenAI
 import spacy
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+# openai.api_key = os.environ["OPENAI_API_KEY"]
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 def preprocess_text_with_LLM(doc):
     debug_mode = True
+    text_contains_listings = False
+    for token in doc:
+        if token.tag_ == "LS":
+            text_contains_listings = True
+            break
+
+
 
     intro = """
     #### Intro: ###
@@ -14,7 +24,6 @@ def preprocess_text_with_LLM(doc):
     Make sure that the previously given instructions are still followed.
     Keep as many words from the original text as possible, and never add information from the examples to the output.\n"""
     #  You return carefully only the current sentence as a complete sentence without adding any extra information, interpretation, explanation, numerations, listings, or "->".
-    instruction_headline = """"""
     outro = """\n
     ### TEXT ### \n"""
     # Return only the transformed input without any additional information or annotations.
@@ -28,7 +37,7 @@ def preprocess_text_with_LLM(doc):
     ### Full Text ### \n""")
 
     # Relevance of Sentence
-    prompts.append("""
+    if True: prompts.append("""
             Filter information from the text (initial query), that is not relevant for the process. The only information we are interested in are real process steps.
             ### Background Information: ###
             
@@ -40,9 +49,6 @@ def preprocess_text_with_LLM(doc):
                       -> "The organization shall determine the methods for monitoring, measurement, analysis and evaluation, to ensure valid results" -> "The organization shall determine the methods for monitoring, measurement, analysis and evaluation"
                  Example: "as evidence of the implementation of the audit programme(s)"
                        -> "Documented information shall be available as evidence of the implementation of the audit programme(s) and the audit results." -> "... shall document the results."
-
-            3) Information that just addresses that the process starts or is finished are not relevant and must be filtered.
-                 Example: "The process instance is then finished."
             
             4) Information that clarifies that something is not universally applicable are not relevant and must be filtered.
                 Example: "as applicable"
@@ -54,36 +60,52 @@ def preprocess_text_with_LLM(doc):
                 Example: "The organization shall determine what needs to be monitored and measured, including information security processes and controls" -> "The organization shall determine what needs to be monitored and measured"
             
             7) References to other Articles or Paragraphs are not relevant for the process.
-                Example: "referred to in Article 22(1) and (4)" can be filtered
+                Example: "referred to in Article 22(1) and (4)" must be filtered
                 Example: "in accordance with Article 55"
+                
+            8) Information on how to solve actions or the goals of actions are not relevant and must be filtered.
+                Example: "The selected methods should produce comparable and reproducible results to be considered valid." must be filtered from the sentence.
             
-            8) Case descriptions are relevant:
-                Example: "In the former case,..." is relevant.
+            9) Case descriptions are relevant:
+                Example: "In the former case,..." and "If it is not...." are relevant.
 
             ### Instruction: ####
-            1) Decide based on the eight provided background information from the sentences if the information in the sentence is relevant for the process or not.
-            2)  If a sentence is relevant for the process, return the sentence without any changes and interpretations.
-                If a sentence is in general not relevant for the process, return an empty message  (just a spaces without any other characters)
+            Read the text carefully and decide information for information based on the eight provided background information from the sentences if the information in the sentence is relevant for the process or not.
+            2)  If a sentence is relevant for the process, return the input sentence without any changes and interpretations.
+            3)  If a sentence is in general not relevant for the process, return an empty message  (just a spaces without any other characters)
                 else filter the not relevant information based on the seven background information from the sentences return the filtered sentence.""")
 
-    if True:
+    # 3) Information that just addresses that the process starts or is finished are not relevant and must be filtered.
+    # Example: "The process instance is then finished."
+    print("text_contains_listings: " + text_contains_listings.__str__())
+    if text_contains_listings:
         prompts.append(
-            """### Instruction: ####
-            If the text contains listings, transform listings based on the structure of the text into a continuous text, 
-            else return the sentence without any changes.
-            Return only the transformed input without any additional information or annotations.
+            """
+            ### Instruction: ####
+            1) Decide if the text contains any listings. If the text contains listings, go to 2), else go to 3).
+            2) Transform listings based on the structure of the text into a continuous text and filter the bullet points. Do not add any additional information or annotations.
+            3) Return the sentence without any changes and without any additional information or annotations.
             """)
-
+    if False:
         # Active Voice
         prompts.append("""
         ### Background Information: ###
-            Active Voice: "Whenever the sales department receives an order, ..."
+        Example 1:
+            Active Voice: "Whenever they receive an order, ..."
             Passive Voice: "... a new process instance is created."
-            -> New Sentence: "Whenever the sales department receives an order, the sales department creates a new process instance."
+            -> New Sentence: "Whenever they receive an order, they create a new process instance."
+        Example 2:
+            "If it is not available, it is back-ordered."
+            Active Voice: "If the product is not available"
+            Passive Voice: "it is back-ordered."
+            -> To determine the active voice, the actor must be identified in the text from the inital request. New Sentence: "If the product is not available, they department back-orders the product."
         
+        Somtimes for the transformation the actor is needed, which is not given in the sentence. Therefrom the actor must be identified in the text from the inital request.
         ### Instruction: ####
-        If a part of a sentence is in passive voice, return the sentence transformed into an active voice sentence, else return the sentence without any changes.""")
-
+        If a part of a sentence is in passive voice, return this part of the sentence transformed into an active voice sentence (inlcuding the other parts), else return the sentence without any changes.
+        If the actor is not given in the sentence, identify the actor in the text from the inital request and do not use information or verbatim from the examples.
+        """)
+    if False:
         # Implicit Actions
         prompts.append("""
         Some sentences contain implicit actions. Implicit or implied actions are actions that are actions that are not explicitly mentioned in the sentence, but can be inferred from the sentence.
@@ -91,14 +113,14 @@ def preprocess_text_with_LLM(doc):
             #Example 2: "The actor then submits an order ticket to the kitchen to begin preparing the food." -> „The actor submits an order ticket to the kitchen. The kitchen prepares the food.“
         
         Most sentences do not contain implicit actions.
-            #Example: "Whenever the sales department receives an order, a new process instance is created." -> "Whenever the sales department receives an order, the sales department creates a new process instance."
+            #Example: "Whenever they receives an order, a new process instance is created." -> "Whenever they receive an order, they creates a new process instance."
         
         ### Instruction: ####
         1) Analyze the following sentence to determine if it contains any implicit actions. If it contains implicit actions go to 2), else go to 3).
         2) If implicit actions are identified, these must be converted into explicit actions following the following conditions, else return the sentence without any changes. 
             1. Condition: The original structure and order of the sentence must be retained as far as possible.
             2. Condition: The original wording of the sentence must be retained as far as possible.
-        3) Else just return the input sentence without any changes and interpretations.
+        3) Return the input sentence without any changes and interpretations.
         """)
 
     # TODO
@@ -173,17 +195,22 @@ def preprocess_text_with_LLM(doc):
                 """)
 
     def generate_response(prompt) -> str:
-        model_engine = "text-davinci-003"
+        model_engine = "gpt-3.5-turbo-instruct"
         if debug_mode: print(f"*** Prompt: *** len: {len(prompt).__str__()} \n {prompt} \n")
-        response = openai.Completion.create(
-            engine=model_engine, prompt=prompt, max_tokens=1024, n=1, stop=None, temperature=0.0)
-        # Extract the response from the response object
-        response_text = response["choices"][0]["text"]
-        text_response = response_text.strip()
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": intro},
+                {"role": "assistant", "content": ""},
+                {"role": "user", "content": prompt},
+            ]
+        )
+        response_text = response.choices[0].message.content
+        response_text = response_text.strip()
         if debug_mode:
-            print(f"*** Response: ***\n {text_response}")
+            print(f"*** Response: ***\n {response_text}")
             print("*" * 50)
-        return text_response
+        return response_text
 
     # Initital Instructions and
     result = ""
@@ -191,18 +218,26 @@ def preprocess_text_with_LLM(doc):
     for number, sent in enumerate(doc.sents):
         # print(f"**** Sent. {number}: {sent.text}")
         current_sent: str = sent.text
-        if current_sent.isspace():
+        if current_sent.isspace() or current_sent.__len__() == 0:
             print(f"Skipped on Sent No. {number} because only whitespace")
             next(doc.sents)
         for prompt in prompts:
-            query = intro + instruction_headline + prompt + outro + current_sent + answer_outro
+            #intro
+            query = prompt + outro + current_sent + answer_outro
             current_sent = generate_response(query)
+            print(f"current_sent: {current_sent}")
+            print(f"current_sent.isspace(): {current_sent.isspace().__str__()}")
+            print(f"current_sent.__len__(): {current_sent.__len__()}")
+            if current_sent.isspace() or current_sent.__len__() == 0:
+                print(f"Sent No. {number} has been returned as empty message.")
+                next(doc.sents)
+                break
         result = result + "" + current_sent + "\n"
 
     print("**** Full description: **** \n" + result.strip().replace("\n", " ").replace(".", ". ").replace("!",
                                                                                                           "! ").replace(
         "?", "? "))
-    return result
+    return result.strip()
 
 
 def write_to_file(number: int, nlp):
@@ -217,4 +252,4 @@ def write_to_file(number: int, nlp):
 
 
 nlp = spacy.load('en_core_web_trf')
-write_to_file(1, nlp)
+write_to_file(5, nlp)

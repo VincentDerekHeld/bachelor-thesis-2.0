@@ -6,17 +6,24 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 
 def preprocess_text_with_LLM(doc):
+    # generate a response of a llm (open-ai) given a prompt
     debug_mode = True
+    use_all_prompts = True
+    Filtering = True
 
     intro = """
     #### Intro: ###
     You are a system analyst who strictly and carefully follows the instructions. 
     Make sure that the previously given instructions are still followed.
     Keep as many words from the original text as possible, and never add information from the examples to the output.\n"""
+    #  You handle every task sentence for sentence.
     #  You return carefully only the current sentence as a complete sentence without adding any extra information, interpretation, explanation, numerations, listings, or "->".
+
     instruction_headline = """"""
+
     outro = """\n
     ### TEXT ### \n"""
+
     # Return only the transformed input without any additional information or annotations.
     answer_outro = "\n ### Answer / Response: ###"
 
@@ -27,52 +34,36 @@ def preprocess_text_with_LLM(doc):
     Return on this message an empty message (just a spaces without any other characters).
     ### Full Text ### \n""")
 
-    # Relevance of Sentence
-    prompts.append("""
-            Filter information from the text (initial query), that is not relevant for the process. The only information we are interested in are real process steps.
-            ### Background Information: ###
-            
-            1) Introduction that describes the what the company is doing in general are not relevant and must be filtered.
-                 Example: The Sentence "A small company manufactures customized bicycles." is not relevant. You return an empty message.
-            
-            2) Introductions that describes the goal of the process are not relevant and must be filtered.
-                 Example: "to ensure valid results. "
-                      -> "The organization shall determine the methods for monitoring, measurement, analysis and evaluation, to ensure valid results" -> "The organization shall determine the methods for monitoring, measurement, analysis and evaluation"
-                 Example: "as evidence of the implementation of the audit programme(s)"
-                       -> "Documented information shall be available as evidence of the implementation of the audit programme(s) and the audit results." -> "... shall document the results."
-
-            3) Information that just addresses that the process starts or is finished are not relevant and must be filtered.
-                 Example: "The process instance is then finished."
-            
-            4) Information that clarifies that something is not universally applicable are not relevant and must be filtered.
-                Example: "as applicable"
-                        "The organization shall determine the methods for monitoring, measurement, analysis and evaluation, as applicable," -> The organization shall determine the methods for monitoring, measurement, analysis and evaluation"
-            
-            5) Examples in the sentences are not relevant and must be filtered.
-            
-            6) Including parts are not relevant.
-                Example: "The organization shall determine what needs to be monitored and measured, including information security processes and controls" -> "The organization shall determine what needs to be monitored and measured"
-            
-            7) References to other Articles or Paragraphs are not relevant for the process.
-                Example: "referred to in Article 22(1) and (4)" can be filtered
-                Example: "in accordance with Article 55"
-            
-            8) Case descriptions are relevant:
-                Example: "In the former case,..." is relevant.
-
-            ### Instruction: ####
-            1) Decide based on the eight provided background information from the sentences if the information in the sentence is relevant for the process or not.
-            2)  If a sentence is relevant for the process, return the sentence without any changes and interpretations.
-                If a sentence is in general not relevant for the process, return an empty message  (just a spaces without any other characters)
-                else filter the not relevant information based on the seven background information from the sentences return the filtered sentence.""")
-
     if True:
+        # Relevance of Sentence
+        prompts.append("""
+        Filter information from the text (initial query), that is not relevant for the process. The only information we are interested in are real process steps.
+        ### Background Information: ###
+        1) Introductions that describes the goal of the process are not relevant.
+             Example: "to ensure valid results. "
+                  -> "The organization shall determine the methods for monitoring, measurement, analysis and evaluation, to ensure valid results" -> "The organization shall determine the methods for monitoring, measurement, analysis and evaluation"
+             Example: "as evidence of the implementation of the audit programme(s)"
+                   > "Documented information shall be available as evidence of the implementation of the audit programme(s) and the audit results." -> "... shall document the results."
+        2) Introduction that describes the what the company is doing in general are not relevant.
+             Example: The Sentence "A small company manufactures customized bicycles." is not relevant. You return an empty message.
+        3) Information that just addresses that the process starts or is finished are not relevant.
+             Example: "The process instance is then finished."
+        4) Information that clarifies that something is not universally applicable are not relevant.
+            Example: "as applicable"
+                    "The organization shall determine the methods for monitoring, measurement, analysis and evaluation, as applicable," -> The organization shall determine the methods for monitoring, measurement, analysis and evaluation"
+        5) Examples in the sentences are not relevant.
+        6) Including parts are not relevant.
+            Example: "The organization shall determine what needs to be monitored and measured, including information security processes and controls" -> "The organization shall determine what needs to be monitored and measured"
+        7) References to other Articles or Paragraphs are not relevant for the process.
+            Example: "referred to in Article 22(1) and (4)" can be filtered
+            Example: "in accordance with Article 55"
+                             
+        ### Instruction: ####
+        If a sentence is in general not relevant for the process, return an empty message  (just a spaces without any other characters), else filter the not relevant information based on the seven background information from the sentences return the filtered sentence.""")
+
         prompts.append(
             """### Instruction: ####
-            If the text contains listings, transform listings based on the structure of the text into a continuous text, 
-            else return the sentence without any changes.
-            Return only the transformed input without any additional information or annotations.
-            """)
+            If the text contains listings, transform listings based on the structure of the text into a continuous text, else return the text without any changes.""")
 
         # Active Voice
         prompts.append("""
@@ -173,12 +164,28 @@ def preprocess_text_with_LLM(doc):
                 """)
 
     def generate_response(prompt) -> str:
-        model_engine = "text-davinci-003"
+        # Get the response from GPT-3
+        #model_engine = "text-davinci-003"
+        # model="gpt-3.5-turbo",
+        model_engine = "gpt-4"
+        # model="gpt-4",
         if debug_mode: print(f"*** Prompt: *** len: {len(prompt).__str__()} \n {prompt} \n")
-        response = openai.Completion.create(
-            engine=model_engine, prompt=prompt, max_tokens=1024, n=1, stop=None, temperature=0.0)
-        # Extract the response from the response object
-        response_text = response["choices"][0]["text"]
+        if model_engine == "gpt-4":
+            messages = [{"role": "user", "content": prompt}]
+            messages.append({"role": "system",
+                             "content": "You are a process analyst, that wants to simplyfiy the textual description of a process or you want to describe a regulatory document as a simple process description, that explain WHO has to take care of WHAT Actions. You answer in full sentences, without any bullet points or listings."})
+            completion = openai.ChatCompletion.create(
+                # model="gpt-3.5-turbo",
+                model=model_engine,
+                # model="gpt-4",
+                messages=messages
+            )
+            response_text: str = completion.choices[0].message.content
+        else:
+            response = openai.Completion.create(
+                engine=model_engine, prompt=prompt, max_tokens=1024, n=1, stop=None, temperature=0.0)
+            # Extract the response from the response object
+            response_text = response["choices"][0]["text"]
         text_response = response_text.strip()
         if debug_mode:
             print(f"*** Response: ***\n {text_response}")
@@ -216,5 +223,10 @@ def write_to_file(number: int, nlp):
     print(f"Created Text: {number.__str__()}")
 
 
+# input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/project/Text/text_input_vh/Text7.txt"
+# text_input = open(input_path, 'r').read().replace("\n", " ")
 nlp = spacy.load('en_core_web_trf')
+# doc = nlp(text_input)
+# preprocess_text_with_LLM(doc)
+#for i in range(1, 23):
 write_to_file(1, nlp)
