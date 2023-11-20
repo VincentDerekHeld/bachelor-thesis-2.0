@@ -1,0 +1,6 @@
+The organization shall plan, establish, implement, and maintain an audit program.
+The organization shall consider the importance of the processes concerned and the results of previous audits.
+The organization defines the audit criteria and scope for each audit.
+The organization shall select auditors. The organization shall conduct audits. The audits shall ensure objectivity and the impartiality of the audit process.
+The organization shall ensure that they report the results of the audits to relevant management.
+The original sentence contains an implicit action.

@@ -1,0 +1,6 @@
+The controller [must] not prevent the data subject from receiving and transmitting the personal data concerning him or her to another controller when the processing is carried out by automated means.
+The organization must determine the methods for monitoring, measuring, analyzing, and evaluating the results.
+The data subject has the right to have their personal data transmitted directly from one controller to another, if technically feasible.
+The organization must determine the methods for monitoring, measuring, analyzing, and evaluating the results.The organization must carry out the exercise of the right.
+The organization must perform a task for the processing to not be applicable to this right.
+The controller must mention the right.

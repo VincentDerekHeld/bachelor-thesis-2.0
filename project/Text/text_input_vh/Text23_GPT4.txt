@@ -1,8 +1,0 @@
-The load switching device should have an independent switching program for each relay.
-The circuit program should be subdivided into daily, weekly, seasonal, and annual programs.
-The central system manages the switching program.
-The central system transmits the switching program to the load switching device via communication paths.
-The circuit program must be read-back for control purposes.
-The central system must log any changes to the circuit program in a logbook.
-The central system sends changed switching programs to the load switching device.
-Meanwhile, the load switching device receives and logs the changes in the logbook.

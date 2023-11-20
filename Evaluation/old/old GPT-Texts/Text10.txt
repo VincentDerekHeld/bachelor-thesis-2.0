@@ -1,0 +1,27 @@
+The Controller must confirm to the Data Subject whether or not personal data concerning him or her are being processed.
+The Controller must provide the Data Subject with access to the personal data and the following information.
+The Controller must confirm to the Data Subject whether or not their Personal Data is being processed.
+The Controller must give the Data Subject access to their Personal Data and the categories of Personal Data concerned.
+The Controller must confirm to the Data Subject whether or not personal data concerning them is being processed.
+The Controller must grant the Data Subject access to the personal data and the recipients or categories of recipient to whom the personal data have been or will be disclosed.
+The Controller must confirm to the Data Subject whether or not personal data concerning them is being processed.
+The Controller must grant the Data Subject access to their personal data and the period for which the personal data will be stored, or the criteria used to determine that period.
+The Controller must confirm to the Data Subject whether or not personal data concerning them is being processed.
+The Controller must grant the Data Subject access to their personal data.
+The Controller must grant the Data Subject the right to request rectification or erasure of personal data or restriction of processing of personal data concerning the Data Subject.
+The Controller must grant the Data Subject the right to object to such processing.
+
+Controller must confirm to the data subject whether or not personal data concerning them is being processed.
+Controller must grant the data subject access to the personal data and any available information as to their source.
+
+If the personal data was not collected from the data subject, controller must provide the data subject with access to the personal data and any available information as to their source.
+Organization must determine methods for monitoring, measurement, analysis, and evaluation.
+The Controller must confirm to the data subject whether or not personal data concerning him or her are being processed.
+The Controller shall provide the data subject with access to the personal data and the existence of automated decision-making, including profiling, referred to in Article 22(1) and (4).
+The Controller, at least in those cases, shall provide meaningful information about the logic involved, as well as the significance and the envisaged consequences of such processing.
+The data subject must be informed where personal data are transferred to a third country or to an international organisation.
+Controller must provide a copy of the personal data they are processing.
+The data subject must request further copies and the controller should charge a reasonable fee.
+The data subject must be provided the information in a commonly used electronic form when they make a request by electronic means.
+The data subject makes a request by electronic means and the information is provided to them in a commonly used electronic form.
+He/she/it/they must obtain a copy.

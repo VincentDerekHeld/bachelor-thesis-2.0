@@ -1,0 +1,14 @@
+The controller confirms to the data subject whether their personal data is being processed and grants them access to it.
+The data subject must confirm and access their own personal data.
+The controller must confirm to the data subject if their personal data is being processed and they have the right to access it.
+They must also disclose the recipients or categories of recipients to whom the personal data have been or will be disclosed.
+The controller must confirm to the data subject whether their personal data is being processed and provide them with access to it, as well as determine the period for which the personal data will be stored.
+Data subject confirms and accesses their personal data, requests rectification, erasure, restriction of processing, and objects to processing.
+The controller must confirm to the data subject if their personal data is being processed and if they have access to it, as well as the right to obtain information about the source of personal data if it was not collected from them.
+Organization must determine methods for monitoring, measuring, analyzing, and evaluating, document results, and decide what needs to be monitored and measured.
+The data subject shall confirm if their personal data is being processed by the controller, and if so, the controller shall grant the data subject access to the personal data and any automated decision-making, including profiling, and provide information about the logic, significance, and consequences of such processing.
+The data subject must be aware of the security measures taken for the transfer.
+The controller must provide another copy of the personal data.
+The fee shall be reasonable.
+Organization must electronically provide the information in a format commonly used.
+Get a copy without violating others' rights and freedoms.

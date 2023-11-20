@@ -1,0 +1,9 @@
+The controller must obtain consent from the data subject to process their personal data.
+Organization will determine methods for monitoring, measuring, analyzing, and evaluating, document results, and decide what needs to be monitored and measured.
+ACTOR shall present request for consent distinguishably, understandably, accessibly, and clearly.
+The part shall not be binding.
+The data subject may withdraw their consent.
+Organization shall remain lawful if consent is withdrawn.
+The controller must inform the data subject.
+The Actor can give and withdraw consent.
+The organization must determine if consent to the processing of personal data is freely given when assessing the performance of a contract, including the provision of a service.

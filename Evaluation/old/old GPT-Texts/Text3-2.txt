@@ -1,0 +1,11 @@
+If the Evanstonian is an upscale independent hotel, [ACTOR] [VERB in active voice] [OBJECT].
+If a guest calls room service at The Evanstonian, the room-service manager will take down the order.
+If the customer has placed an order, the [ACTOR] shall submit an order ticket to the kitchen to begin preparing the food.
+If the customer requests alcoholic beverages, the sommelier shall fetch wine from the cellar and prepare any other alcoholic beverages.
+If eighty percent of room-service orders include wine or some other alcoholic beverage, the controller shall notify the supervisory authority within 72 hours, else the controller shall provide reasons for the delay.
+If the order is ready, the waiter shall be assigned the order by her.
+If the kitchen and the sommelier are doing their tasks, the waiter [MODAL VERB if present] readies a cart by putting a tablecloth on it and gathering silverware.
+The waiter is responsible for providing nonalcoholic drinks.
+If the food, wine, and cart are ready, the waiter will deliver it to the guest's room.
+If the guest has returned to the room-service station, the waiter will debit their account.
+If the waiter has another order to prepare or deliver, he may wait to do the billing.

@@ -1,0 +1,7 @@
+If the customer decides that the costs are acceptable, the CRS hands out a repair cost calculation back.
+If the customer does not decide that the costs are acceptable, she takes her computer home unrepaired.
+The first activity is to check and repair the hardware.
+The second activity checks and configures the software.
+After each activity, the proper system functionality is tested.
+If an error is detected, another arbitrary repair activity is executed.
+Otherwise, the repair is finished.

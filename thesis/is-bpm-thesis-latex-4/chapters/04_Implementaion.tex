@@ -1,0 +1,61 @@
+\chapter{Implementation}
+\label{sec:implementation}
+
+
+//TODO: Identification of irrelevant information: List of stuff that is irrelevant
+
+
+In this chapter, the practical implementation of our enhanced automated approach for transforming natural language process descriptions to BPMN2.0 process diagrams will be described. Again, the differentiation in pre-processing, processing and post-processing will be used.
+
+\section{Preprocessing / Data Preparation} 
+The first step in our practical implementation is data preprocessing, where we prepare the raw textual process descriptions for further analysis. Using BeautifulSoup, we convert the process descriptions on websites into a suitable format for analysis. This includes tasks such as downloading the process descriptions from websites, storing them as text file (.txt), and removing unnecessary whitespace and formatting. For refactoring the current state approach in Python, the Spacy library, a powerful and widely used Natural Language Processing (NLP) toolkit, will be employed. Spacy offers multiple different pre-trained pipelines. For our approach the large spacy pipeline, called "en\_core\_web\_lg" is employed. This model is based on a large English language corpus and offers a wide range of linguistic features and capabilities. Its extensive vocabulary and contextual word embeddings enable accurate and comprehensive analysis of natural language. Spacy’s tokenization capabilities are used to break the text into individual words and tokens, ensuring that the data is ready for subsequent analysis.
+
+\section{Processing / NLP Analysis}
+The core of our practical implementation lies in the NLP analysis phase, where we apply a range of NLP techniques using Spacy to extract relevant information from the processed text. We utilize Spacy’s part-of-speech (POS) tagging functionality to assign grammatical labels to each word, enabling us to identify nouns, verbs, adjectives, adverbs, and other parts of speech. This information plays a crucial role in subsequent steps, such as identifying actions and actors within the process descriptions. Friedrich et al. uses WordNet, a lexical database developed by the Princeton University, to achieve better result. As the en\_core\_web\_lg pipeline is already trained on this data of WordNet 3.0, this step can be skipped.
+
+To analyze the syntactic structure of the sentences and establish relationships between tokens, we use Spacy's parser capabilities. The parser generates a dependency parse tree, which captures the grammatical relationships and dependencies between different tokens in the text. This helps us understand how the various components of the process descriptions are connected and related to each other.
+
+Furthermore, Spacy's Named Entity Recognition (NER) functionality proves invaluable in identifying and labeling specific entities such as people, organizations, and locations mentioned in the process descriptions. This enables us to capture and utilize this valuable information in the subsequent steps of our approach.
+
+As part of our implementation, we address the challenges associated with sentence boundary detection. Spacy's linguistic capabilities and tokenization provide a foundation for detecting sentence boundaries. However, to improve the accuracy of boundary detection, a Matcher will be used within Spacy. By defining specific patterns and indicators that suggest sentence boundaries, we enhance the results of boundary detection and ensure the appropriate segmentation of the process descriptions into sentences.
+
+Additionally, we address the need to filter out example sentences, as BPMN 2.0 diagrams require atomic process elements. By utilizing Spacy's text search functionalities, we identify and remove example indicators, such as 'for instance', 'for example', and 'e.g.', from the text. This filtering step ensures that our resulting process diagrams contain only relevant and non-example sentences.
+ 
+The subsequent step in our practical implementation focuses on extracting relevant information from the processed text and creating a model representation of the process. Leveraging Spacy's capabilities, we define rules based on grammatical labels to identify actions and objects within the sentences. The active and passive voice differentiation allows us to assign the correct action to the respective object. We also leverage Spacys anaphor resolution functionality to handle linguistic references and resolve them appropriately in the context of the process descriptions.
+To capture conditional sentences within the process descriptions, we utilize Spacys text search and pattern matching capabilities to identify markers such as 'if', 'else', 'otherwise', or specific phrases indicating conditional relationships. These markers are mapped to the relevant BPMN constructions, as specified in Table 1. Our result will be stored and constantly updated in a world model. 
+
+\section{Post-Processing / Visualization}
+Once the relevant information, including activities, actors, and relationships, has been extracted from the text and stored in the model, we can proceed with the visualization step. To visualize the resulting BPMN models generated by our approach, we employ the Graphviz library. Graphviz is a powerful open-source graph visualization software package that provides a collection of tools for creating and manipulating graph structures. Graphviz allows us to convert the model into a graphical representation that adheres to the BPMN 2.0 notation. The visualization process involves converting the extracted data into a DOT file format, which is a plain text graph description language supported by Graphviz.  This format describes the structure and relationships between the nodes and edges of the graph. The DOT file serves as input to the Graphviz library, which generates the corresponding graphical representation. To accomplish this, we utilized the Python interface provided by the Graphviz library. This interface allows us to programmatically create DOT files and invoke the Graphviz layout engine to generate the final visualization. The layout engine automatically arranges the nodes and edges in a visually appealing manner, considering the specified relationships and constraints, extracted from the textual description. Once the visualization is generated, we can export it in various formats, such as PNG, PDF, or SVG, to suit our specific requirements.
+\pagebreak
+
+
+
+\caption{Identification of Introduction Sentences}
+
+
+
+The code can be found on the GitHub repository of the author \footnote{https://github.com/ShuaiweiYu/text2BPMN}.
+
+
+
+The key element of our methodology is to break down the text into individual sentences. This granular approach allows for a comprehensive assessment where each sentence can be independently adapted and targeted to specific rquirements (Table XY). Using a sequence of  engineered prompts, the LLM helps to reformulate each sentence. The aim is to restructure the sentences so that they qualify for a rule-based extraction process, enabling the identification and inclusion of all relevant information.
+
+
+
+\begin{table}[h]
+\centering
+\caption{Requirements for LLM-Assisted Textual Refinement}
+\label{table:Requirements for LLM-Assisted Textual Refinement}
+\begin{tabular}{l|l}
+\textbf{Requirement Number} & \textbf{Definition} \hline
+Rq. 1: & Text does not contain meta information  \\
+Rq. 2: & Text is in active voice & \\
+Rq. 3: & Text contains only explicit actions  \\
+Rq. 4: & Text does not contain references  \\ 
+Rq. 5: & Modal verbs are still part of the text  \\ 
+\hline
+
+\end{tabular}
+\end{table}
+
+\newpage

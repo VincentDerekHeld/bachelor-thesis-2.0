@@ -1,0 +1,11 @@
+Top management shall review the organization's information security management system at planned intervals.Management shall consider the status of actions. 
+Organization must identify changes in external and internal issues relevant to the information security management system. 
+Organization must identify changes in needs and expectations of interested parties relevant to the information security management system. 
+Organization should receive feedback on the information security performance including trends in nonconformities and corrective actions. 
+Organization must monitor and measure results, audit results, and fulfilment of information security objectives. 
+Organization should receive feedback from interested parties. 
+If risk assessment is conducted, Organization must evaluate results of risk assessment and status of risk treatment plan. 
+Organization should identify opportunities for continual improvement. 
+Organization must decide on continual improvement opportunities and any needs for changes to the information security management system.
+Organization shall monitor, measure, analyze, and evaluate its results if it determines the methods for monitoring, measuring, analyzing, and evaluating the results.
+Management shall document the results.

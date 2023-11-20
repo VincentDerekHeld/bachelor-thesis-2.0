@@ -1,0 +1,141 @@
+\chapter{Evaluation}
+\label{sec:evaluation}
+%Overview of Texts in a Table (academic, Industry, Regulatory documents) 
+%Length of sentences and average length of sentences 
+\section{Evaluation Metrics}
+In this study, a gold standard of comprising 23 carefully curated textual process descriptions and the corresponding BPMN 2.0 diagrams have been created.  For the creation this Gold Standard, we applied a rigorous methodology involving the selection of diverse and representative process descriptions from different domains.  Consisting of textual descriptions of the PET dataset, ISO standards, GDPR articles and process descriptions from industry. The creation of this gold standard is intended to facilitate the objective evaluation of automated process modeling approaches (of the baseline approach and our approach) and provide a valuable resource for researchers in the field based on the different domains. All the used textual descriptions and the corresponding BPMN2.0 diagrams of the gold standard and the generated diagrams can be found in the same repository as the code. The link is given in section \ref{sec:implementation}. 
+
+For a quantitative evaluation the occurrence of basic BPMN2.0 elements is compared between different approaches and the Gold Standard:
+\begin{itemize}
+    \item Number of Activities $A$
+    \item Number of lanes $S$
+    \item Number of parallel gateways $G_p$
+    \item Number of exclusive gateways $G_e$
+\end{itemize}
+
+In the following the text input is analyzed and afterwards the different approaches will be evaluated.
+
+\newpage
+\section{Text Input Analysis}
+The textual descriptions by source type are given in table \ref{table:source_type}, as well as the average number of sentences ($\overline{No.\_of\_sentences}$), the average number of tokens in the text ($\overline{No.\_of\_tokens}$), and the average number of tokens per sentence ($\overline{No.\_of\_tokens\_per\_sentence}$). These numbers are calculated by the the outputs of the Spacy standard Tokenizer and Sentencizer.
+
+While the descriptions of the industry and the PET data set represent more typical process descriptions, the ISO Norms and the GDPR articles represent regulatory documents. 
+
+In general, the input text determines the quality of the output.
+
+While number of sentences is higher in the textual descriptions of typically business process descriptions than in regulatory documents, the number of average tokens per sentence is smaller. 
+
+ISO tries to achieve an "ease of use" \cite{ISOISOHouse} of their documents. Therefore the ISO documents follow the a guideline, that specifies the language and the formatting. 
+
+Within this guideline a few instructions are mentioned that are significant for this work:
+The text must be written in \textbf{short sentences and paragraphs} to break up the text and make it easier to follow for the user. Therefore a sentence should include no more than 20 words per sentence. The guideline refers to the usage of "\textbf{ISO verbal forms}" \cite{ISOISOHouse}. These form make it more easy to identify requirements, recommendations, permissions, possibility and capability and external constraints in the text. Within the guideline also the tone of the text is described: Instructions should be given by using \textbf{direct, active verbs}.
+
+These outlined guidelines of writing regulatory documents make the extraction of information using machines much easier.
+
+Most governments do not follow a guideline how to write a regulatory document. This includes the government of the EU, which adopted the GDPR. 
+
+
+
+\newpage
+\section{Comparison between the Gold Standard and the baseline approach}
+In the second step the output of the approach of the baseline approach \cite{yuImprovedAutogenerationBusiness2023} is compared to the diagrams of the gold standard. This aims the identification of limitation, especially focusing on the input of regulatory documents.
+
+\section{Comparison between the Gold Standard and the Proposed Approach}
+In the third step the generated diagrams of this approach are compared to the gold standard.
+
+
+
+
+\begin{table}[]
+\begin{center}
+\caption{\centering Textual descriptions by source type}
+\label{table:source_type}  
+\begin{tabular}{l|l|l|l|l|l}
+\textbf{Source}     & \textbf{Amount}  & \textbf{Text ID} & $\overline{No.\_of\_sentences}$  & $\overline{No.\_of\_tokens}$ & $\overline{No.\_of\_tokens\_per\_sentence}$ \\ \hline
+PET Dataset     & 4      &  1-4 & 10 & 184 & 18 \\ \hline
+ISO Norms    & 3        & 5-7 &4 & 150 & 41 \\ \hline
+GDPR Articles & 7      &  8-14 & 5 & 254 & 83\\ \hline
+Industry & 7         &  15-23 & 7 & 157 & 7 \\ \hline
+Total    & 23      & &&& \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+
+
+
+
+\subsection{Business Processes}
+
+\subsection{Regulatory Documents}
+
+\begin{table}[]
+\caption{\centering Result of applying the evaluation metrics}
+\label{table:eva_01}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\rotatebox{90}{$ID$} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$A^{gold\_standard}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$A^{baseline}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$A^{our\_approach}$}} &
+    
+  
+    \multicolumn{1}{l|}{\rotatebox{90}{$A^{our\_approach}_{matched}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$A^{our\_approach}_{missed}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$A^{our\_approach}_{irrelevant}$}} &
+
+    \multicolumn{1}{l|}{\rotatebox{90}{$S^{gold\_standard}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$S^{baseline}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$S^{our\_approach}$}} &
+
+    \multicolumn{1}{l|}{\rotatebox{90}{$G_p^{gold\_standard}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$G_p^{baseline}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$G_p^{our\_approach}$}} &
+    
+    \multicolumn{1}{l|}{\rotatebox{90}{$G_e^{gold\_standard}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$G_e^{baseline}$}} &
+    \multicolumn{1}{l|}{\rotatebox{90}{$G_e^{our\_approach}$}} \\ \hline
+1 & 9 & 16 & & & & & 3 & 5 & & 2 & 6 & & 4 & 4 & \\ \hline
+2 & 8 & * & & & & & 2 & * & & 0 & * & & 3 & * & \\ \hline
+3 & 12 & 13 & & & & & 4 & 5 & & 3 or 5 & 0& & 4 & 2 & \\ \hline
+4 & 7 & 28 & & & & & 1 & 2 & & 3 & 0 & & 2 & 0 & \\ \hline
+5 & 15 & 12 & & & & & 1 & 1 & & 4 & 0 & & 0 & 0 & \\ \hline
+6 & 14 & 9 & & & & & 1 & 1 & & 6 & 0 & & 0 & 0 & \\ \hline
+7 & 18 & * & & & & & 1 & * & &  4 & * & & 2 & * & \\ \hline
+8 & 7 & 16 &  & & & & 3 & 2 & & 2 & 0 & & 6 & 0 & \\ \hline
+9 & 24 & * & & & & & 3 & * &  & 4 & * & & 10 or 11 & * &  \\ \hline
+10 & 3 & * & & & & & 2 & * & & 2 & * & & 0 & * & \\ \hline
+11 & 3 & 13 & & & & & 3 & 1 & & 2 & 0 & & 0 & 0 & \\ \hline
+12 & 5 & 13 & & & & & 2 & 1 & & 0 & 0 & & 3 & 4 & \\ \hline
+13 & 2 & 7 & & & & & 2 & 1 & & 0 & 0 & & 0 & 0 & \\ \hline
+14 & 4 & 27 & & & & & 2 & 1 & & 0 & 2 & & 2 & 2 & \\ \hline
+15 & 7 & 13 & & & & & 3 & 2 & & 2 & 0 & & 0 & 0 & \\ \hline
+16 & 9 & 13 & & & & & 3 & 1 & & 2 & 6 & & 4 & 0 & \\ \hline
+17 & 7 & 5 & & & & & 3 & 1 & & 2 & 2 & & 0 & 0 & \\ \hline
+18 & 5 & 10 & & & & & 3 & 2 & & 2 & 0 & & 0 & 0 & \\ \hline
+19 & 5 & 3 & & & & & 2 & 1 & & 2 & 0 & & 0 & 0 & \\ \hline
+20 & 6 & 6 & & & & & 3 & 1 & & 2 & 2 & & 0 & 2 & \\ \hline
+21 & 6 & 9 & & & & & 3 & 1 & & 2 & 4 & & 0 & 0 & \\ \hline
+22 & 6 & 15 & & & & & 3 & 1 & & 2 & 4 & & 0 & 0 & \\ \hline
+23 & 5 & 8 & & & & & 2 & 1 & & 2 & 4 & & 0 & 2 & \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+\subsection{Business Processes}
+
+\subsection{Regulatory Documents}
+
+
+Limitations of visualization
+-> Further work 
+
+
+\newpage

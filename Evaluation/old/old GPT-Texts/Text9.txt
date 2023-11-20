@@ -1,0 +1,17 @@
+The data subject must give consent to the processing of his or her personal data for one or more specific purposes only
+if the processing is lawful.
+The controller must process lawfully only if and to the extent that processing is necessary for the performance of a contract
+to which the data subject is party or to take steps at the request of the data subject prior to entering into a contract;
+The controller must comply with a legal obligation to which the controller is subject;
+The controller must protect the vital interests of the data subject or of another natural person;
+The controller must perform a task carried out in the public interest or in the exercise of official authority vested in the controller;
+The controller must pursue the legitimate interests of the controller or of a third party.
+The organization shall not apply point (f) of the first subparagraph.
+
+The Union or Member State law must lay down the basis for the processing referred to in point (c) and (e) of paragraph 1.
+Organization must determine methods for monitoring, measurement, analysis, and evaluation.
+The organization must determine the purpose of the processing in the legal basis.The Controller must process lawfully.
+The Data Types subject to processing must be identified. The Data Subjects must be identified.
+The Entities to whom the Personal Data may be disclosed and the Purposes for which the Personal Data may be disclosed must be identified.
+The Purpose Limitation must be established. Storage Periods must be established. Processing Operations and Processing Procedures must be established.
+The law shall meet a legitimate aim pursued with an objective of public interest and be proportionate.The Controller must ascertain whether processing for another purpose is compatible with the purpose for which the personal data are initially collected, taking into account the context in which the personal data have been collected, the nature of the personal data, the possible consequences of the intended further processing for data subjects, and the existence of appropriate safeguards.

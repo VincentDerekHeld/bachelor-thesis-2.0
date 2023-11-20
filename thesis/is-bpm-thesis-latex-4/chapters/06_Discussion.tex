@@ -1,0 +1,34 @@
+\chapter{Discussion}
+\label{sec:discussion}
+
+%Es macht auf jeden Fall sinn, Gesetztes Texte in BPMN Datein umzuwandeln, insbesondere im Hinblick auf Proezess Minig und denn Abgleich von akutellen Prozessen (inklusive Ausnahmefällen) und der Gesetzlichen Regulatorien
+% Anwendungsfälle Datenschutzprozesse
+
+%Bedarf der Entwicklung eines Python to BPMN2.0 Frameworks basierende auf Pullmann
+
+% Bei semi-stucturieten Text eher LLMs?
+[//TODO: fancy name of requirements for preprecoessing]
+
+This thesis introduces a novel methodology for generating process models from textual descriptions, encompassing not only general process descriptions but also complex regulatory documents like GDPR articles and ISO Norms. By integrating Large Language Models (LLMs) for the initial pre-processing of these texts, this approach significantly enhances the quality of input data. This improvement is crucial for the subsequent application of rule-based extraction methods, which are used to create detailed and accurate output diagrams.
+
+
+
+% Interpretation of Results: Explaining what the results mean, often going into detail about the nuances and complexities of the findings.
+
+%Contextualization: Comparing and contrasting the results with those of other studies, and discussing how the findings fit into the broader field.
+
+
+
+%Implications: Discussing the theoretical, practical, or real-world implications of the findings.
+
+The results of this research have significant implications for how companies and organizations adapt to the evolving legal and regulatory landscape. With the introduction of various new laws and standards by different government institutions and organizations, there is an urgent need for an automated approach to improve the understanding and implementation of these changes. While ISO standards usually provide a clear language, complex legal texts such as the General Data Protection Regulation pose a significant challenge in terms of understanding and practical application. This research addresses this challenge. By using the proposed approach to automatically generate action steps and process diagrams from regulatory documents, the process of integrating new standards and laws into business practice is significantly simplified. This not only increases operational efficiency, but also ensures more accurate and compliant adherence to these regulations, which is increasingly important in an era of increasing sanctions for data breaches.  In essence, this approach could serve as a transformative tool for organizations operating in the often complex terrain of regulatory compliance.
+
+%Limitations: Acknowledging the limitations of the study and how these might affect the interpretation of the results.
+The package "Process-Piper", which is used in this study for the visualization of the created process diagrams, has some limitations that should be considered. First and foremost, the functionality of the package is limited to displaying process diagrams only in the form of images (.png format).  Future work should aim to eliminate this limitation and develop a framework that is able to create BPMN 2.0-compliant diagrams together with the corresponding .xml files.  This disadvantage is particularly relevant if a user wants to make changes to the individual process steps or the process sequence after automated creation. This is not possible because the generated diagrams cannot be imported as image files into BPMN 2.0-compliant tools or systems.
+
+%Suggestions for Future Research: Based on the limitations and findings, suggesting areas for further investigation.
+
+%No Definitive Closure: The Discussion often ends with open-ended statements about the implications of the work or suggestions for future research, rather than definitive conclusions.
+
+
+Therefore, in June 2023, ISO published with the ISO 24495-1:2023 a norm for governing principles and guidelines. This document aims to establish governing principles and guidelines for developing plain language documents \cite{isoISO24495120232020}. ISO/AWI 24495-2 is currently under development and should provide support to the creators of regulatory documents and  ensure that people affected by regulatory documents can understand and carry out their rights and responsibilities \cite{isoISOAWI244952}.

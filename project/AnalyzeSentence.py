@@ -37,8 +37,6 @@ def sub_sentence_finder(sentence: Span) -> [Span]:
 
 
 def find_sub_sentence_start_end_index(sentence: Span, index_list: [int]):
-    # TODO:Lets have a look if this can help us with the regulatory ducuments
-
     """find the start and end index of the sub-sentences
 
        Args:
@@ -77,54 +75,6 @@ def add_index(index_list, index):
     else:
         index_list.append(index)
         return index_list
-
-
-def analyze_document_vh(doc: Doc) -> [SentenceContainer]:
-    container_list = []
-    for sentence in doc.sents:
-        container = SentenceContainer(sentence)
-        container_list.append(container)
-
-        process = Process(sentence)
-        extract_elements_vh(sentence, process)
-        container.add_process(process)
-
-    for sentence in container_list:
-        complement_actor(sentence)
-        complement_object(sentence)
-        correct_model(sentence)
-        complement_model(sentence)
-
-    return container_list
-
-
-def analyze_document_vh1(doc: Doc) -> [SentenceContainer]:
-    """Analyze the document and return a list of SentenceContainer which contains the extracted information stored in
-        the models.
-
-       Args:
-           nlp: The spacy language model
-           doc: The document that contains the sentence
-
-       Returns:
-           A list SentenceContainer
-    """
-    container_list = []
-    for sentence in doc.sents:
-        print("Spacy standard Splitting:" + sentence.text + "\n")
-        container = SentenceContainer(sentence)
-        container_list.append(container)
-
-        process = Process(sentence)
-        extract_elements_vh(sentence, process)
-        container.add_process(process)
-
-    for sentence in container_list:
-        complement_actor(sentence)
-        complement_object(sentence)
-        correct_model(sentence)
-        complement_model(sentence)
-    return container_list
 
 
 def analyze_document(doc: Doc) -> [SentenceContainer]:

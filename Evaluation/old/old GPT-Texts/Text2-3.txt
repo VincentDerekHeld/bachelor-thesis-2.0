@@ -1,0 +1,8 @@
+A customer brings in a defective computer.
+The CRS checks the defect and hands out a repair cost calculation.
+If the customer decides that the costs are acceptable, they continue the process.
+Otherwise, they take their computer home unrepaired.
+The repair department carries out two activities for the ongoing repair, executing them in an arbitrary order.
+The first activity checks and repairs the hardware, whereas the second activity checks and configures the software.
+After each of these activities, they test the proper system functionality.
+If they detect an error, they execute another arbitrary repair activity. Otherwise, they finish the repair.

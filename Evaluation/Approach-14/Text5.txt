@@ -1,0 +1,8 @@
+The organization shall determine what needs to be monitored and measured, including information security processes and controls.
+The methods for monitoring, measurement, analysis and evaluation shall be determined, as applicable, to ensure valid results.
+The methods selected should produce comparable and reproducible results to be considered valid.
+The monitoring and measuring shall be performed at a determined time.
+The organization shall monitor and measure.
+The results from monitoring and measurement shall be analysed and evaluated at a determined time.
+The organization shall analyse and evaluate these results.
+Documented information shall be available as evidence of the results. The organization shall evaluate the information security performance and the effectiveness of the information security management system.

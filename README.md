@@ -21,6 +21,10 @@ Keywords: Natural Language Processing, Business Process Compliance, Natural Lang
 ```      
 pip install -r requirements.txt
 ```
+3. Activate the following line in the "start_task" Method in the "BPMNStarter.py" to download all dependencies the first time
+```      
+download_all_dependencies()
+```
 
 ## Execution:
 1. Enter the input path to the textual description  (.txt), to use it as an input file

@@ -1,0 +1,13 @@
+Management shall review the information security management system.
+The management review shall include considering
+the status of actions from previous management reviews,
+changes in external and internal issues that are relevant to the information security management system,
+changes in needs and expectations of interested parties that are relevant to the information security management system,
+feedback on the information security performance including trends in nonconformities and corrective actions,
+monitoring and measurement results, audit results, fulfillment of information security objectives.
+It shall also include feedback from interested parties, the results of risk assessment, and the status of the risk treatment plan.
+
+The review shall consider opportunities for continual improvement.
+
+The results of the management review should include decisions related to continual improvement opportunities and any needs for changes to the information security management system.
+shall be available as evidence of the results of management reviews.

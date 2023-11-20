@@ -1,0 +1,7 @@
+1. If a personal data breach occurs, the controller must notify the supervisory authority within 72 hours, unless the breach is unlikely to harm individuals' rights and freedoms.
+2. If the notification is not made within 72 hours, the controller must provide reasons for the delay.
+3. The processor must inform the controller promptly upon becoming aware of a personal data breach.
+4. The notification must include: a) a description of the breach, including the approximate number of individuals and personal data records affected; b) the contact information for the data protection officer or other point of contact for more information; c) the potential consequences of the breach; and d) the actions taken or planned by the controller to address the breach.
+5. If it is not possible to provide all of this information at once, it may be provided in stages without undue delay.
+6. The controller must keep a record of all personal data breaches, including the details of the breach, its impact, and the steps taken to address it.
+7. This documentation must be available for the supervisory authority to review for compliance with this Article.

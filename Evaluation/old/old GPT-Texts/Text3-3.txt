@@ -1,0 +1,11 @@
+The text remains unchanged.
+When a guest calls room service at The Evanstonian, the room-service manager takes down the order and processes it.
+The text remains unchanged.
+She orders the sommelier to fetch wine from the cellar. The sommelier prepares any other alcoholic beverages.
+Eighty percent of room-service orders include wine or other alcoholic beverages. This triggers the creation of a new process instance.
+She assigns the order without any changes.
+The waiter prepared a cart.
+The text remains unchanged.
+The waiter delivered the food, wine, and cart to the guest's room.
+The waiter debits the guest's account without any changes.
+The waiter may wait before the billing is done.

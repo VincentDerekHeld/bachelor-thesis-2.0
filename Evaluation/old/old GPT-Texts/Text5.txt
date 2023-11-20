@@ -1,0 +1,6 @@
+The organization must determine what needs to be monitored and measured, and the methods for monitoring, measurement, analysis, and evaluation.
+The organization shall determine the methods for monitoring, measurement, analysis and evaluation.
+They must monitor and measure the results. They should analyse and evaluate the results.
+The organization shall document the results and make them available as information.
+The organization will evaluate the information security performance of the organization.
+The organization will evaluate the effectiveness of the information security management system of the organization.

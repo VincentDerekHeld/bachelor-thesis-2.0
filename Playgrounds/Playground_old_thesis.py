@@ -57,6 +57,7 @@ def determine_condition(sent_root):  # sent_root = assamble #TODO Active vs. pas
             full_name_tokens = sorted_tokens
     return full_name_tokens
 
+
 def extract_elements(sentence, process):
     """
     extract the elements from the sentence, creating the corresponding models, and adding them to the processes
@@ -84,6 +85,7 @@ def extract_elements(sentence, process):
                 conjunct_obj = determine_object(conjunct, sentence_is_active)
                 conjunct_action = create_action(conjunct, conjunct_obj)
                 process.action.conjunction.append(conjunct_action)
+
 
 def extract_from_active_sentence(sent_root, conditonal=False) -> []:
     """

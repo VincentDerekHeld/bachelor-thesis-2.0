@@ -1,0 +1,8 @@
+The controller shall notify the personal data breach to the supervisory authority.
+Where the notification to the supervisory authority is not made within 72 hours, it shall be accompanied by reasons for the delay.
+The processor shall notify the controller without undue delay after becoming aware of a personal data breach.
+The notification shall at least describe the nature of the personal data breach, communicate the name and contact details of the data protection officer or other contact point, describe the likely consequences of the personal data breach, and describe the measures taken or proposed to be taken by the controller to address the personal data breach.
+ 
+Where, and in so far as, it is not possible to provide the information at the same time, the information may be provided in phases without undue further delay.
+The controller shall document the personal data breaches.
+They shall enable the supervisory authority to verify compliance with this Article.

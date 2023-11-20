@@ -1,0 +1,9 @@
+The data subject shall consent if lawful processing is required.
+Processing may be lawful if necessary for a contract with the data subject, to comply with a legal obligation, to protect vital interests, to perform a task in the public interest, to exercise official authority, or for legitimate interests.
+Public authorities shall not process when applicable.
+The controller shall be subject to the basis for processing.
+Organization must determine methods for monitoring, measuring, analyzing, and evaluating, document results, and decide what needs to be monitored and measured.
+The organization shall determine the purpose of processing.
+The controller must consider legality, types of data, data subjects, entities, purposes, purpose limitation, storage periods, processing operations, and processing procedures.
+The Union or Member State shall meet an objective of public interest.
+The controller shall consider connection, purposes, context, nature, consequences, and safeguards.
