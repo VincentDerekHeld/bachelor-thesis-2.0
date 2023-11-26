@@ -1,0 +1,32 @@
+The customer perceives that her subscribed service has degraded.
+ The list with all the problem parameters is sent to the Customer Service department of TELECO.
+ At the customer service an employee enters a problem report into system T based on the received data.
+ The problem report is compared to the customer SLA to identify the extent and details of the service degradation.
+ Based on this, the necessary counter measures are determined including their respective priorities.
+ An electronic service determines the significance of the customer based on information collected during the history of the contractual relationship.
+ If the customer is premium, the process will link to an extra problem fix process.
+ If the customer is of certain significance, the process goes back to re-prioritize the counter measures, otherwise the process continues.
+ A detailed problem report is created by taking together the information from the contract commitment data and prioritized actions.
+ The detailed problem report is then sent to Service Management.
+ Service Management deals with violations of quality in services provided to customers.
+ After receiving the detailed problem report, Service Management investigates whether the problem is analyzable at their department or if it may be located at Resource Provisioning.
+ If Service Management cannot analyze the problem, the detailed problem report is sent to Resource Provisioning.
+ If Service Management can analyze the problem, they perform the analysis and create a trouble report indicating the type of problem.
+ The detailed problem report is checked for any possible problems.
+ If no problems are detected, a notification about the normal service execution is created.
+ If a problem is detected, it is analyzed by Resource Provisioning and a trouble report is created.
+ The trouble report or normal execution notification is included in a status report and sent back to Service Management.
+ The Room Service Manager then prepares the final status report based on the received information.
+ It is then determined what counter measures should be taken depending on the information in the final status report.
+ Three alternative process paths may be taken.
+ If no problem was detected, the actual service performance is sent back to the Customer Service.
+ If minor corrective actions are required, Service Management will undertake them and create a problem resolution report to send to Customer Service.
+ If automatic resource restoration from Resource Provisioning is required, Service Management must create a request for automatic resource restoration and send it to Resource Provisioning.
+ Resource Provisioning has been on-hold and waiting for a restoration request, but it must happen within 2 days after the status report was sent out, otherwise Resource Provisioning terminates the process.
+ After the restoration request is received, all possible errors are tracked and necessary corrective actions are undertaken by Resource Provisioning.
+ A trouble-shooting report is created and sent to Service Management, then the process ends.
+ The trouble-shooting report is received by Service Management and goes into the creation of the problem resolution report.
+ Customer Service receives either the actual service performance or the problem resolution report.
+ Two concurrent activities are triggered: a report is created for the customer detailing the current service performance and resolution of the problem, and an SLA violation rebate is reported to Billing & Collections who will adjust the billing.
+ The report for the customer is sent out and after all three activities are completed, the process ends within Customer Service.
+ After the customer receives the report about service performance and problem resolution from Customer Service, the process flow at the customer also ends.

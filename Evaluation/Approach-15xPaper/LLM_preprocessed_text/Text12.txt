@@ -1,0 +1,8 @@
+When a claim is received, it is first checked whether the claimant is insured by the organization.
+ The claimant is informed that the claim must be rejected.
+ Otherwise, the severity of the claim is evaluated.
+ Based on the outcome, relevant forms are sent to the claimant.
+ Once the forms are returned, they are checked for completeness.
+ The claim is registered in the Claims Management system, which ends the Claims Notification process.
+ The claimant is informed to update the forms.
+ Upon reception of the updated forms, they are checked again.

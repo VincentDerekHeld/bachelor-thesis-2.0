@@ -6,10 +6,10 @@ from spacy import Language
 
 from project.AnalyzeSentence import analyze_document
 from project.AnalyzeText import determine_marker, correct_order, build_flows, remove_redundant_processes, \
-    determine_end_activities, adjust_actor_list
+    determine_end_activities, adjust_actor_list, get_valid_actors
 from project.BPMNCreator import create_bpmn_model_vh
 from project.Constant import DEBUG
-from project.Utilities import text_pre_processing, remove_introduction_sentence
+from project.Utilities import text_pre_processing
 
 
 def download_all_dependencies():
@@ -48,7 +48,7 @@ def start_task(input_path, title, output_path, debug=False):
 
     @Language.component("custom_sentencizer")  # TODO: me
     def custom_sentencizer(doc):
-        """Custom Sentencizer that sets 'LS' tokens as sentence starts. It is added to the pipeline before the parser.
+        """Custom sentencizer that sets 'LS' tokens as sentence starts. It is added to the pipeline before the parser.
            Here, it is not added, because the LLM resolves the problem with a higher quality."""
         for token in doc:
             if token.tag_ == "LS":
@@ -81,9 +81,7 @@ def start_task(input_path, title, output_path, debug=False):
     correct_order(containerList)
     remove_redundant_processes(containerList)
 
-    from Playgrounds.Playgorund_Coreference import get_valid_actors_vh1
-    valid_actors = get_valid_actors_vh1(containerList, nlp_similarity)  # TODO Check what was changed here
-    # valid_actors = get_valid_actors(containerList)
+    valid_actors = get_valid_actors(containerList, nlp_similarity)
     valid_actors = adjust_actor_list(valid_actors)
     flows = build_flows(containerList)
     for flow in flows:  # TODO: delte?

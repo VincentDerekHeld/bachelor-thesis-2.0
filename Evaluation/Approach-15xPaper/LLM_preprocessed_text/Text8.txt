@@ -1,0 +1,4 @@
+Each morning, the files which have yet to be processed need to be checked, to make sure they are in order for the court hearing that day.
+ If some files are missing, a search is initiated.
+ Once all the files are ready, these are handed to the Associate, and meantime the Judges Lawlist is distributed to the relevant people.
+ The directions hearings are conducted.

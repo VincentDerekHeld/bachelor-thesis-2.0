@@ -1,4 +1,4 @@
-from Playgrounds.Playground_Actors_Similarity import determinate_full_name
+from Playgrounds.old.Playground_Actors_Similarity import determinate_full_name
 from Playgrounds.Playground_Helpers import tokens_to_string
 from project.Model.ExtractedObject import ExtractedObject
 from spacy.tokens import Token

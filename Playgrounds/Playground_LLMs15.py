@@ -65,7 +65,7 @@ def preprocess_text_with_LLM(doc):
     ### Background Information: ###
     Introduction sentence that describe the company are not relevant and must be filtered.
         Example: The Sentence "A small company manufactures customized bicycles." must be filtered.
-        Example: The Sentence "The Evanstonian is an upscale independent hotel. must be filtered.
+        Example: The Sentence "The Evanstonian is an upscale independent hotel." must be filtered.
     """ + filter_outro)
 
     if relevance_of_sentence: prompts.append(""" 
@@ -88,6 +88,7 @@ def preprocess_text_with_LLM(doc):
     """ + filter_outro)
     # Information that describes the reason of an activity must be filtered.
 
+    # TODO: maybe those parts can be combined
     if relevance_of_sentence: prompts.append(""" 
     ### Background Information: ###
     Information that describes the decision criteria for methods or techniques are not relevant and must be filtered.
@@ -326,5 +327,5 @@ def write_to_file(number: int, nlp):
 
 nlp = spacy.load('en_core_web_trf')
 for i in range(1, 6):
-   write_to_file(i, nlp)
-#write_to_file(1, nlp)
+    write_to_file(i, nlp)
+# write_to_file(1, nlp)

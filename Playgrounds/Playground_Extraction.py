@@ -1,3 +1,23 @@
+"""
+This file contains an alternative approach to extract the elements.
+It is based on the description of the approach in the following paper.
+Unfortunately, the paper does not contain any information about the code.
+@article{sunDesigntimeBusinessProcess2023,
+	title = {Design-{Time} {Business} {Process} {Compliance} {Assessment} {Based} on {Multi}-{Granularity} {Semantic} {Information}},
+	issn = {0920-8542, 1573-0484},
+	url = {https://link.springer.com/10.1007/s11227-023-05626-0},
+	doi = {10.1007/s11227-023-05626-0},
+	abstract = {Business process compliance is an essential part of business process management, which saves organizations from penalties caused by non-compliant processes. However, current researches on business process compliance mainly focus on checking using general constraint rules that have been formalized without in-depth analysis of related regulatory documents and mostly involve extensive human efforts. In this paper, we aim to propose an automatic and interpretable compliance checking approach for design-time business processes. By combining deep learning and a natural language processing approach based on rule templates, we extract semantic information from regulatory documents at different granularities for subsequent compliance checking. In addition, we match appropriate rules to the process model and detect the degree of violation of the business process from three controlflow perspectives. The effectiveness of this method is validated on two real-world datasets.},
+	language = {en},
+	urldate = {2023-10-06},
+	journal = {The Journal of Supercomputing},
+	author = {Sun, Xiaoxiao and Yang, Siqing and Zhao, Chenying and Yu, Dongjin},
+	month = sep,
+	year = {2023},
+	file = {Sun et al. - 2023 - Design-time business process compliance assessment.pdf:/Users/vincentderekheld/Zotero/storage/NESYRM42/Sun et al. - 2023 - Design-time business process compliance assessment.pdf:application/pdf},
+}
+"""
+
 # from project.AnalyzeSentence import is_active, determine_actor, determine_predicate, determine_object, create_actor, create_action
 from typing import Any, Optional
 

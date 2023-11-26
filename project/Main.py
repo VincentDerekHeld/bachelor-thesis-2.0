@@ -34,8 +34,20 @@ def run__set_of_texts_GPT():
         itaration += 1
 
 
+def run_approach15xPaper():
+    for i in range(31, 96):
+        try:
+            input_path = f"/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Approach-15xPaper/LLM_preprocessed_text/Text{i}.txt"
+            output_path = f"/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Approach-15xPaper/Output/our_model_{i}.png"
+            title = f"Text {i}: our model"
+            BPMNStarter.start_task(input_path, title, output_path, debug=DEBUG)
+        except:
+            print(f"Text {i} failed")
+
+
 if __name__ == '__main__':
-    run__set_of_texts_GPT()
+    # run__set_of_texts_GPT()
+    run_approach15xPaper()
     # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
     # [1, 3, 4, 5, 6, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
     """input_path = "/Users/vincentderekheld/PycharmProjects/bachelor-thesis/project/Text/text_input_vh/Text6.txt"
@@ -48,4 +60,3 @@ if __name__ == '__main__':
 
 # Approach 20: uses input of Approach 15 with get valid actors vh1
 # Approach 21: uses input of Approach 15 with get valid actors
-

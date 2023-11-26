@@ -1,0 +1,4 @@
+The organization shall determine what needs to be monitored and measured, including information security processes and controls. The organization shall also determine the methods for monitoring, measurement, analysis, and evaluation, as applicable, to ensure valid results.
+The methods selected should produce comparable and reproducible results to be considered valid; c) when the monitoring and measuring shall be performed; d) who shall monitor and measure; e) when the results from monitoring and measurement shall be analysed and evaluated; and f) who shall analyse and evaluate these results.
+The sentence "Documented information shall be available as evidence of the results" does not contain any listings, so I will go to step 3 and return the sentence without any changes or additional information.
+The organization shall evaluate the information security performance and the effectiveness of the information security management system.

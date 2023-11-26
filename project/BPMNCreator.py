@@ -13,6 +13,9 @@ def create_bpmn_model_vh(structure_list: [Structure], actor_list: list, title: s
                          theme: str = "BLUEMOUNTAIN"):
     """
     Create a BPMN model from a list of structures and actors.
+    First, the input syntax is created and some text is removed from the input syntax, to reduce errors based on the syntax.
+    Then, the BPMN model is rendered.
+
     Args:
         structure_list: the list of structures
         actor_list: the list of valid actors
@@ -21,8 +24,8 @@ def create_bpmn_model_vh(structure_list: [Structure], actor_list: list, title: s
         theme: the theme of the BPMN model, default is BLUEMOUNTAIN
     """
     input_syntax = create_bpmn_description_VH(structure_list, actor_list, title, theme=theme)
-    input_syntax = input_syntax.replace("as applicable", "")  # TODO: done by me
-    input_syntax = input_syntax.replace("[\" ", "[")  # TODO: done by me: Text
+    input_syntax = input_syntax.replace("as applicable", "")
+    input_syntax = input_syntax.replace("[\" ", "[")
 
     print(input_syntax)
     render_bpmn_model(input_syntax, save_path)

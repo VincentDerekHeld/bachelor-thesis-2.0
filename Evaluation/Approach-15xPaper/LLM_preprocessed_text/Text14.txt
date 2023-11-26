@@ -1,0 +1,7 @@
+The customer submits a claim by sending in relevant documentation.
+ The car insurer checks the documents upon completeness and registers the claim.
+ The Handling department picks up the claim and checks the insurance.
+ Then, an assessment is performed.
+ If the assessment is positive, a garage is phoned to authorise the repairs and the payment is scheduled (in this order).
+ Otherwise, the claim is rejected.
+ In any case, a letter is sent to the customer and the process is considered to be complete.

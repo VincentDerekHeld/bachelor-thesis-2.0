@@ -7,7 +7,7 @@ from Model.SentenceContainer import SentenceContainer
 from Structure.Activity import Activity
 from Structure.Block import ConditionBlock, AndBlock, ConditionType
 from Structure.Structure import LinkedStructure, Structure
-from Utilities import find_dependency, find_action, contains_indicator, find_process
+from Utilities import find_dependency, find_action, contains_indicator, find_process, compare_actors_similarity
 from WordNetWrapper import hypernyms_checker, verb_hypernyms_checker
 
 
@@ -442,24 +442,35 @@ def build_linked_list(container_list: [SentenceContainer]):
     return link
 
 
-def get_valid_actors(container_list: [SentenceContainer]) -> list:
+def get_valid_actors(container_list: [SentenceContainer], nlp) -> list:
     """
+    @param container_list: the list of containers that contains the actions.
+    @param nlp: the nlp object, that is used to check the similarity of the actors.
+    @return: the list of valid (real) actors.
+
     iterate the container list and get all the actors that are real actors
-
-    Args:
-        container_list: The container that contains the action.
-
-    Returns:
-        A list of actors that are real actors.
-
+    check if the actor is already in the list, if not add it to the list
+    Checking the similarity of the actors with the help of the function compare_actors_similarity
     """
     result = []
     for container in container_list:
         for process in container.processes:
             if process.actor is not None:
-                if process.actor.is_real_actor and process.actor.full_name not in result:
-                    result.append(process.actor.full_name)
+                process.actor.determinate_full_name_vh()
+                if Constant.DEBUG: print("Actor:", process.actor.full_name)
+                if process.actor.is_real_actor:
+                    temp_bool_add = True
+                    for actor in result:
+                        if compare_actors_similarity(process.actor.full_name, actor, nlp):
+                            temp_bool_add = False
+                            process.actor.full_name = actor
+                            break
+                    if temp_bool_add:
+                        result.append(process.actor.full_name)
 
+    for actor_full_name in result:
+        if actor_full_name.strip() in ["he", "he ", "she", "they", "it"]:
+            result.remove(actor_full_name)
     return result
 
 

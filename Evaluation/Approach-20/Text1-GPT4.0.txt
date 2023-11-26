@@ -1,0 +1,12 @@
+A small company manufactures customized bicycles.
+ The sales department receives an order. A new process instance is created.
+ A member of the sales department has the choice to reject or accept the order for a customized bike.
+ In the former case, the process instance finishes.
+ The storehouse is informed and the engineering department is also informed.
+ The storehouse processes the part list of the order immediately. The storehouse checks the required quantity of each part.
+ "If the part is available in-house, they reserve it."
+ If it is not available, they back-order it.
+ They repeat this procedure for each item on the part list.
+ The engineering department prepares everything for the assembling of the ordered bicycle. Next, the assembling of the ordered bicycle takes place.
+ The storehouse reserves or back-orders every item of the part list. The preparation activity finishes. The engineering department assembles the bicycle.
+ The sales department ships the bicycle to the customer. The sales department finishes the process instance.

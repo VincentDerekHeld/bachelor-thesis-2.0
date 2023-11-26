@@ -1,0 +1,6 @@
+The data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed.
+ Where personal data are transferred to a third country or to an international organisation, the data subject shall have the right to be informed of the appropriate safeguards pursuant to Article 46 relating to the transfer.
+ The controller shall provide a copy of the personal data undergoing processing.
+ The controller may charge a reasonable fee based on administrative costs.
+ The data subject makes the request by electronic means, and unless otherwise requested by the data subject, the information shall be provided in a commonly used electronic form.
+ The right to obtain a copy shall not adversely affect the rights and freedoms of others.

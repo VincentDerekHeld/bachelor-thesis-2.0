@@ -1,0 +1,4 @@
+You develop an application that helps you with the inspection of a machine.
+ The inspection can begin: * Questions are asked, and you have to input values.
+ Buttons are to be pressed, and values are automatically collected from the machine and shown to you.
+ Depending on the results, additional questions are asked.
