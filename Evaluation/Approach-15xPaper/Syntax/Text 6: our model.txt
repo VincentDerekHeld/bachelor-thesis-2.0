@@ -1,0 +1,125 @@
+title: Text 6: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: customer 
+	(start) as start
+	[a switch over request initiate the process] as activity_60
+	[transmits his data to the customer service department of the company] as activity_61
+	<@parallel> as gateway_17
+	[receive the customer data] as activity_18
+	[enter a customer data object into the crm system] as activity_19
+	<@parallel> as gateway_17_end
+	<@parallel> as gateway_20
+	[enter customer data has] as activity_21
+	[compare it should] as activity_22
+	[check it for completeness and plausibility] as activity_23
+	<@parallel> as gateway_20_end
+	<correct these should?> as gateway_24
+	<> as gateway_24_end
+	[do the comparison of data] as activity_62
+	[store individual customer data] as activity_63
+	<the customer does not exist the customer data base?> as gateway_26
+	[create a new customer object is] as activity_28
+	[a new customer object will remain the rest of the process flow] as activity_29
+	<> as gateway_26_end
+	[use the generated customer object] as activity_64
+	[to prepare the contract documents for the power supplier switch] as activity_65
+	[carry an automated check of the contract documents out] as activity_66
+	[to confirm their successful generation] as activity_67
+	<> as gateway_30
+	<> as gateway_30_end
+	[generate the contract documents] as activity_68
+	<send a confirmation document out to the customer?> as gateway_33
+	[execute the switch over to the new supplier can] as activity_35
+	<> as gateway_33_end
+	[creates a cis contract] as activity_70
+	<> as gateway_48
+	[confirm contract] as activity_49
+	[withdraw to the switch contract] as activity_50
+	<> as gateway_48_end
+	<> as gateway_51
+	[the process flow at customer service continue] as activity_52
+	[the process flow at customer service ends] as activity_53
+	<> as gateway_51_end
+	[regard the contract will] as activity_71
+	[the process continues] as activity_72
+	[message can speed up the switch process] as activity_73
+	[the grid operator transmits the power meter data the customer service and the old supplier via] as activity_74
+	[power supply has begun] as activity_75
+	<@parallel> as gateway_54
+	[the grid operator computes the final billing] as activity_55
+	[the grid operator send billing] as activity_56
+	<@parallel> as gateway_54_end
+	<@parallel> as gateway_57
+	[imports the meter data to systems] as activity_77
+	[receiving the meter data] as activity_78
+	[systems require the information] as activity_79
+	[the process of winning a new customer ends] as activity_80
+	[winning a new customer] as activity_81
+	(end) as end
+lane: CIS 
+	[send a request to the grid operator] as activity_69
+lane: selected supplier 
+	<the selected supplier supply the customer may?> as gateway_36
+	[request puts the question] as activity_38
+	<> as gateway_36_end
+	<@parallel> as gateway_39
+	[the grid operator check the switch over request for supplier concurrence] as activity_40
+	[the grid operator transmits a response comment] as activity_41
+	<@parallel> as gateway_39_end
+	<> as gateway_42
+	<> as gateway_42_end
+	<@parallel> as gateway_45
+	[the grid operator communicates the old supplier] as activity_46
+	[the grid operator carry out the termination of the sales agreement between the customer and the old supplier] as activity_47
+	<@parallel> as gateway_45_end
+lane: old supplier 
+	[creates the final billing] as activity_58
+	[send the final billing] as activity_59
+	<@parallel> as gateway_57_end
+	[the process the customer as well as the grid operator ends] as activity_76
+
+start->activity_60->activity_61->gateway_17
+gateway_17->activity_18->gateway_17_end
+gateway_17->activity_19->gateway_17_end
+gateway_17_end->gateway_20
+gateway_20->activity_21->gateway_20_end
+gateway_20->activity_22->gateway_20_end
+gateway_20->activity_23->gateway_20_end
+gateway_20_end->gateway_24
+gateway_24-"yes"->gateway_24_end
+gateway_24-"no"->gateway_24_end
+gateway_24_end->activity_62->activity_63->gateway_26
+gateway_26-"yes"->activity_28->activity_29->gateway_26_end
+gateway_26-"no"->gateway_26_end
+gateway_26_end->activity_64->activity_65->activity_66->activity_67->gateway_30
+gateway_30-"resolve the issues"->gateway_30_end
+gateway_30-"analyze the issues"->gateway_30_end
+gateway_30_end->activity_68->gateway_33
+gateway_33-"yes"->activity_35->gateway_33_end
+gateway_33-"no"->gateway_33_end
+gateway_33_end->activity_69->gateway_36
+gateway_36-"yes"->activity_38->gateway_36_end
+gateway_36-"no"->gateway_36_end
+gateway_36_end->gateway_39
+gateway_39->activity_40->gateway_39_end
+gateway_39->activity_41->gateway_39_end
+gateway_39_end->gateway_42
+gateway_42-"the grid operator\ndemand the resolution\nof the conflict"->gateway_42_end
+gateway_42-"the grid operator\nwould inform all\ninvolved suppliers"->gateway_42_end
+gateway_42_end->gateway_45
+gateway_45->activity_46->gateway_45_end
+gateway_45->activity_47->gateway_45_end
+gateway_45_end->activity_70->gateway_48
+gateway_48-""->activity_49->gateway_48_end
+gateway_48-""->activity_50->gateway_48_end
+gateway_48_end->gateway_51
+gateway_51-""->activity_52->gateway_51_end
+gateway_51-""->activity_53->gateway_51_end
+gateway_51_end->activity_71->activity_72->activity_73->activity_74->activity_75->gateway_54
+gateway_54->activity_55->gateway_54_end
+gateway_54->activity_56->gateway_54_end
+gateway_54_end->gateway_57
+gateway_57->activity_58->gateway_57_end
+gateway_57->activity_59->gateway_57_end
+gateway_57_end->activity_76->activity_77->activity_78->activity_79->activity_80->activity_81->end

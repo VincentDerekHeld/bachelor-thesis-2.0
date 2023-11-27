@@ -1,0 +1,50 @@
+title: Text 18: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: employee of organization 
+	(start) as start
+	[submits an office supply request] as activity_189
+	[register the requirement] as activity_190
+	<> as gateway_172
+	[can review the comments for the change request] as activity_179
+	[request will go to the purchase department] as activity_181
+	[making quotations] as activity_182
+	[select a vendor] as activity_183
+	<> as gateway_175_end
+lane: supervisor 
+	[ask for a change] as activity_173
+	[must approve a change] as activity_174
+	<> as gateway_172_end
+	[reject the request] as activity_191
+	<> as gateway_175
+	[to make a change] as activity_177
+	[return it to the petitioner employee] as activity_178
+lane: purchase department 
+	[to choose a different vendor] as activity_192
+	<@parallel> as gateway_184
+	[select a vendor] as activity_185
+	[confirm a vendor] as activity_186
+	[the system will generate a purchase order] as activity_187
+	[the system send a purchase order] as activity_188
+	<@parallel> as gateway_184_end
+	[the system will wait] as activity_193
+	[deliver the product to] as activity_194
+	[the invoice received] as activity_195
+	[the system will send a notification] as activity_196
+lane: user 
+	[know] as activity_197
+	[the system will send a notification] as activity_198
+	(end) as end
+
+start->activity_189->activity_190->gateway_172
+gateway_172-""->activity_173->gateway_172_end
+gateway_172-""->activity_174->gateway_172_end
+gateway_172_end->activity_191->gateway_175
+gateway_175-"ask the request"->activity_177->activity_178->activity_179->gateway_175_end
+gateway_175-"approve the request"->activity_181->activity_182->activity_183->gateway_175_end
+gateway_175_end->activity_192->gateway_184
+gateway_184->activity_185->gateway_184_end
+gateway_184->activity_186->gateway_184_end
+gateway_184->activity_187->gateway_184_end
+gateway_184->activity_188->gateway_184_end
+gateway_184_end->activity_193->activity_194->activity_195->activity_196->activity_197->activity_198->end

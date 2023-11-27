@@ -1,0 +1,26 @@
+title: Text 89: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	<@parallel> as gateway_59
+	[the data subject shall have the right] as activity_60
+	[the personal data the personal data has provided to a controller] as activity_61
+	[to receive the personal data] as activity_62
+	[have the right] as activity_63
+	[to transmit those data to another controller] as activity_64
+	<@parallel> as gateway_59_end
+	[the data subject shall have the right] as activity_65
+	[exercising his or her right to data portability] as activity_66
+	[the personal data transmitted one controller to another] as activity_67
+	[the exercise of the right not apply shall to processing necessary for the performance of a task] as activity_68
+	[the right shall not affect the rights and freedoms of others] as activity_69
+	(end) as end
+
+start->gateway_59
+gateway_59->activity_60->gateway_59_end
+gateway_59->activity_61->gateway_59_end
+gateway_59->activity_62->gateway_59_end
+gateway_59->activity_63->gateway_59_end
+gateway_59->activity_64->gateway_59_end
+gateway_59_end->activity_65->activity_66->activity_67->activity_68->activity_69->end

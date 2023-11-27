@@ -27,6 +27,10 @@ def create_bpmn_model_vh(structure_list: [Structure], actor_list: list, title: s
     input_syntax = input_syntax.replace("as applicable", "")
     input_syntax = input_syntax.replace("[\" ", "[")
 
+    output_path = f"/Users/vincentderekheld/PycharmProjects/bachelor-thesis/Evaluation/Approach-15xPaper/Syntax/{title}.txt"
+    with open(output_path, 'w') as file:
+        file.write(input_syntax)
+
     print(input_syntax)
     render_bpmn_model(input_syntax, save_path)
 

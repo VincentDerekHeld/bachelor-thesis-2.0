@@ -1,0 +1,35 @@
+title: Text 31: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: Support Officer 
+	(start) as start
+	<@parallel> as gateway_272
+	[finalize the dates] as activity_273
+	[updates all group calendars] as activity_274
+	[create meeting folders for each meeting] as activity_275
+	[ensure all group calendars] as activity_276
+	[upload all appropriate documents to system] as activity_277
+	<@parallel> as gateway_272_end
+	[advise committee members] as activity_281
+	[to read all related documents] as activity_282
+	<@parallel> as gateway_278
+	[updates all departmental records] as activity_285
+	(end) as end
+lane: Committee Members 
+	[hold their meeting] as activity_279
+lane: Support Office 
+	[produces minutes including any action points for each committee member] as activity_280
+	<@parallel> as gateway_278_end
+	[the coordination unit must conduct a qa check on the minutes] as activity_283
+	[send the minutes] as activity_284
+
+start->gateway_272
+gateway_272->activity_273->gateway_272_end
+gateway_272->activity_274->gateway_272_end
+gateway_272->activity_275->gateway_272_end
+gateway_272->activity_276->gateway_272_end
+gateway_272->activity_277->gateway_272_end
+gateway_272_end->activity_281->activity_282->gateway_278
+gateway_278->activity_279->gateway_278_end
+gateway_278->activity_280->gateway_278_end
+gateway_278_end->activity_283->activity_284->activity_285->end

@@ -1,0 +1,53 @@
+title: Text 11: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: Mail Clerk 
+	(start) as start
+	[sorts the unopened mail into the various business areas] as activity_106
+	[distribute the mail] as activity_107
+	<@parallel> as gateway_88
+	[the registry receive the mail] as activity_89
+	[open it] as activity_90
+	[sort it into groups for distribution] as activity_91
+	[register it] as activity_92
+	<@parallel> as gateway_88_end
+lane: Assistant Registry Manager within Registry 
+	[performs a quality check] as activity_108
+	<@parallel> as gateway_93
+	[compile a list of requisition] as activity_94
+	[send a list of requisition] as activity_95
+	<@parallel> as gateway_93_end
+	<> as gateway_96
+	[capture the matter details] as activity_97
+	[provide the matter details to the cashier] as activity_98
+	[puts the receipt and copied documents into an envelope] as activity_101
+	[post receipt to the party] as activity_102
+	<@parallel> as gateway_100_end
+	<@parallel> as gateway_103
+lane: Cashier 
+	[takes the fees] as activity_99
+	<> as gateway_96_end
+	<@parallel> as gateway_100
+	[captures the party details] as activity_104
+	[print the physical court file] as activity_105
+	<@parallel> as gateway_103_end
+	(end) as end
+
+start->activity_106->activity_107->gateway_88
+gateway_88->activity_89->gateway_88_end
+gateway_88->activity_90->gateway_88_end
+gateway_88->activity_91->gateway_88_end
+gateway_88->activity_92->gateway_88_end
+gateway_88_end->activity_108->gateway_93
+gateway_93->activity_94->gateway_93_end
+gateway_93->activity_95->gateway_93_end
+gateway_93_end->gateway_96
+gateway_96-""->activity_97->activity_98->activity_99->gateway_96_end
+gateway_96-""->gateway_96_end
+gateway_96_end->gateway_100
+gateway_100->activity_101->gateway_100_end
+gateway_100->activity_102->gateway_100_end
+gateway_100_end->gateway_103
+gateway_103->activity_104->gateway_103_end
+gateway_103->activity_105->gateway_103_end
+gateway_103_end->end

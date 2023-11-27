@@ -1,0 +1,33 @@
+title: Text 22: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: employee 
+	(start) as start
+	[one of my masters determines the necessary parts and quantities as well as the delivery date] as activity_249
+	[every time get a new order] as activity_250
+	<@parallel> as gateway_241
+	[information optimizes our production processes] as activity_242
+	[information create possibly uniform work packages] as activity_243
+	[minimize the setup times] as activity_244
+	<@parallel> as gateway_241_end
+	[information creates a list of parts] as activity_251
+	[not couple information to our enterprise resource planning system] as activity_252
+	[transfer the data must] as activity_253
+	[we need] as activity_254
+	<@parallel> as gateway_245
+	[schedule production] as activity_246
+	[we receive a notice] as activity_247
+	[an employee takes care of the implementation] as activity_248
+	<@parallel> as gateway_245_end
+	[check the order will for its quality] as activity_255
+	(end) as end
+
+start->activity_249->activity_250->gateway_241
+gateway_241->activity_242->gateway_241_end
+gateway_241->activity_243->gateway_241_end
+gateway_241->activity_244->gateway_241_end
+gateway_241_end->activity_251->activity_252->activity_253->activity_254->gateway_245
+gateway_245->activity_246->gateway_245_end
+gateway_245->activity_247->gateway_245_end
+gateway_245->activity_248->gateway_245_end
+gateway_245_end->activity_255->end

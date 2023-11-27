@@ -1,0 +1,37 @@
+title: Text 64: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[realize the prepayment function] as activity_477
+	[the terminal acts a switching device] as activity_478
+	[the central system generates the shutdown command] as activity_479
+	[comparing credits] as activity_480
+	[make the comparison of credits with actual consumption value should] as activity_481
+	[carry shutdown may out] as activity_482
+	<@parallel> as gateway_467
+	[display each status change of the terminal must] as activity_468
+	[create each status change of the terminal] as activity_469
+	<@parallel> as gateway_467_end
+	<@parallel> as gateway_470
+	[consume credit or credit limit] as activity_471
+	<@parallel> as gateway_470_end
+	<@parallel> as gateway_472
+	[interrupt the supply of electrical energy] as activity_473
+	[display the status of the breaker] as activity_474
+	[generate an entry in the logbook of the terminal] as activity_475
+	[transmit the status to the central system] as activity_476
+	<@parallel> as gateway_472_end
+	(end) as end
+
+start->activity_477->activity_478->activity_479->activity_480->activity_481->activity_482->gateway_467
+gateway_467->activity_468->gateway_467_end
+gateway_467->activity_469->gateway_467_end
+gateway_467_end->gateway_470
+gateway_470->activity_471->gateway_470_end
+gateway_470_end->gateway_472
+gateway_472->activity_473->gateway_472_end
+gateway_472->activity_474->gateway_472_end
+gateway_472->activity_475->gateway_472_end
+gateway_472->activity_476->gateway_472_end
+gateway_472_end->end

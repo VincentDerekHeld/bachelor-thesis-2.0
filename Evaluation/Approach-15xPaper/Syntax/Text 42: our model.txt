@@ -1,0 +1,34 @@
+title: Text 42: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: company 
+	(start) as start
+	[you can enter a topic and how much money you want] as activity_353
+	[a topic and how much money you want a topic and how much money you want interests] as activity_354
+	[you how much money want] as activity_355
+	[you can enter experience and hobbies] as activity_356
+	[several offers will arrive] as activity_357
+	<> as gateway_346
+	[you deny offers] as activity_347
+	[you can accept offers] as activity_348
+	<> as gateway_346_end
+	[all other offers become invalid] as activity_358
+	[accept an offer] as activity_359
+	[you to write at least 3 status updates about your internship] as activity_360
+	[the company to write 3 status updates about you] as activity_361
+	<@parallel> as gateway_349
+	[finish the internship] as activity_350
+	[you can recommend the company to a list of friends] as activity_351
+	[send separate tweets] as activity_352
+	<@parallel> as gateway_349_end
+	(end) as end
+
+start->activity_353->activity_354->activity_355->activity_356->activity_357->gateway_346
+gateway_346-""->activity_347->gateway_346_end
+gateway_346-""->activity_348->gateway_346_end
+gateway_346_end->activity_358->activity_359->activity_360->activity_361->gateway_349
+gateway_349->activity_350->gateway_349_end
+gateway_349->activity_351->gateway_349_end
+gateway_349
+gateway_349_end->activity_352->gateway_349_end
+gateway_349_end->end

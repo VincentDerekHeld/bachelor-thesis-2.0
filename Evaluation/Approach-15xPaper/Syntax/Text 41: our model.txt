@@ -1,0 +1,80 @@
+title: Text 41: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: household 
+	<the household serves the company to a considerable extent?> as gateway_313
+	[providing accommodation for guests] as activity_315
+	[convert buildings] as activity_316
+	[erect buildings] as activity_317
+	[repairing buildings] as activity_318
+	[buildings serve the agricultural and forestry establishment] as activity_319
+	[accident insurance cover the following tasks] as activity_320
+	<> as gateway_313_end
+	<@parallel> as gateway_321
+	[consider certain accidents] as activity_322
+	[can affect people] as activity_323
+	[people do have not accident insurance] as activity_324
+	<@parallel> as gateway_321_end
+lane: employees 
+	(start) as start
+	[create a process] as activity_336
+	[a process helps] as activity_337
+	[gathering information about work accidents] as activity_338
+	<> as gateway_306
+	[collect child] as activity_307
+	[taking a child] as activity_308
+	<> as gateway_306_end
+	<accidents do not occur?> as gateway_309
+	[consider accidents can] as activity_311
+	[performing the insured employment] as activity_312
+	<> as gateway_309_end
+	[must inform the employer of any work accident any incident any serious and immediate risk to safety and health any defect] as activity_339
+	[any incident would led to an accident] as activity_340
+	[any serious and immediate risk to safety and health any defect that discover] as activity_341
+	<not report accident has to the emergency services?> as gateway_325
+	[any work accident leads a fatality or serious injury to the labour inspectorate] as activity_327
+	<> as gateway_325_end
+	[you not only report accidents the accident insurance provider in] as activity_342
+	[people but also those employ] as activity_343
+	[those involve you] as activity_344
+lane: employer 
+lane: Students and schoolchildren 
+	[should report accidents to the competent directorate] as activity_345
+	<> as gateway_328
+	[kill a person with accident insurance] as activity_329
+	[injure a person with accident insurance] as activity_330
+	<> as gateway_328_end
+lane: insured party 
+	<the insured party must report an accident?> as gateway_331
+	[to avoid the provider] as activity_333
+	<> as gateway_331_end
+	<report the accident has?> as gateway_334
+	<> as gateway_334_end
+	(end) as end
+
+start->activity_336->activity_337->activity_338->gateway_306
+gateway_306-""->activity_307->gateway_306_end
+gateway_306-""->activity_308->gateway_306_end
+gateway_306_end->gateway_309
+gateway_309-"yes"->activity_311->activity_312->gateway_309_end
+gateway_309-"no"->gateway_309_end
+gateway_309_end->gateway_313
+gateway_313-"yes"->activity_315->activity_316->activity_317->activity_318->activity_319->activity_320->gateway_313_end
+gateway_313-"no"->gateway_313_end
+gateway_313_end->gateway_321
+gateway_321->activity_322->gateway_321_end
+gateway_321->activity_323->gateway_321_end
+gateway_321->activity_324->gateway_321_end
+gateway_321_end->activity_339->activity_340->activity_341->gateway_325
+gateway_325-"yes"->activity_327->gateway_325_end
+gateway_325-"no"->gateway_325_end
+gateway_325_end->activity_342->activity_343->activity_344->activity_345->gateway_328
+gateway_328-""->activity_329->gateway_328_end
+gateway_328-""->activity_330->gateway_328_end
+gateway_328_end->gateway_331
+gateway_331-"yes"->activity_333->gateway_331_end
+gateway_331-"no"->gateway_331_end
+gateway_331_end->gateway_334
+gateway_334-"yes"->gateway_334_end
+gateway_334-"no"->gateway_334_end
+gateway_334_end->end

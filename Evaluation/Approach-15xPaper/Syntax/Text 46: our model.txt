@@ -1,0 +1,46 @@
+title: Text 46: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[creates a cool online tool for creating characters for their new wow expansion] as activity_414
+	[creating characters for their new wow expansion] as activity_415
+	[creating a world of warcraft character] as activity_416
+	[you can start] as activity_417
+	[you doing two things] as activity_418
+	[you are setting up your account] as activity_419
+	[you can come up good character names] as activity_420
+	<> as gateway_398
+	[the setup of your account starts] as activity_400
+	[you enter the account information] as activity_402
+	[you click the link] as activity_403
+	[the link receive the confirmation mail] as activity_404
+	[you can check] as activity_406
+	<> as gateway_398_end
+	[enter your credit card information] as activity_421
+	<you choose your bank account?> as gateway_408
+	[enter your iban and bic numbers] as activity_410
+	<> as gateway_408_end
+	<@parallel> as gateway_411
+	[you that can log into the game] as activity_412
+	[you select realm race and class of your character] as activity_413
+	<@parallel> as gateway_411_end
+	[you should come up] as activity_422
+	[you enter names] as activity_423
+	[you get a confirmation and some selfies of your character] as activity_424
+	[you get another message] as activity_425
+	[release a expansion] as activity_426
+	(end) as end
+
+start->activity_414->activity_415->activity_416->activity_417->activity_418->activity_419->activity_420->gateway_398
+gateway_398-"you have a battle.net\naccount"->activity_400->gateway_398_end
+gateway_398-"you do have not\none"->activity_402->activity_403->activity_404->gateway_398_end
+gateway_398-"you have an active\nwow subscription"->activity_406->gateway_398_end
+gateway_398-"you can select the\npayment method"->gateway_398_end
+gateway_398_end->activity_421->gateway_408
+gateway_408-"yes"->activity_410->gateway_408_end
+gateway_408-"no"->gateway_408_end
+gateway_408_end->gateway_411
+gateway_411->activity_412->gateway_411_end
+gateway_411->activity_413->gateway_411_end
+gateway_411_end->activity_422->activity_423->activity_424->activity_425->activity_426->end

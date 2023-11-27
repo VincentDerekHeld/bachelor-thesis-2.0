@@ -1,0 +1,91 @@
+title: Text 20: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: ACME AG 
+	(start) as start
+	[receives invoices] as activity_230
+	<@parallel> as gateway_199
+lane: Secretariat 
+	[receive these] as activity_200
+	[forward these to an accounting employee] as activity_201
+	<@parallel> as gateway_199_end
+	<@parallel> as gateway_202
+	[employee identifies the charging suppliers] as activity_203
+	[employee create a new instance] as activity_204
+	<@parallel> as gateway_202_end
+	<@parallel> as gateway_205
+	[employee checks the invoice items] as activity_206
+	[employee note the corresponding cost center at the acme ag and the related cost center managers for each position] as activity_207
+	<@parallel> as gateway_205_end
+	<@parallel> as gateway_208
+	<@parallel> as gateway_208_end
+	[manager reviews the content accuracy after] as activity_231
+	[receiving the copy of the invoice] as activity_232
+	<@parallel> as gateway_209
+	[manager notes his code one on the docket] as activity_210
+	[manager return the copy of the invoice to the internal mail] as activity_211
+	<@parallel> as gateway_209_end
+	<mark all items?> as gateway_212
+	[pass the copy of the invoice on the next cost center manager based] as activity_214
+	<> as gateway_212_end
+	[the copy of invoice and the docket move the hands of all cost center managers] as activity_233
+	[mark all positions] as activity_234
+	<inconsistencies exist?> as gateway_215
+lane: cost center manager 
+	[rejects the ap] as activity_217
+	[send the copy of the invoice] as activity_218
+	<> as gateway_215_end
+	[manager will proceed] as activity_235
+	[manager consults the cost center managers] as activity_236
+	<@parallel> as gateway_219
+	[resolve all inconsistencies] as activity_220
+	[send the copy of the invoice] as activity_221
+	[the process continues] as activity_222
+	<@parallel> as gateway_219_end
+lane: accounting employee 
+	[forwards the copy of the invoice to the commercial manager] as activity_237
+	<@parallel> as gateway_223
+	[employee makes the commercial audit] as activity_224
+	[employee issue the approval for payment] as activity_225
+	<@parallel> as gateway_223_end
+	[the bill amount exceeds eur 20] as activity_238
+	[the copy of the invoice including the docket moves the appropriate signature file] as activity_239
+	[resolve it will] as activity_240
+	<@parallel> as gateway_226
+	[complete the commercial audit] as activity_227
+	[gives payment instructions] as activity_228
+	[close the instance] as activity_229
+	<@parallel> as gateway_226_end
+	(end) as end
+
+start->activity_230->gateway_199
+gateway_199->activity_200->gateway_199_end
+gateway_199->activity_201->gateway_199_end
+gateway_199_end->gateway_202
+gateway_202->activity_203->gateway_202_end
+gateway_202->activity_204->gateway_202_end
+gateway_202_end->gateway_205
+gateway_205->activity_206->gateway_205_end
+gateway_205->activity_207->gateway_205_end
+gateway_205_end->gateway_208
+gateway_205_end->activity_231->activity_232->gateway_209
+gateway_209->activity_210->gateway_209_end
+gateway_209->activity_211->gateway_209_end
+gateway_209_end->gateway_212
+gateway_212-"yes"->activity_214->gateway_212_end
+gateway_212-"no"->gateway_212_end
+gateway_212_end->activity_233->activity_234->gateway_215
+gateway_215-"yes"->activity_217->activity_218->gateway_215_end
+gateway_215-"no"->gateway_215_end
+gateway_215_end->activity_235->activity_236->gateway_219
+gateway_219->activity_220->gateway_219_end
+gateway_219->activity_221->gateway_219_end
+gateway_219->activity_222->gateway_219_end
+gateway_219_end->activity_237->gateway_223
+gateway_223->activity_224->gateway_223_end
+gateway_223->activity_225->gateway_223_end
+gateway_223_end->activity_238->activity_239->activity_240->gateway_226
+gateway_226->activity_227->gateway_226_end
+gateway_226->activity_228->gateway_226_end
+gateway_226->activity_229->gateway_226_end
+gateway_226_end->end

@@ -1,0 +1,20 @@
+title: Text 49: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: customer 
+	(start) as start
+	[you produce custom chainsaws] as activity_427
+	[your chainsaws have at least 5 properties such as length of the guide bar chain width electric or motor chainsaw] as activity_428
+	[your customer told the properties] as activity_429
+	[you can start] as activity_430
+	[you ordering the parts] as activity_431
+	[the parts arrive] as activity_432
+	[you to do a manual inspection of all parts] as activity_433
+	[you assemble the parts] as activity_434
+	[you send updates] as activity_435
+	[you send saw] as activity_436
+	[producing the first saw] as activity_437
+	[produce the rest of his order] as activity_438
+	(end) as end
+
+start->activity_427->activity_428->activity_429->activity_430->activity_431->activity_432->activity_433->activity_434->activity_435->activity_436->activity_437->activity_438->end

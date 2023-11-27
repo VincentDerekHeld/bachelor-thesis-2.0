@@ -1,0 +1,20 @@
+title: Text 8: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: 
+	(start) as start
+	[the files need] as activity_86
+	<@parallel> as gateway_82
+	[initiate a search] as activity_83
+	[hand these to the associate] as activity_84
+	[distribute the judges lawlist to the relevant people] as activity_85
+	<@parallel> as gateway_82_end
+	[conduct the directions hearings] as activity_87
+	(end) as end
+
+start->activity_86->gateway_82
+gateway_82->activity_83->gateway_82_end
+gateway_82
+gateway_82_end->activity_84->gateway_82_end
+gateway_82->activity_85->gateway_82_end
+gateway_82_end->activity_87->end

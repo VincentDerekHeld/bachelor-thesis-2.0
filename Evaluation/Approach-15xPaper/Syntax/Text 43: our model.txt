@@ -1,0 +1,54 @@
+title: Text 43: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: applicant 
+	(start) as start
+	[check the requirements for working and living in austria] as activity_373
+	[create a process] as activity_374
+	[a process a process assists for a combination of the steps] as activity_375
+	[steps must have a travel document valid in austria with a validity period and with at least two empty pages] as activity_376
+	[issue a travel document valid in austria with a validity period and with at least two empty pages] as activity_377
+	[steps must have a passport photo] as activity_378
+	[steps must present a fully comprehensive travel health insurance policy for the planned duration of the stay] as activity_379
+	[steps must provide proof of sufficient means of subsistence for the duration of the intended stay and for the return journey to the country of origin or residence] as activity_380
+	[steps must provide other evidence] as activity_381
+	[adapt these to local standards] as activity_382
+	[coordinate these] as activity_383
+	[the evidence may vary] as activity_384
+	[steps must have not any other grounds for refusal] as activity_385
+	[request additional documents may] as activity_386
+	[contact the representation for more information] as activity_387
+	<> as gateway_362
+	[representation offices abroad by all visa types in certain border control posts] as activity_363
+	[representation offices abroad issue all visa types] as activity_364
+	<> as gateway_362_end
+	[the representation office of the country issue schengen visas must] as activity_388
+	[locate the main travel destination of the visa applicant] as activity_389
+	<the applicant intends?> as gateway_365
+	[the applicant to spend an equal amount of time] as activity_367
+	[locate the main travel destination] as activity_368
+	<> as gateway_365_end
+	[it to determine a main travel destination] as activity_390
+	[issuing the visa] as activity_391
+	[territorial competence for applications for category a and c visas falls to the representation office in the consular district] as activity_392
+	[locate the legal place of residence of the applicant] as activity_393
+	<the applicant can provide justification as to why they had to submit their application to that particular consulate?> as gateway_369
+	[a representation office may claim exceptional competence for applications from third‑country nationals] as activity_371
+	[nationals to submit their application to that particular consulate] as activity_372
+	<> as gateway_369_end
+	[apply type d visas must] as activity_394
+	[the provisions of section 8 of the fpg apply to type d visas] as activity_395
+	[determine the territorial competence for carrying out official actions in relation to visas] as activity_396
+	[carrying out official actions] as activity_397
+	(end) as end
+
+start->activity_373->activity_374->activity_375->activity_376->activity_377->activity_378->activity_379->activity_380->activity_381->activity_382->activity_383->activity_384->activity_385->activity_386->activity_387->gateway_362
+gateway_362-""->activity_363->gateway_362_end
+gateway_362-""->activity_364->gateway_362_end
+gateway_362_end->activity_388->activity_389->gateway_365
+gateway_365-"yes"->activity_367->activity_368->gateway_365_end
+gateway_365-"no"->gateway_365_end
+gateway_365_end->activity_390->activity_391->activity_392->activity_393->gateway_369
+gateway_369-"yes"->activity_371->activity_372->gateway_369_end
+gateway_369-"no"->gateway_369_end
+gateway_369_end->activity_394->activity_395->activity_396->activity_397->end

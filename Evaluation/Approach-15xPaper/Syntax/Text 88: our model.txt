@@ -1,0 +1,27 @@
+title: Text 88: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: controller 
+	(start) as start
+	<not process personal data are?> as gateway_47
+	[to obtain confirmation as to whether or not personal data are being processed] as activity_49
+	<> as gateway_47_end
+	[transfer personal data to a third country] as activity_53
+	[the data subject shall have the right] as activity_54
+	[the controller shall provide a copy of the personal data] as activity_55
+	[the controller may charge a reasonable fee] as activity_56
+	<@parallel> as gateway_50
+	[the data subject makes the request] as activity_51
+	[provide the information shall] as activity_52
+	<@parallel> as gateway_50_end
+	[the right shall not affect the rights and freedoms of others] as activity_57
+	[to obtain a copy] as activity_58
+	(end) as end
+
+start->gateway_47
+gateway_47-"yes"->activity_49->gateway_47_end
+gateway_47-"no"->gateway_47_end
+gateway_47_end->activity_53->activity_54->activity_55->activity_56->gateway_50
+gateway_50->activity_51->gateway_50_end
+gateway_50->activity_52->gateway_50_end
+gateway_50_end->activity_57->activity_58->end

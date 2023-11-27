@@ -1,0 +1,51 @@
+title: Text 61: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: friends 
+	(start) as start
+	<you want?> as gateway_442
+	[you need] as activity_444
+	[you to select a course] as activity_445
+	<> as gateway_442_end
+	[the system tells the courses and dates] as activity_462
+	[select one] as activity_463
+	<> as gateway_446
+	[you need] as activity_448
+	<> as gateway_446_end
+	[register your account] as activity_464
+	<@parallel> as gateway_451
+	[request an activation] as activity_452
+	[wait for a response] as activity_453
+	<@parallel> as gateway_451_end
+	[you have an account] as activity_465
+	<@parallel> as gateway_454
+	[connect the application to your twitter account] as activity_455
+	[let the application] as activity_456
+	[you tweet to friends] as activity_457
+	[friends might want] as activity_458
+	[friends to join you] as activity_459
+	[you can complete the registration for the course] as activity_460
+	[you provide the payment information] as activity_461
+	<@parallel> as gateway_454_end
+	[you will receive a course ticket] as activity_466
+	(end) as end
+
+start->gateway_442
+gateway_442-"yes"->activity_444->activity_445->gateway_442_end
+gateway_442-"no"->gateway_442_end
+gateway_442_end->activity_462->activity_463->gateway_446
+gateway_446-"you have an account\nat the sports institute"->activity_448->gateway_446_end
+gateway_446-"register you"->gateway_446_end
+gateway_446-"you need"->gateway_446_end
+gateway_446_end->activity_464->gateway_451
+gateway_451->activity_452->gateway_451_end
+gateway_451->activity_453->gateway_451_end
+gateway_451_end->activity_465->gateway_454
+gateway_454->activity_455->gateway_454_end
+gateway_454->activity_456->gateway_454_end
+gateway_454->activity_457->gateway_454_end
+gateway_454->activity_458->gateway_454_end
+gateway_454->activity_459->gateway_454_end
+gateway_454->activity_460->gateway_454_end
+gateway_454->activity_461->gateway_454_end
+gateway_454_end->activity_466->end

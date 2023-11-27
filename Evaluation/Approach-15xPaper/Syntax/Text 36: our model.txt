@@ -1,0 +1,44 @@
+title: Text 36: our model
+width: 10000
+colourtheme: BLUEMOUNTAIN
+lane: manager 
+	(start) as start
+	[the quince harvesting process takes place] as activity_297
+	[checks] as activity_298
+	<affect plantation?> as gateway_286
+	[interrupt that day 's production] as activity_288
+	(end) as end_288
+	<> as gateway_286_end
+	[reminds workers] as activity_291
+	<> as gateway_289_end
+	<@parallel> as gateway_292
+lane: employees 
+	[begin] as activity_299
+	[to pick the fruits] as activity_300
+	[the quinces have almost no dew] as activity_301
+	[started] as activity_293
+	[picking the fruits] as activity_294
+	[the trucks come] as activity_295
+	[load trucks] as activity_296
+	<@parallel> as gateway_292_end
+	[have worked] as activity_305
+	(end) as end
+lane: workers 
+	<the workers have not taken a break?> as gateway_289
+lane: supervisor 
+	[notes down the spoiled fruit] as activity_302
+	[load the trucks have] as activity_303
+	[reports the total number of kilos and the hours] as activity_304
+
+start->activity_297->activity_298->gateway_286
+gateway_286-"yes"->activity_288->end_288
+gateway_286-"no"->gateway_286_end
+gateway_286_end->activity_299->activity_300->activity_301->gateway_289
+gateway_289-"yes"->activity_291->gateway_289_end
+gateway_289-"no"->gateway_289_end
+gateway_289_end->gateway_292
+gateway_292->activity_293->gateway_292_end
+gateway_292->activity_294->gateway_292_end
+gateway_292->activity_295->gateway_292_end
+gateway_292->activity_296->gateway_292_end
+gateway_292_end->activity_302->activity_303->activity_304->activity_305->end
